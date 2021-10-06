@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tukangku/screens/home/dashboard.dart';
 
 class Navbar extends StatefulWidget {
   const Navbar({Key? key}) : super(key: key);
@@ -9,24 +10,17 @@ class Navbar extends StatefulWidget {
 
 class _NavbarState extends State<Navbar> {
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+
   static const List<Widget> _widgetOptions = <Widget>[
+    Dashboard(),
     Text(
-      'Index 0: Home',
-      style: optionStyle,
+      'Index 1: Chat',
     ),
     Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: Chat',
-      style: optionStyle,
+      'Index 2: Desain',
     ),
     Text(
       'Index 3: Profil',
-      style: optionStyle,
     ),
   ];
 
@@ -39,13 +33,6 @@ class _NavbarState extends State<Navbar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Tukangku'),
-        backgroundColor: Colors.orangeAccent.shade700,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-      ),
       backgroundColor: Colors.white,
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
@@ -64,12 +51,12 @@ class _NavbarState extends State<Navbar> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Business',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.chat),
             label: 'Chat',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Desain',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_circle),

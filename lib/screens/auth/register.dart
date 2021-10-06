@@ -101,7 +101,7 @@ class _RegisterState extends State<Register> {
               TextField(
                   obscureText: true,
                   decoration: InputDecoration(
-                      hintText: 'Password',
+                      hintText: 'Konfirmasi Password',
                       suffixIcon: Icon(Icons.visibility_off),
                       // border: InputBorder.none,
                       enabledBorder: UnderlineInputBorder(
@@ -117,7 +117,10 @@ class _RegisterState extends State<Register> {
                 value: false,
                 controlAffinity: ListTileControlAffinity.leading,
                 onChanged: (value) {},
-                title: Text('I agree to terms of service and privacy policy'),
+                title: Text(
+                  'I agree to terms of service and privacy policy',
+                  style: TextStyle(fontSize: 12),
+                ),
               ),
               SizedBox(
                 height: 15,
