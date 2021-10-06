@@ -6,51 +6,30 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  Widget _entryField(String title, {bool isPassword = false}) {
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          // Text(
-          //   title,
-          //   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-          // ),
-          SizedBox(
-            height: 10,
-          ),
-          TextField(
-              obscureText: isPassword,
-              decoration: InputDecoration(
-                  hintText: title,
-                  border: InputBorder.none,
-                  fillColor: Color(0xfff3f3f4),
-                  filled: true))
-        ],
-      ),
-    );
-  }
-
   Widget _submitButton() {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.symmetric(vertical: 10),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: Colors.grey.shade200,
-                offset: Offset(2, 4),
-                blurRadius: 5,
-                spreadRadius: 2)
-          ],
-          gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [Color(0xfffbb448), Color(0xfff7892b)])),
-      child: Text(
-        'Login',
-        style: TextStyle(fontSize: 20, color: Colors.white),
+    return InkWell(
+      onTap: () => Navigator.of(context).pushNamed('/navbar'),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.symmetric(vertical: 10),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Colors.grey.shade200,
+                  offset: Offset(2, 4),
+                  blurRadius: 5,
+                  spreadRadius: 2)
+            ],
+            gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Colors.orangeAccent.shade700, Color(0xfff7892b)])),
+        child: Text(
+          'Login',
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
       ),
     );
   }
@@ -90,7 +69,7 @@ class _LoginState extends State<Login> {
 
   Widget _createAccountLabel() {
     return InkWell(
-      onTap: () {},
+      onTap: () => Navigator.of(context).pushNamed('/register'),
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 10),
         padding: EdgeInsets.all(15),
@@ -144,8 +123,31 @@ class _LoginState extends State<Login> {
   Widget _emailPasswordWidget() {
     return Column(
       children: <Widget>[
-        _entryField("Username"),
-        _entryField("Password", isPassword: true),
+        SizedBox(
+          height: 10,
+        ),
+        TextField(
+            obscureText: false,
+            decoration: InputDecoration(
+                hintText: 'Username',
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.orangeAccent.shade700),
+                ),
+                fillColor: Color(0xfff3f3f4),
+                filled: true)),
+        SizedBox(
+          height: 15,
+        ),
+        TextField(
+            obscureText: true,
+            decoration: InputDecoration(
+                hintText: 'Password',
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.orangeAccent.shade700),
+                ),
+                suffixIcon: Icon(Icons.visibility_off),
+                fillColor: Color(0xfff3f3f4),
+                filled: true)),
       ],
     );
   }
@@ -176,6 +178,7 @@ class _LoginState extends State<Login> {
                 children: <Widget>[
                   // SizedBox(height: height * .2),
                   _title(),
+                  Text('Proffesional Homecare'),
                   SizedBox(
                     height: 20,
                   ),

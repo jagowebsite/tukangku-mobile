@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:tukangku/auth/login.dart';
-import 'package:tukangku/auth/register.dart';
+import 'package:tukangku/screens/auth/login.dart';
+import 'package:tukangku/screens/auth/register.dart';
+import 'package:tukangku/screens/navbar.dart';
 
 void main() {
   runApp(MyApp());
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => MyHomePage(),
         '/login': (context) => Login(),
-        '/register': (context) => Register()
+        '/register': (context) => Register(),
+        '/navbar': (context) => Navbar(),
       },
     );
   }
