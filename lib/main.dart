@@ -3,6 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:tukangku/screens/auth/login.dart';
 import 'package:tukangku/screens/auth/register.dart';
 import 'package:tukangku/screens/navbar.dart';
+import 'package:tukangku/screens/others/filter.dart';
+import 'package:tukangku/screens/others/search.dart';
+import 'package:tukangku/screens/service/service_detail.dart';
+import 'package:tukangku/screens/service/services.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,6 +27,10 @@ class MyApp extends StatelessWidget {
         '/login': (context) => Login(),
         '/register': (context) => Register(),
         '/navbar': (context) => Navbar(),
+        '/search': (context) => Search(),
+        '/filter': (context) => Filter(),
+        '/services': (context) => Services(),
+        '/service-detail': (context) => ServiceDetail(),
       },
     );
   }

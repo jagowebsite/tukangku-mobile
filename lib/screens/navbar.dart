@@ -59,7 +59,7 @@ class _NavbarState extends State<Navbar> {
             label: 'Desain',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.account_circle),
+            icon: Icon(Icons.account_box_rounded),
             label: 'Profil',
           ),
         ],

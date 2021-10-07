@@ -46,6 +46,11 @@ class _DashboardState extends State<Dashboard> {
     'Lainnya'
   ];
 
+  Future<void> _refresh() async {
+    await Future.delayed(Duration(seconds: 1));
+    print('Refresing...');
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -68,208 +73,254 @@ class _DashboardState extends State<Dashboard> {
           ],
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.notifications))
+          IconButton(
+            onPressed: () => Navigator.pop(context),
+            icon: Stack(
+              children: [
+                Container(
+                  margin: EdgeInsets.only(top: 3),
+                  child: Icon(
+                    Icons.shopping_cart,
+                    color: Colors.grey.shade400,
+                    size: 30,
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Icon(
+                    Icons.circle,
+                    color: Colors.orangeAccent.shade700,
+                    size: 15,
+                  ),
+                ),
+              ],
+            ),
+          )
         ],
       ),
       backgroundColor: Colors.white,
-      body:
-          CustomScrollView(physics: AlwaysScrollableScrollPhysics(), slivers: [
-        SliverList(
-            delegate: SliverChildListDelegate([
-          Container(
-            width: size.width,
-            height: size.height * 0.2,
-            margin: EdgeInsets.only(top: 10),
-            child: CarouselSlider(
-              options: CarouselOptions(
-                autoPlay: true,
-                aspectRatio: 2.0,
-                enlargeCenterPage: true,
-              ),
-              items: imgList
-                  .map((item) => Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20)),
-                        child: CachedNetworkImage(
-                          imageUrl: item,
-                          fit: BoxFit.cover,
-                          imageBuilder: (context, imageProvider) => Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                image: imageProvider,
+      body: RefreshIndicator(
+        backgroundColor: Colors.white,
+        color: Colors.orangeAccent.shade700,
+        displacement: 20,
+        onRefresh: () => _refresh(),
+        child: CustomScrollView(
+            physics: AlwaysScrollableScrollPhysics(),
+            slivers: [
+              SliverList(
+                  delegate: SliverChildListDelegate([
+                Container(
+                  width: size.width,
+                  height: size.height * 0.2,
+                  margin: EdgeInsets.only(top: 10),
+                  child: CarouselSlider(
+                    options: CarouselOptions(
+                      autoPlay: true,
+                      aspectRatio: 2.0,
+                      enlargeCenterPage: true,
+                    ),
+                    items: imgList
+                        .map((item) => Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20)),
+                              child: CachedNetworkImage(
+                                imageUrl: item,
                                 fit: BoxFit.cover,
-                              ),
-                            ),
-                          ),
-                          placeholder: (context, url) => Shimmer.fromColors(
-                              baseColor: Colors.grey.shade300,
-                              highlightColor: Colors.grey.shade100,
-                              child: Container(
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
                                   decoration: BoxDecoration(
-                                      color: Colors.grey.shade100,
-                                      borderRadius: BorderRadius.circular(10)),
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                placeholder: (context, url) =>
+                                    Shimmer.fromColors(
+                                        baseColor: Colors.grey.shade300,
+                                        highlightColor: Colors.grey.shade100,
+                                        child: Container(
+                                            decoration: BoxDecoration(
+                                                color: Colors.grey.shade100,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                            child:
+                                                Icon(Icons.image, size: 100))),
+                                errorWidget: (context, url, error) => Container(
+                                  color: Colors.grey.shade100,
                                   width: double.infinity,
                                   height: double.infinity,
-                                  child: Icon(Icons.image, size: 100))),
-                          errorWidget: (context, url, error) => Container(
-                            color: Colors.grey.shade100,
-                            width: double.infinity,
-                            height: double.infinity,
-                            child: Shimmer.fromColors(
-                                baseColor: Colors.grey.shade200,
-                                highlightColor: Colors.grey.shade100,
-                                child: Icon(Icons.error)),
-                          ),
-                        ),
-                      ))
-                  .toList(),
-            ),
-          )
-        ])),
-        SliverList(
-            delegate: SliverChildListDelegate([
-          Container(
-              margin: EdgeInsets.only(top: 20, left: 15, right: 15),
-              height: 40,
-              decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(10)),
-              child: Row(children: [
-                Expanded(
-                  child: TextField(
-                    // controller: _searchController,
-                    // enableInteractiveSelection: false,
-                    // onSubmitted: (e) => searchSubmit(e),
-                    textAlignVertical: TextAlignVertical.bottom,
-                    maxLines: 1,
-                    decoration: InputDecoration(
-                        isDense: true,
-                        contentPadding: EdgeInsets.only(top: 6, bottom: 11),
-                        hintText: 'Cari layanan yang kamu butuhkan sekarang',
-                        hintStyle: TextStyle(
-                            color: Colors.grey.shade400, fontSize: 14),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                        ),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          size: 25,
-                          color: Colors.grey,
-                        )),
+                                  child: Shimmer.fromColors(
+                                      baseColor: Colors.grey.shade200,
+                                      highlightColor: Colors.grey.shade100,
+                                      child: Icon(Icons.error)),
+                                ),
+                              ),
+                            ))
+                        .toList(),
                   ),
-                ),
+                )
               ])),
-          SizedBox(
-            height: 25,
-          ),
-          Container(
-              margin: EdgeInsets.symmetric(horizontal: 15),
-              child: Text('Kategori Layanan',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700))),
-          Container(
-            height: 100,
-            child: ListView.builder(
-                physics: BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics()),
-                padding: EdgeInsets.all(15),
-                scrollDirection: Axis.horizontal,
-                itemCount: imgCategory.length,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.only(right: 15),
-                    child: Column(
-                      children: [
-                        ClipOval(
-                          child: Container(
-                            height: 40,
-                            color: Colors.orangeAccent,
-                            child: CachedNetworkImage(
-                              imageUrl: imgCategory[index],
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Text(textCategory[index])
-                      ],
-                    ),
-                  );
-                }),
-          ),
-          Container(
-              margin: EdgeInsets.symmetric(horizontal: 15),
-              child: Text('Semua Layanan',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700))),
-          Container(
-            margin: EdgeInsets.all(15),
-            child: GridView.count(
-              physics: ScrollPhysics(),
-              shrinkWrap: true,
-              childAspectRatio: 1 / 1.3,
-              crossAxisCount: 2,
-              children: List.generate(imgService.length, (index) {
-                return Container(
-                  child: Card(
-                    elevation: 0,
-                    child: Container(
+              SliverList(
+                  delegate: SliverChildListDelegate([
+                GestureDetector(
+                  onTap: () => Navigator.of(context).pushNamed('/search'),
+                  child: Container(
+                      margin: EdgeInsets.only(top: 20, left: 15, right: 15),
+                      height: 40,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.grey.shade100),
-                      child: Stack(
-                        children: [
-                          Container(
-                            width: double.infinity,
-                            height: double.infinity,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: CachedNetworkImage(
-                                imageUrl: imgService[index],
-                                fit: BoxFit.cover,
-                              ),
-                            ),
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Row(children: [
+                        Expanded(
+                          child: TextField(
+                            textAlignVertical: TextAlignVertical.bottom,
+                            maxLines: 1,
+                            decoration: InputDecoration(
+                                isDense: true,
+                                enabled: false,
+                                contentPadding:
+                                    EdgeInsets.only(top: 6, bottom: 11),
+                                hintText:
+                                    'Cari layanan yang kamu butuhkan sekarang',
+                                hintStyle: TextStyle(
+                                    color: Colors.grey.shade400, fontSize: 14),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                ),
+                                prefixIcon: Icon(
+                                  Icons.search,
+                                  size: 25,
+                                  color: Colors.grey,
+                                )),
                           ),
-                          Container(
-                            width: double.infinity,
-                            height: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              gradient: LinearGradient(
-                                colors: [
-                                  Colors.black,
-                                  Colors.transparent,
-                                  Colors.transparent,
-                                  Colors.black
+                        ),
+                      ])),
+                ),
+                SizedBox(
+                  height: 25,
+                ),
+                Container(
+                    margin: EdgeInsets.symmetric(horizontal: 15),
+                    child: Text('Kategori Layanan',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w700))),
+                SizedBox(
+                  height: 5,
+                ),
+                Container(
+                  height: 100,
+                  child: ListView.builder(
+                      physics: BouncingScrollPhysics(
+                          parent: AlwaysScrollableScrollPhysics()),
+                      padding: EdgeInsets.all(15),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: imgCategory.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: EdgeInsets.only(right: 15),
+                          child: Column(
+                            children: [
+                              ClipOval(
+                                child: Container(
+                                  height: 40,
+                                  color: Colors.orangeAccent,
+                                  child: CachedNetworkImage(
+                                    imageUrl: imgCategory[index],
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(textCategory[index])
+                            ],
+                          ),
+                        );
+                      }),
+                ),
+                Container(
+                    margin: EdgeInsets.symmetric(horizontal: 15),
+                    child: Text('Semua Layanan',
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.w700))),
+                Container(
+                  margin: EdgeInsets.all(15),
+                  child: GridView.count(
+                    physics: ScrollPhysics(),
+                    shrinkWrap: true,
+                    childAspectRatio: 1 / 1.3,
+                    crossAxisCount: 2,
+                    children: List.generate(imgService.length, (index) {
+                      return Container(
+                        child: Card(
+                          elevation: 0,
+                          child: GestureDetector(
+                            onTap: () => Navigator.of(context)
+                                .pushNamed('/service-detail'),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.grey.shade100),
+                              child: Stack(
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: CachedNetworkImage(
+                                        imageUrl: imgService[index],
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Colors.black,
+                                          Colors.transparent,
+                                          Colors.transparent,
+                                          Colors.black
+                                        ],
+                                        begin: Alignment.topCenter,
+                                        end: Alignment.bottomCenter,
+                                        stops: [0, 0, 0.7, 1],
+                                      ),
+                                    ),
+                                  ),
+                                  Positioned(
+                                      child: Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Service AC Rumah',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ))
                                 ],
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                stops: [0, 0, 0.7, 1],
                               ),
                             ),
                           ),
-                          Positioned(
-                              child: Align(
-                            alignment: Alignment.bottomLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                'Service AC Rumah',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                          ))
-                        ],
-                      ),
-                    ),
+                        ),
+                      );
+                    }),
                   ),
-                );
-              }),
-            ),
-          )
-        ])),
-      ]),
+                )
+              ])),
+            ]),
+      ),
     );
   }
 }
