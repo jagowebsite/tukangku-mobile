@@ -7,6 +7,7 @@ import 'package:tukangku/screens/others/filter.dart';
 import 'package:tukangku/screens/others/search.dart';
 import 'package:tukangku/screens/service/service_detail.dart';
 import 'package:tukangku/screens/service/services.dart';
+import 'package:tukangku/screens/transaction/cart.dart';
 
 void main() {
   runApp(MyApp());
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         '/filter': (context) => Filter(),
         '/services': (context) => Services(),
         '/service-detail': (context) => ServiceDetail(),
+        '/cart': (context) => Cart(),
       },
     );
   }

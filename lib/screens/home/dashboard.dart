@@ -74,7 +74,7 @@ class _DashboardState extends State<Dashboard> {
         ),
         actions: [
           IconButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.of(context).pushNamed('/cart'),
             icon: Stack(
               children: [
                 Container(
