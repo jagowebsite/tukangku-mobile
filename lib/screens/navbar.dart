@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tukangku/screens/account/account.dart';
+import 'package:tukangku/screens/chat/chat.dart';
+import 'package:tukangku/screens/design/design.dart';
 import 'package:tukangku/screens/home/dashboard.dart';
 
 class Navbar extends StatefulWidget {
@@ -13,15 +16,9 @@ class _NavbarState extends State<Navbar> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     Dashboard(),
-    Text(
-      'Index 1: Chat',
-    ),
-    Text(
-      'Index 2: Desain',
-    ),
-    Text(
-      'Index 3: Profil',
-    ),
+    Chat(),
+    Design(),
+    Account(),
   ];
 
   void _onItemTapped(int index) {
@@ -55,7 +52,7 @@ class _NavbarState extends State<Navbar> {
             label: 'Chat',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
+            icon: Icon(Icons.grid_view),
             label: 'Desain',
           ),
           BottomNavigationBarItem(
