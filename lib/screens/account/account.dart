@@ -75,22 +75,48 @@ class _AccountState extends State<Account> {
                     ),
                     ListTile(
                       minVerticalPadding: 0,
-                      onTap: () {},
-                      title: Text('Edit Profil'),
+                      onTap: () =>
+                          Navigator.of(context).pushNamed('/update-profile'),
+                      title: Text('Update Profil'),
                       trailing: Icon(Icons.chevron_right),
                     ),
                     Divider(
                       thickness: 0.5,
+                    ),
+                    ListTile(
+                      title: Text('Ubah Password'),
+                      onTap: () =>
+                          Navigator.of(context).pushNamed('/update-password'),
+                      trailing: Icon(Icons.chevron_right),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                color: Colors.white,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Text(
+                        'Transaksi',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                     ListTile(
                       title: Text('Keranjang'),
+                      onTap: () => Navigator.of(context).pushNamed('/cart'),
                       trailing: Icon(Icons.chevron_right),
                     ),
                     Divider(
                       thickness: 0.5,
                     ),
                     ListTile(
-                      title: Text('Transaksi'),
+                      title: Text('Semua Transaksi'),
                       trailing: Icon(Icons.chevron_right),
                     ),
                   ],

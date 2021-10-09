@@ -48,8 +48,7 @@ class _DesignState extends State<Design> {
                             isDense: true,
                             enabled: false,
                             contentPadding: EdgeInsets.only(top: 6, bottom: 11),
-                            hintText:
-                                'Cari layanan yang kamu butuhkan sekarang',
+                            hintText: 'Cari desain yang kamu butuhkan sekarang',
                             hintStyle: TextStyle(
                                 color: Colors.grey.shade400, fontSize: 14),
                             border: OutlineInputBorder(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tukangku/screens/account/profile/update_password.dart';
+import 'package:tukangku/screens/account/profile/update_profile.dart';
 import 'package:tukangku/screens/auth/login.dart';
 import 'package:tukangku/screens/auth/register.dart';
 import 'package:tukangku/screens/navbar.dart';
@@ -33,6 +35,8 @@ class MyApp extends StatelessWidget {
         '/services': (context) => Services(),
         '/service-detail': (context) => ServiceDetail(),
         '/cart': (context) => Cart(),
+        '/update-profile': (context) => UpdateProfil(),
+        '/update-password': (context) => UpdatePassword(),
       },
     );
   }
