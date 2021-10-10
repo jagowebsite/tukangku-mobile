@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:tukangku/screens/account/master/banner/master_banner.dart';
+import 'package:tukangku/screens/account/master/category/master_category_service.dart';
+import 'package:tukangku/screens/account/master/employee/master_employee.dart';
+import 'package:tukangku/screens/account/master/service/master_service.dart';
 import 'package:tukangku/screens/account/profile/update_password.dart';
 import 'package:tukangku/screens/account/profile/update_profile.dart';
 import 'package:tukangku/screens/auth/login.dart';
@@ -37,6 +41,10 @@ class MyApp extends StatelessWidget {
         '/cart': (context) => Cart(),
         '/update-profile': (context) => UpdateProfil(),
         '/update-password': (context) => UpdatePassword(),
+        '/master-service': (context) => MasterService(),
+        '/master-service-category': (context) => MasterCategoryService(),
+        '/master-employee': (context) => MasterEmployee(),
+        '/master-banner': (context) => MasterBanner(),
       },
     );
   }

@@ -33,6 +33,7 @@ class _UpdateProfilState extends State<UpdateProfil> {
           SingleChildScrollView(
             padding: EdgeInsets.all(20),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
                   child: Container(
@@ -104,30 +105,78 @@ class _UpdateProfilState extends State<UpdateProfil> {
                   height: 15,
                 ),
                 TextField(
-                  decoration:
-                      InputDecoration(hintText: 'Email', enabled: false),
+                  decoration: InputDecoration(
+                    hintText: 'Email',
+                    labelText: 'Email',
+                    // enabled: false,
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.black87,
+                        width: 0.2,
+                      ),
+                    ),
+                  ),
                 ),
                 TextField(
-                  decoration: InputDecoration(hintText: 'Nama Lengkap'),
+                  decoration: InputDecoration(
+                    hintText: 'Nama Lengkap',
+                    labelText: 'Nama',
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.black87,
+                        width: 0.2,
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 TextField(
-                  decoration: InputDecoration(hintText: 'Tanggal Lahir'),
+                  decoration: InputDecoration(
+                    hintText: 'Tanggal Lahir',
+                    labelText: 'Tanggal Lahir',
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.black87,
+                        width: 0.2,
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 TextField(
-                  decoration: InputDecoration(hintText: 'No Telp'),
+                  decoration: InputDecoration(
+                    hintText: 'No Telp',
+                    labelText: 'Telp',
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.black87,
+                        width: 0.2,
+                      ),
+                    ),
+                  ),
                 ),
                 SizedBox(
                   height: 10,
                 ),
                 TextField(
-                  decoration: InputDecoration(hintText: 'Alamat'),
+                  decoration: InputDecoration(
+                    hintText: 'Alamat Lengkap',
+                    labelText: 'Alamat',
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Colors.black87,
+                        width: 0.2,
+                      ),
+                    ),
+                  ),
                 ),
+                SizedBox(
+                  height: 100,
+                )
               ],
             ),
           ),

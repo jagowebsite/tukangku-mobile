@@ -139,7 +139,8 @@ class _AccountState extends State<Account> {
                     ),
                     ListTile(
                       minVerticalPadding: 0,
-                      onTap: () {},
+                      onTap: () =>
+                          Navigator.of(context).pushNamed('/master-service'),
                       title: Text('Data Jasa'),
                       trailing: Icon(Icons.chevron_right),
                     ),
@@ -147,6 +148,8 @@ class _AccountState extends State<Account> {
                       thickness: 0.5,
                     ),
                     ListTile(
+                      onTap: () => Navigator.of(context)
+                          .pushNamed('/master-service-category'),
                       title: Text('Data Kategori Jasa'),
                       trailing: Icon(Icons.chevron_right),
                     ),
@@ -154,10 +157,17 @@ class _AccountState extends State<Account> {
                       thickness: 0.5,
                     ),
                     ListTile(
+                      onTap: () =>
+                          Navigator.of(context).pushNamed('/master-employee'),
                       title: Text('Data Tukang'),
                       trailing: Icon(Icons.chevron_right),
                     ),
+                    Divider(
+                      thickness: 0.5,
+                    ),
                     ListTile(
+                      onTap: () =>
+                          Navigator.of(context).pushNamed('/master-banner'),
                       title: Text('Data Banner'),
                       trailing: Icon(Icons.chevron_right),
                     ),
