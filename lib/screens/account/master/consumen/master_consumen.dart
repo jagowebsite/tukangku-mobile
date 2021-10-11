@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class MasterEmployee extends StatefulWidget {
-  const MasterEmployee({Key? key}) : super(key: key);
+class MasterConsumen extends StatefulWidget {
+  const MasterConsumen({Key? key}) : super(key: key);
 
   @override
-  _MasterEmployeeState createState() => _MasterEmployeeState();
+  _MasterConsumenState createState() => _MasterConsumenState();
 }
 
-class _MasterEmployeeState extends State<MasterEmployee> {
-  List<String> employees = [
-    'Pak Budi',
-    'Andriono Sujiwo',
-    'Lukito Muldoko',
-    'Sudijo Buwono'
+class _MasterConsumenState extends State<MasterConsumen> {
+  List<String> consumen = [
+    'Rudi Hariono',
+    'Andi Suhadi',
+    'Sri Rahayu',
+    'Jajang Hermansyah'
   ];
 
   @override
@@ -22,7 +22,7 @@ class _MasterEmployeeState extends State<MasterEmployee> {
             backgroundColor: Colors.white,
             elevation: 0,
             title: Text(
-              'Master Data Tukang',
+              'Master Data Konsumen',
               style: TextStyle(color: Colors.black87),
             ),
             actions: [
@@ -59,13 +59,13 @@ class _MasterEmployeeState extends State<MasterEmployee> {
                   ),
                   title: Container(
                     child: Text(
-                      employees[index],
+                      consumen[index],
                       style: TextStyle(
                         fontSize: 16,
                       ),
                     ),
                   ),
-                  subtitle: Text('Bebersih'),
+                  subtitle: Text('rudi@gmail.com'),
                   trailing: Icon(Icons.chevron_right, color: Colors.black87),
                 );
               },

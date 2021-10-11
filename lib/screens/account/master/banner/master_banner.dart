@@ -8,6 +8,11 @@ class MasterBanner extends StatefulWidget {
 }
 
 class _MasterBannerState extends State<MasterBanner> {
+  List<String> banners = [
+    'Opening Tukangku Apps',
+    'Pilih Jasa Idamanmu Sekarang',
+    'Jasa Serba Bisa'
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,54 +42,26 @@ class _MasterBannerState extends State<MasterBanner> {
         backgroundColor: Colors.white,
         body: Container(
           child: ListView.separated(
-              padding: EdgeInsets.all(15),
               itemBuilder: (context, index) {
-                return InkWell(
+                return ListTile(
                   onTap: () {},
-                  child: Container(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image.network(
-                              'https://picsum.photos/64',
-                              height: 45,
-                              width: 45,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Opening Aplikasi',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 7,
-                                ),
-                                Text(
-                                  'Aktif',
-                                  style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.green.shade700),
-                                ),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
+                  leading: Container(
+                    child: Container(
+                      child: ClipRRect(
+                        child: Image.network('https://picsum.photos/64'),
+                      ),
                     ),
                   ),
+                  title: Container(
+                    child: Text(
+                      banners[index],
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  subtitle: Text('Aktif'),
+                  trailing: Icon(Icons.chevron_right, color: Colors.black87),
                 );
               },
               separatorBuilder: (context, index) {

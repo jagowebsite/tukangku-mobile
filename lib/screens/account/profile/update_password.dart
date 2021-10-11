@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tukangku/screens/widgets/input_text.dart';
 
 class UpdatePassword extends StatefulWidget {
   const UpdatePassword({Key? key}) : super(key: key);
@@ -32,20 +33,23 @@ class _UpdatePasswordState extends State<UpdatePassword> {
             padding: EdgeInsets.all(20),
             child: Column(
               children: [
-                TextField(
-                  decoration: InputDecoration(hintText: 'Password Sekarang'),
+                InputText(
+                  hintText: 'Password Sekarang',
+                  obscureText: true,
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                TextField(
-                  decoration: InputDecoration(hintText: 'Password Baru'),
+                InputText(
+                  hintText: 'Password Baru',
+                  obscureText: true,
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                TextField(
-                  decoration: InputDecoration(hintText: 'Konfirmasi Password'),
+                InputText(
+                  hintText: 'Konfirmasi Password',
+                  obscureText: true,
                 ),
               ],
             ),
@@ -60,12 +64,13 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                     width: MediaQuery.of(context).size.width,
                     height: 40,
                     decoration: BoxDecoration(
-                        border: Border.all(color: Colors.orangeAccent.shade700),
+                        // border: Border.all(color: Colors.orangeAccent.shade700),
+                        color: Colors.orangeAccent.shade700,
                         borderRadius: BorderRadius.circular(10)),
                     child: Center(
                       child: Text('Update Password',
                           style: TextStyle(
-                            color: Colors.orangeAccent.shade700,
+                            color: Colors.white,
                             fontSize: 18,
                           )),
                     )),

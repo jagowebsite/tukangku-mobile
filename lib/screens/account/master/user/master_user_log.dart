@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-class MasterEmployee extends StatefulWidget {
-  const MasterEmployee({Key? key}) : super(key: key);
+class MasterUserLog extends StatefulWidget {
+  const MasterUserLog({Key? key}) : super(key: key);
 
   @override
-  _MasterEmployeeState createState() => _MasterEmployeeState();
+  _MasterUserLogState createState() => _MasterUserLogState();
 }
 
-class _MasterEmployeeState extends State<MasterEmployee> {
-  List<String> employees = [
-    'Pak Budi',
-    'Andriono Sujiwo',
-    'Lukito Muldoko',
-    'Sudijo Buwono'
+class _MasterUserLogState extends State<MasterUserLog> {
+  List<String> users = [
+    'Rudi Hariono',
+    'Andi Suhadi',
+    'Sri Rahayu',
+    'Jajang Hermansyah'
   ];
 
   @override
@@ -22,18 +22,9 @@ class _MasterEmployeeState extends State<MasterEmployee> {
             backgroundColor: Colors.white,
             elevation: 0,
             title: Text(
-              'Master Data Tukang',
+              'User Log',
               style: TextStyle(color: Colors.black87),
             ),
-            actions: [
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.add,
-                  color: Colors.black87,
-                ),
-              )
-            ],
             centerTitle: true,
             leading: IconButton(
                 onPressed: () => Navigator.pop(context),
@@ -47,26 +38,27 @@ class _MasterEmployeeState extends State<MasterEmployee> {
               itemBuilder: (context, index) {
                 return ListTile(
                   onTap: () {},
-                  leading: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.orange, shape: BoxShape.circle),
-                    child: Container(
-                      child: CircleAvatar(
-                        backgroundImage:
-                            NetworkImage('https://i.pravatar.cc/300'),
-                      ),
-                    ),
-                  ),
                   title: Container(
                     child: Text(
-                      employees[index],
+                      users[index],
                       style: TextStyle(
                         fontSize: 16,
                       ),
                     ),
                   ),
-                  subtitle: Text('Bebersih'),
-                  trailing: Icon(Icons.chevron_right, color: Colors.black87),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('rudi@gmail.com'),
+                      Text('Menambahkan transaksi baru'),
+                    ],
+                  ),
+                  trailing: Column(
+                    children: [
+                      Text('17-09-2021'),
+                      Text('02:45:00'),
+                    ],
+                  ),
                 );
               },
               separatorBuilder: (context, index) {

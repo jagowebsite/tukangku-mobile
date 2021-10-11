@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 
-class MasterEmployee extends StatefulWidget {
-  const MasterEmployee({Key? key}) : super(key: key);
+class MasterUserPermission extends StatefulWidget {
+  const MasterUserPermission({Key? key}) : super(key: key);
 
   @override
-  _MasterEmployeeState createState() => _MasterEmployeeState();
+  _MasterUserPermissionState createState() => _MasterUserPermissionState();
 }
 
-class _MasterEmployeeState extends State<MasterEmployee> {
-  List<String> employees = [
-    'Pak Budi',
-    'Andriono Sujiwo',
-    'Lukito Muldoko',
-    'Sudijo Buwono'
+class _MasterUserPermissionState extends State<MasterUserPermission> {
+  List<String> permissions = [
+    'dashboard_view',
+    'profile_view',
+    'service_view',
   ];
 
   @override
@@ -22,7 +21,7 @@ class _MasterEmployeeState extends State<MasterEmployee> {
             backgroundColor: Colors.white,
             elevation: 0,
             title: Text(
-              'Master Data Tukang',
+              'Role Akses',
               style: TextStyle(color: Colors.black87),
             ),
             actions: [
@@ -47,25 +46,15 @@ class _MasterEmployeeState extends State<MasterEmployee> {
               itemBuilder: (context, index) {
                 return ListTile(
                   onTap: () {},
-                  leading: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.orange, shape: BoxShape.circle),
-                    child: Container(
-                      child: CircleAvatar(
-                        backgroundImage:
-                            NetworkImage('https://i.pravatar.cc/300'),
-                      ),
-                    ),
-                  ),
                   title: Container(
                     child: Text(
-                      employees[index],
+                      permissions[index],
                       style: TextStyle(
                         fontSize: 16,
                       ),
                     ),
                   ),
-                  subtitle: Text('Bebersih'),
+                  subtitle: Text('Web'),
                   trailing: Icon(Icons.chevron_right, color: Colors.black87),
                 );
               },
@@ -74,7 +63,7 @@ class _MasterEmployeeState extends State<MasterEmployee> {
                   thickness: 0.3,
                 );
               },
-              itemCount: 3),
+              itemCount: permissions.length),
         ));
   }
 }

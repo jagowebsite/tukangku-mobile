@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:tukangku/screens/widgets/input_text.dart';
 
 class UpdateProfil extends StatefulWidget {
   const UpdateProfil({Key? key}) : super(key: key);
@@ -101,78 +102,37 @@ class _UpdateProfilState extends State<UpdateProfil> {
                     ),
                   ),
                 ),
+                Center(
+                  child: Container(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 10,
+                      ),
+                      child: Text('boywilliam@gmail.com')),
+                ),
                 SizedBox(
-                  height: 15,
+                  height: 25,
                 ),
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Email',
-                    labelText: 'Email',
-                    // enabled: false,
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black87,
-                        width: 0.2,
-                      ),
-                    ),
-                  ),
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Nama Lengkap',
-                    labelText: 'Nama',
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black87,
-                        width: 0.2,
-                      ),
-                    ),
-                  ),
+                InputText(
+                  hintText: 'Nama Lengkap',
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Tanggal Lahir',
-                    labelText: 'Tanggal Lahir',
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black87,
-                        width: 0.2,
-                      ),
-                    ),
-                  ),
+                InputText(
+                  hintText: 'Tanggal Lahir',
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: 'No Telp',
-                    labelText: 'Telp',
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black87,
-                        width: 0.2,
-                      ),
-                    ),
-                  ),
+                InputText(
+                  hintText: 'No Telp',
+                  textInputType: TextInputType.number,
                 ),
                 SizedBox(
                   height: 10,
                 ),
-                TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Alamat Lengkap',
-                    labelText: 'Alamat',
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Colors.black87,
-                        width: 0.2,
-                      ),
-                    ),
-                  ),
+                InputText(
+                  hintText: 'Alamat Lengkap',
                 ),
                 SizedBox(
                   height: 100,
@@ -190,12 +150,13 @@ class _UpdateProfilState extends State<UpdateProfil> {
                     width: MediaQuery.of(context).size.width,
                     height: 40,
                     decoration: BoxDecoration(
-                        border: Border.all(color: Colors.orangeAccent.shade700),
+                        // border: Border.all(color: Colors.orangeAccent.shade700),
+                        color: Colors.orangeAccent.shade700,
                         borderRadius: BorderRadius.circular(10)),
                     child: Center(
-                      child: Text('Update',
+                      child: Text('Update Profil',
                           style: TextStyle(
-                            color: Colors.orangeAccent.shade700,
+                            color: Colors.white,
                             fontSize: 18,
                           )),
                     )),

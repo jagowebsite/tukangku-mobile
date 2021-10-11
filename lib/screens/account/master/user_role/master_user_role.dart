@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 
-class MasterEmployee extends StatefulWidget {
-  const MasterEmployee({Key? key}) : super(key: key);
+class MasterUserRole extends StatefulWidget {
+  const MasterUserRole({Key? key}) : super(key: key);
 
   @override
-  _MasterEmployeeState createState() => _MasterEmployeeState();
+  _MasterUserRoleState createState() => _MasterUserRoleState();
 }
 
-class _MasterEmployeeState extends State<MasterEmployee> {
-  List<String> employees = [
-    'Pak Budi',
-    'Andriono Sujiwo',
-    'Lukito Muldoko',
-    'Sudijo Buwono'
+class _MasterUserRoleState extends State<MasterUserRole> {
+  List<String> roles = [
+    'Superadmin',
+    'Administrator',
   ];
 
   @override
@@ -22,9 +20,10 @@ class _MasterEmployeeState extends State<MasterEmployee> {
             backgroundColor: Colors.white,
             elevation: 0,
             title: Text(
-              'Master Data Tukang',
+              'Role Akses',
               style: TextStyle(color: Colors.black87),
             ),
+            centerTitle: true,
             actions: [
               IconButton(
                 onPressed: () {},
@@ -34,7 +33,6 @@ class _MasterEmployeeState extends State<MasterEmployee> {
                 ),
               )
             ],
-            centerTitle: true,
             leading: IconButton(
                 onPressed: () => Navigator.pop(context),
                 icon: Icon(
@@ -47,25 +45,15 @@ class _MasterEmployeeState extends State<MasterEmployee> {
               itemBuilder: (context, index) {
                 return ListTile(
                   onTap: () {},
-                  leading: Container(
-                    decoration: BoxDecoration(
-                        color: Colors.orange, shape: BoxShape.circle),
-                    child: Container(
-                      child: CircleAvatar(
-                        backgroundImage:
-                            NetworkImage('https://i.pravatar.cc/300'),
-                      ),
-                    ),
-                  ),
                   title: Container(
                     child: Text(
-                      employees[index],
+                      roles[index],
                       style: TextStyle(
                         fontSize: 16,
                       ),
                     ),
                   ),
-                  subtitle: Text('Bebersih'),
+                  subtitle: Text('Web'),
                   trailing: Icon(Icons.chevron_right, color: Colors.black87),
                 );
               },
@@ -74,7 +62,7 @@ class _MasterEmployeeState extends State<MasterEmployee> {
                   thickness: 0.3,
                 );
               },
-              itemCount: 3),
+              itemCount: roles.length),
         ));
   }
 }

@@ -8,6 +8,13 @@ class MasterCategoryService extends StatefulWidget {
 }
 
 class _MasterCategoryServiceState extends State<MasterCategoryService> {
+  List<String> categories = [
+    'Bebersih',
+    'Service AC',
+    'Pertukangan',
+    'Listrik'
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,49 +43,31 @@ class _MasterCategoryServiceState extends State<MasterCategoryService> {
                 ))),
         backgroundColor: Colors.white,
         body: Container(
-          child: ListView.separated(
-              padding: EdgeInsets.all(15),
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {},
-                  child: Container(
-                    child: Row(
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(8.0),
-                            child: Image.network(
-                              'https://picsum.photos/64',
-                              height: 40,
-                              width: 40,
-                            ),
-                          ),
+            child: ListView.builder(
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    onTap: () {},
+                    leading: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.orange, shape: BoxShape.circle),
+                      child: Container(
+                        child: CircleAvatar(
+                          backgroundImage:
+                              NetworkImage('https://picsum.photos/64'),
                         ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: Container(
-                            child: Text(
-                              'Bebersih',
-                              style: TextStyle(
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
+                      ),
                     ),
-                  ),
-                );
-              },
-              separatorBuilder: (context, index) {
-                return Divider(
-                  thickness: 0.3,
-                );
-              },
-              itemCount: 3),
-        ));
+                    title: Container(
+                      child: Text(
+                        categories[index],
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    trailing: Icon(Icons.chevron_right, color: Colors.black87),
+                  );
+                })));
   }
 }

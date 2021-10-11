@@ -2,8 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner.dart';
 import 'package:tukangku/screens/account/master/category/master_category_service.dart';
+import 'package:tukangku/screens/account/master/consumen/master_consumen.dart';
 import 'package:tukangku/screens/account/master/employee/master_employee.dart';
+import 'package:tukangku/screens/account/master/gps_log/master_gps_log.dart';
+import 'package:tukangku/screens/account/master/payment/master_payment.dart';
 import 'package:tukangku/screens/account/master/service/master_service.dart';
+import 'package:tukangku/screens/account/master/transaction/master_transaction.dart';
+import 'package:tukangku/screens/account/master/user/master_user.dart';
+import 'package:tukangku/screens/account/master/user/master_user_log.dart';
+import 'package:tukangku/screens/account/master/user_role/master_user_permission.dart';
+import 'package:tukangku/screens/account/master/user_role/master_user_role.dart';
 import 'package:tukangku/screens/account/profile/update_password.dart';
 import 'package:tukangku/screens/account/profile/update_profile.dart';
 import 'package:tukangku/screens/auth/login.dart';
@@ -45,6 +53,14 @@ class MyApp extends StatelessWidget {
         '/master-service-category': (context) => MasterCategoryService(),
         '/master-employee': (context) => MasterEmployee(),
         '/master-banner': (context) => MasterBanner(),
+        '/master-consumen': (context) => MasterConsumen(),
+        '/master-user': (context) => MasterUser(),
+        '/master-user-log': (context) => MasterUserLog(),
+        '/master-user-role': (context) => MasterUserRole(),
+        '/master-user-permission': (context) => MasterUserPermission(),
+        '/master-transaction': (context) => MasterTransaction(),
+        '/master-payment': (context) => MasterPayment(),
+        '/master-gps-log': (context) => MasterGPSLog(),
       },
     );
   }
