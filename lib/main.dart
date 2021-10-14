@@ -22,6 +22,7 @@ import 'package:tukangku/screens/others/search.dart';
 import 'package:tukangku/screens/service/service_detail.dart';
 import 'package:tukangku/screens/service/services.dart';
 import 'package:tukangku/screens/transaction/cart.dart';
+import 'package:tukangku/screens/transaction/payment.dart';
 
 void main() {
   runApp(MyApp());
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
         '/master-transaction': (context) => MasterTransaction(),
         '/master-payment': (context) => MasterPayment(),
         '/master-gps-log': (context) => MasterGPSLog(),
+        '/payment': (context) => Payment(),
       },
     );
   }

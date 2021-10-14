@@ -252,35 +252,38 @@ class _ServiceDetailState extends State<ServiceDetail> {
           Positioned(
             child: Align(
                 alignment: Alignment.bottomCenter,
-                child: Container(
-                    color: Colors.white,
-                    child: Container(
-                        margin: EdgeInsets.all(10),
-                        width: MediaQuery.of(context).size.width,
-                        height: 40,
-                        decoration: BoxDecoration(
-                            color: Colors.orangeAccent.shade700,
-                            borderRadius: BorderRadius.circular(10)),
-                        child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.shopping_cart,
-                                color: Colors.white,
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text('Pesan Sekarang',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600)),
-                            ],
-                          ),
-                        )))),
+                child: GestureDetector(
+                  onTap: () => Navigator.of(context).pushNamed('/payment'),
+                  child: Container(
+                      color: Colors.white,
+                      child: Container(
+                          margin: EdgeInsets.all(10),
+                          width: MediaQuery.of(context).size.width,
+                          height: 40,
+                          decoration: BoxDecoration(
+                              color: Colors.orangeAccent.shade700,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Center(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.shopping_cart,
+                                  color: Colors.white,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text('Pesan Sekarang',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w600)),
+                              ],
+                            ),
+                          ))),
+                )),
           )
         ],
       ),
