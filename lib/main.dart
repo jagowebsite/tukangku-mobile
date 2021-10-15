@@ -18,6 +18,7 @@ import 'package:tukangku/screens/auth/login.dart';
 import 'package:tukangku/screens/auth/register.dart';
 import 'package:tukangku/screens/navbar.dart';
 import 'package:tukangku/screens/others/filter.dart';
+import 'package:tukangku/screens/others/map_coordinate.dart';
 import 'package:tukangku/screens/others/search.dart';
 import 'package:tukangku/screens/service/service_detail.dart';
 import 'package:tukangku/screens/service/services.dart';
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
         '/master-payment': (context) => MasterPayment(),
         '/master-gps-log': (context) => MasterGPSLog(),
         '/payment': (context) => Payment(),
+        '/map-coordinate': (context) => MapCoordinate(),
       },
     );
   }
