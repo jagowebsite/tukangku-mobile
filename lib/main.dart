@@ -8,6 +8,7 @@ import 'package:tukangku/screens/account/master/gps_log/master_gps_log.dart';
 import 'package:tukangku/screens/account/master/payment/master_payment.dart';
 import 'package:tukangku/screens/account/master/service/master_service.dart';
 import 'package:tukangku/screens/account/master/transaction/master_transaction.dart';
+import 'package:tukangku/screens/account/master/transaction/master_transaction_detail.dart';
 import 'package:tukangku/screens/account/master/user/master_user.dart';
 import 'package:tukangku/screens/account/master/user/master_user_log.dart';
 import 'package:tukangku/screens/account/master/user_role/master_user_permission.dart';
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
         '/master-user-role': (context) => MasterUserRole(),
         '/master-user-permission': (context) => MasterUserPermission(),
         '/master-transaction': (context) => MasterTransaction(),
+        '/master-transaction-detail': (context) => MasterTransactionDetail(),
         '/master-payment': (context) => MasterPayment(),
         '/master-gps-log': (context) => MasterGPSLog(),
         '/payment': (context) => Payment(),
@@ -124,23 +126,32 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: TextButton(
                           onPressed: () =>
                               Navigator.of(context).pushNamed('/login'),
-                          child: Text(
-                            'Sign in',
-                            style: TextStyle(color: Colors.white),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 8),
+                            child: Text(
+                              'Sign in',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                           style: TextButton.styleFrom(
                               backgroundColor: Colors.orangeAccent.shade700),
                         ),
+                      ),
+                      SizedBox(
+                        height: 15,
                       ),
                       Container(
                         width: size.width,
                         child: TextButton(
                           onPressed: () =>
                               Navigator.of(context).pushNamed('/register'),
-                          child: Text(
-                            'Sign up',
-                            style:
-                                TextStyle(color: Colors.orangeAccent.shade700),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 8),
+                            child: Text(
+                              'Sign up',
+                              style: TextStyle(
+                                  color: Colors.orangeAccent.shade700),
+                            ),
                           ),
                           style: TextButton.styleFrom(
                             side: BorderSide(

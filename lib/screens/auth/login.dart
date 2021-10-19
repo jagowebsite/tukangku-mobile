@@ -27,7 +27,7 @@ class _LoginState extends State<Login> {
                 end: Alignment.centerRight,
                 colors: [Colors.orangeAccent.shade700, Color(0xfff7892b)])),
         child: Text(
-          'Login',
+          'Sign In',
           style: TextStyle(fontSize: 20, color: Colors.white),
         ),
       ),
