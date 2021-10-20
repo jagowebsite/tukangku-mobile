@@ -25,8 +25,10 @@ import 'package:tukangku/screens/service/service_detail.dart';
 import 'package:tukangku/screens/service/services.dart';
 import 'package:tukangku/screens/transaction/cart.dart';
 import 'package:tukangku/screens/transaction/payment.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+void main() async {
+  await dotenv.load(fileName: ".env_production");
   runApp(MyApp());
 }
 
