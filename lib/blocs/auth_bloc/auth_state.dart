@@ -14,7 +14,14 @@ class AuthInitial extends AuthState {}
 
 class LoginLoading extends AuthState {}
 
-class LoginError extends AuthState {}
+class LoginError extends AuthState {
+  final String message;
+
+  LoginError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
 
 class LoginSuccess extends AuthState {}
 
@@ -28,16 +35,46 @@ class RegisterSuccess extends AuthState {}
 
 class LogoutLoading extends AuthState {}
 
-class LogoutError extends AuthState {}
+class LogoutError extends AuthState {
+  final String message;
+  LogoutError(this.message);
 
-class LogoutSuccess extends AuthState {}
+  @override
+  List<Object> get props => [message];
+}
+
+class LogoutSuccess extends AuthState {
+  final String message;
+  LogoutSuccess(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
 
 // Authenticate
 
 class AuthLoading extends AuthState {}
 
-class Authorized extends AuthState {}
+class Authorized extends AuthState {
+  final User user;
+
+  Authorized(this.user);
+
+  @override
+  List<Object> get props => [user];
+}
 
 class UnAuthorized extends AuthState {}
 
 class AuthError extends AuthState {}
+
+// Verify Email
+
+class VerifyEmail extends AuthState {
+  final LoginModel loginModel;
+
+  VerifyEmail(this.loginModel);
+
+  @override
+  List<Object> get props => [loginModel];
+}

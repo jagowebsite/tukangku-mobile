@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
+import 'package:tukangku/screens/auth/verify_email.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -6,9 +9,28 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  late AuthBloc authBloc;
+
+  bool passwordObscure = true;
+
+  Future loginProcess() async {
+    // LoginModel loginModel = new LoginModel(
+    //     username: usernameController.text, password: passwordController.text);
+    // authBloc.add(LoginProcess(loginModel));
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return const VerifyEmailScreen();
+    }));
+
+    // authBloc.add(GetAuthData());
+    authBloc.add(OnLogout());
+  }
+
   Widget _submitButton() {
     return InkWell(
-      onTap: () => Navigator.of(context).pushNamed('/navbar'),
+      onTap: () => loginProcess(),
       child: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(vertical: 10),
@@ -127,6 +149,7 @@ class _LoginState extends State<Login> {
           height: 10,
         ),
         TextField(
+            controller: usernameController,
             obscureText: false,
             decoration: InputDecoration(
                 hintText: 'Username',
@@ -139,17 +162,39 @@ class _LoginState extends State<Login> {
           height: 15,
         ),
         TextField(
-            obscureText: true,
+            controller: passwordController,
+            obscureText: passwordObscure,
             decoration: InputDecoration(
                 hintText: 'Password',
                 enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Colors.orangeAccent.shade700),
                 ),
-                suffixIcon: Icon(Icons.visibility_off),
+                suffixIcon: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        passwordObscure = !passwordObscure;
+                      });
+                    },
+                    child: passwordObscure
+                        ? Icon(Icons.visibility_off)
+                        : Icon(Icons.visibility)),
                 fillColor: Color(0xfff3f3f4),
                 filled: true)),
       ],
     );
+  }
+
+  @override
+  void initState() {
+    authBloc = BlocProvider.of<AuthBloc>(context);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   @override

@@ -13,17 +13,23 @@ class AuthRepository {
 
   Future<LoginData?> login(LoginModel loginModel) async {
     try {
-      final response = await http.post(Uri.parse(_baseUrl), body: {
+      final response =
+          await http.post(Uri.parse(_baseUrl + '/auth/login'), body: {
         'email': loginModel.username,
         'password': loginModel.password,
         'device_name': 'mobile'
       });
-      print(response.body);
+
+      // print(response.body);
 
       // Error handling
       if (response.statusCode == 200) {
         var jsonResponse = json.decode(response.body);
-        return LoginData.toJson(jsonResponse['data']);
+        if (jsonResponse['status'] == 'success') {
+          return LoginData.toJson(jsonResponse['data']);
+        } else {
+          throw Exception(jsonResponse['message']);
+        }
       } else {
         throw Exception('Koneksi dengan server bermasalah');
       }
@@ -62,6 +68,8 @@ class AuthRepository {
             'Accept': 'application/json'
           });
 
+      // print(response.body);
+
       // Error handling
       if (response.statusCode == 200) {
         var jsonResponse = json.decode(response.body);
@@ -84,12 +92,17 @@ class AuthRepository {
             'Accept': 'application/json'
           });
 
+      print(response.body);
+
       // Error handling
       if (response.statusCode == 200) {
         var jsonResponse = json.decode(response.body);
         return ResponseModel.toJson(jsonResponse);
       } else {
-        throw Exception('Koneksi dengan server bermasalah');
+        print('Response code : ' + response.statusCode.toString());
+        throw Exception(response.statusCode == 401
+            ? 'Unauthenticated'
+            : 'Koneksi dengan server bermasalah');
       }
     } catch (e) {
       print(e.toString());
@@ -121,6 +134,8 @@ class AuthRepository {
         'email': email,
       });
 
+      print(response.body);
+
       // Error handling
       if (response.statusCode == 200) {
         var jsonResponse = json.decode(response.body);
@@ -140,7 +155,7 @@ class AuthRepository {
   /// Mengecek apakah didalam session ada token user
   /// Jika tidak ada, menandakan user belum login
   /// Return String
-  Future hasToken() async {
+  Future<String?> hasToken() async {
     final SharedPreferences _prefs = await SharedPreferences.getInstance();
     final String _token = _prefs.getString("token") ?? "";
     return _token != "" ? _token : null;

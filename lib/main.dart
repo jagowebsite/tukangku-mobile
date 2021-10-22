@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner.dart';
 import 'package:tukangku/screens/account/master/category/master_category_service.dart';
 import 'package:tukangku/screens/account/master/consumen/master_consumen.dart';
@@ -28,48 +30,55 @@ import 'package:tukangku/screens/transaction/payment.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
-  await dotenv.load(fileName: ".env_production");
+  await dotenv.load(fileName: "assets/env/.env_production");
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Tukangku',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthBloc>(
+          create: (BuildContext context) => AuthBloc(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Tukangku',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        debugShowCheckedModeBanner: false,
+        initialRoute: '/',
+        routes: {
+          '/': (context) => MyHomePage(),
+          '/login': (context) => Login(),
+          '/register': (context) => Register(),
+          '/navbar': (context) => Navbar(),
+          '/search': (context) => Search(),
+          '/filter': (context) => Filter(),
+          '/services': (context) => Services(),
+          '/service-detail': (context) => ServiceDetail(),
+          '/cart': (context) => Cart(),
+          '/update-profile': (context) => UpdateProfil(),
+          '/update-password': (context) => UpdatePassword(),
+          '/master-service': (context) => MasterService(),
+          '/master-service-category': (context) => MasterCategoryService(),
+          '/master-employee': (context) => MasterEmployee(),
+          '/master-banner': (context) => MasterBanner(),
+          '/master-consumen': (context) => MasterConsumen(),
+          '/master-user': (context) => MasterUser(),
+          '/master-user-log': (context) => MasterUserLog(),
+          '/master-user-role': (context) => MasterUserRole(),
+          '/master-user-permission': (context) => MasterUserPermission(),
+          '/master-transaction': (context) => MasterTransaction(),
+          '/master-transaction-detail': (context) => MasterTransactionDetail(),
+          '/master-payment': (context) => MasterPayment(),
+          '/master-gps-log': (context) => MasterGPSLog(),
+          '/payment': (context) => Payment(),
+          '/map-coordinate': (context) => MapCoordinate(),
+        },
       ),
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => MyHomePage(),
-        '/login': (context) => Login(),
-        '/register': (context) => Register(),
-        '/navbar': (context) => Navbar(),
-        '/search': (context) => Search(),
-        '/filter': (context) => Filter(),
-        '/services': (context) => Services(),
-        '/service-detail': (context) => ServiceDetail(),
-        '/cart': (context) => Cart(),
-        '/update-profile': (context) => UpdateProfil(),
-        '/update-password': (context) => UpdatePassword(),
-        '/master-service': (context) => MasterService(),
-        '/master-service-category': (context) => MasterCategoryService(),
-        '/master-employee': (context) => MasterEmployee(),
-        '/master-banner': (context) => MasterBanner(),
-        '/master-consumen': (context) => MasterConsumen(),
-        '/master-user': (context) => MasterUser(),
-        '/master-user-log': (context) => MasterUserLog(),
-        '/master-user-role': (context) => MasterUserRole(),
-        '/master-user-permission': (context) => MasterUserPermission(),
-        '/master-transaction': (context) => MasterTransaction(),
-        '/master-transaction-detail': (context) => MasterTransactionDetail(),
-        '/master-payment': (context) => MasterPayment(),
-        '/master-gps-log': (context) => MasterGPSLog(),
-        '/payment': (context) => Payment(),
-        '/map-coordinate': (context) => MapCoordinate(),
-      },
     );
   }
 }
