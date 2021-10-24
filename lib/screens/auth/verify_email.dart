@@ -1,9 +1,13 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:tukangku/models/login_model.dart';
 import 'package:tukangku/models/response_model.dart';
 import 'package:tukangku/repositories/auth_repository.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
-  const VerifyEmailScreen({Key? key}) : super(key: key);
+  final LoginModel? loginModel;
+  const VerifyEmailScreen({Key? key, this.loginModel}) : super(key: key);
 
   @override
   _VerifyEmailScreenState createState() => _VerifyEmailScreenState();
@@ -11,14 +15,40 @@ class VerifyEmailScreen extends StatefulWidget {
 
 class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   AuthRepository _authRepo = AuthRepository();
+  TextEditingController usernameController = TextEditingController();
 
   Future resendVerifyEmail() async {
+    EasyLoading.show(status: 'loading...');
     ResponseModel? responseModel =
-        await _authRepo.resendVerifyEmail('user@tukangku.co.id');
+        await _authRepo.resendVerifyEmail(usernameController.text);
+    EasyLoading.dismiss();
     if (responseModel != null) {
-      print(responseModel.status);
-      print(responseModel.message);
+      if (responseModel.status == 'success') {
+        CoolAlert.show(
+          context: context,
+          type: CoolAlertType.success,
+          text: responseModel.message,
+        );
+      } else {
+        CoolAlert.show(
+          context: context,
+          type: CoolAlertType.warning,
+          text: responseModel.message,
+        );
+      }
     }
+  }
+
+  @override
+  void initState() {
+    usernameController.text = widget.loginModel!.username ?? '';
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    super.dispose();
   }
 
   @override
@@ -48,7 +78,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
               height: 10,
             ),
             TextField(
-                // controller: usernameController,
+                controller: usernameController,
                 obscureText: false,
                 decoration: InputDecoration(
                     hintText: 'Email',

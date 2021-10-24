@@ -3,6 +3,7 @@ import 'package:meta/meta.dart';
 
 import 'package:equatable/equatable.dart';
 import 'package:tukangku/models/login_model.dart';
+import 'package:tukangku/models/register_model.dart';
 import 'package:tukangku/models/response_model.dart';
 import 'package:tukangku/models/user_model.dart';
 import 'package:tukangku/repositories/auth_repository.dart';
@@ -15,12 +16,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   AuthBloc() : super(AuthInitial()) {
     on<LoginProcess>(_loginProcess);
+    on<RegisterProcess>(_registerProcess);
     on<GetAuthData>(_authData);
     on<OnLogout>(_logout);
   }
 
   Future _loginProcess(LoginProcess event, Emitter<AuthState> emit) async {
     print('Login process...');
+    emit(LoginLoading());
     try {
       LoginData? loginData = await _authRepo.login(event.loginModel);
       if (loginData != null) {
@@ -39,6 +42,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     } catch (e) {
       emit(LoginError('Login Error'));
+    }
+  }
+
+  Future _registerProcess(
+      RegisterProcess event, Emitter<AuthState> emit) async {
+    print('Register process...');
+    emit(RegisterLoading());
+    try {
+      ResponseModel? responseModel =
+          await _authRepo.register(event.registerModel);
+      if (responseModel != null) {
+        if (responseModel.status == 'success') {
+          emit(RegisterSuccess(responseModel.message!));
+        } else {
+          emit(RegisterError(responseModel.message!));
+        }
+      } else {
+        print('Register failed');
+        emit(RegisterError('Register Error'));
+      }
+    } catch (e) {
+      emit(RegisterError('Register Error'));
     }
   }
 
@@ -63,6 +88,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   Future _logout(OnLogout event, Emitter<AuthState> emit) async {
     print('Logout process...');
+    emit(LogoutLoading());
     try {
       String? _token = await _authRepo.hasToken();
       print(_token);

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
+import 'package:tukangku/models/login_model.dart';
 import 'package:tukangku/screens/auth/verify_email.dart';
+import 'package:tukangku/utils/custom_snackbar.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -17,15 +19,21 @@ class _LoginState extends State<Login> {
   bool passwordObscure = true;
 
   Future loginProcess() async {
-    // LoginModel loginModel = new LoginModel(
-    //     username: usernameController.text, password: passwordController.text);
-    // authBloc.add(LoginProcess(loginModel));
-    Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return const VerifyEmailScreen();
-    }));
+    if (usernameController.text == '' || passwordController.text == '') {
+      String message = 'Username atau password tidak boleh ada yang kosong!';
+      CustomSnackbar.showSnackbar(context, message, SnackbarType.warning);
+    } else {
+      LoginModel loginModel = new LoginModel(
+          username: usernameController.text, password: passwordController.text);
+      authBloc.add(LoginProcess(loginModel));
+    }
+
+    // Navigator.push(context, MaterialPageRoute(builder: (context) {
+    //   return const VerifyEmailScreen();
+    // }));
 
     // authBloc.add(GetAuthData());
-    authBloc.add(OnLogout());
+    // authBloc.add(OnLogout());
   }
 
   Widget _submitButton() {
@@ -101,7 +109,7 @@ class _LoginState extends State<Login> {
           children: <Widget>[
             Text(
               'Don\'t have an account ?',
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
             ),
             SizedBox(
               width: 10,
@@ -110,7 +118,7 @@ class _LoginState extends State<Login> {
               'Register',
               style: TextStyle(
                   color: Color(0xfff79c4f),
-                  fontSize: 13,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600),
             ),
           ],
@@ -200,47 +208,82 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    return Scaffold(
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          leading: IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: Icon(
-              Icons.arrow_back,
-              color: Colors.black87,
-            ),
-          ),
-        ),
-        body: Container(
-          height: height,
-          child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  // SizedBox(height: height * .2),
-                  _title(),
-                  Text('Proffesional Homecare'),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  _emailPasswordWidget(),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  _submitButton(),
-                  SizedBox(
-                    height: 30,
-                  ),
-                  _divider(),
-                  _createAccountLabel(),
-                ],
+    return BlocListener<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is VerifyEmail) {
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return VerifyEmailScreen(
+              loginModel: state.loginModel,
+            );
+          }));
+        }
+      },
+      child: Scaffold(
+          appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            leading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.black87,
               ),
             ),
           ),
-        ));
+          backgroundColor: Colors.white,
+          body: Stack(
+            children: [
+              Container(
+                height: height,
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        // SizedBox(height: height * .2),
+                        _title(),
+                        Text('Proffesional Homecare'),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        _emailPasswordWidget(),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        _submitButton(),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        _divider(),
+                        _createAccountLabel(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  if (state is LoginLoading) {
+                    return Container(
+                        color: Colors.white.withOpacity(0.5),
+                        child: Center(
+                          child: Container(
+                              width: 25,
+                              height: 25,
+                              child: CircularProgressIndicator(
+                                color: Colors.orangeAccent.shade700,
+                                strokeWidth: 3,
+                              )),
+                        ));
+                  } else {
+                    return Container();
+                  }
+                },
+              )
+            ],
+          )),
+    );
   }
 }

@@ -36,6 +36,8 @@ dependencies:
   flutter_bloc: ^7.3.1
   flutter_dotenv: ^5.0.2
   shared_preferences:
+  cool_alert: ^1.1.0
+  flutter_easyloading: ^3.0.3
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -64,6 +66,7 @@ flutter:
     - assets/env/.env_development
     - assets/logo/tukangku_logo.png
     - assets/flats/chat-flat.png
+    - assets/flare/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

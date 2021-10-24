@@ -29,7 +29,21 @@ class LoginSuccess extends AuthState {}
 
 class RegisterLoading extends AuthState {}
 
-class RegisterSuccess extends AuthState {}
+class RegisterSuccess extends AuthState {
+  final String message;
+  RegisterSuccess(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class RegisterError extends AuthState {
+  final String message;
+  RegisterError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
 
 // Logout
 

@@ -17,6 +17,15 @@ class LoginProcess extends AuthEvent {
   List<Object> get props => [loginModel];
 }
 
+class RegisterProcess extends AuthEvent {
+  final RegisterModel registerModel;
+
+  RegisterProcess(this.registerModel);
+
+  @override
+  List<Object> get props => [registerModel];
+}
+
 class GetAuthData extends AuthEvent {}
 
 class OnLogout extends AuthEvent {}
