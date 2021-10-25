@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
 import 'package:tukangku/models/register_model.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:tukangku/utils/custom_snackbar.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -29,8 +30,9 @@ class _RegisterState extends State<Register> {
         _passwordController.text == '' ||
         _confirmPassController.text == '' ||
         privacyCheck == false) {
-      showMessage(
-          'Pastikan semua input terisi dan tidak boleh ada yang kosong!');
+      String message =
+          'Pastikan semua input terisi dan tidak boleh ada yang kosong!';
+      CustomSnackbar.showSnackbar(context, message, SnackbarType.warning);
     } else {
       RegisterModel registerModel = new RegisterModel(
           name: _nameController.text,
@@ -39,27 +41,6 @@ class _RegisterState extends State<Register> {
           confirmPassword: _confirmPassController.text);
       _authBloc.add(RegisterProcess(registerModel));
     }
-  }
-
-  showMessage(String message) {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          height: 60,
-          margin: EdgeInsets.all(15),
-          // color: Colors.amber,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(15)),
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                Text(message),
-              ],
-            ),
-          ),
-        );
-      },
-    );
   }
 
   @override

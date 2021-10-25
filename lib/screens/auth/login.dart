@@ -38,7 +38,8 @@ class _LoginState extends State<Login> {
 
   Widget _submitButton() {
     return InkWell(
-      onTap: () => loginProcess(),
+      // onTap: () => loginProcess(),
+      onTap: () => Navigator.of(context).pushNamed('/navbar'),
       child: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(vertical: 10),

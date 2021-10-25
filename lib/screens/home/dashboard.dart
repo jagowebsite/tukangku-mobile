@@ -2,6 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:tukangku/models/banner_model.dart';
+import 'package:tukangku/models/category_service_model.dart';
+import 'package:tukangku/models/service_model.dart';
+import 'package:tukangku/repositories/banner_repository.dart';
+import 'package:tukangku/repositories/category_service_repository.dart';
+import 'package:tukangku/repositories/service_repository.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -11,22 +17,44 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  List<String> imgList = [
-    'https://1.bp.blogspot.com/-pXvN7Ec8zA8/XVWjOqWiwyI/AAAAAAAABLU/6iVTf2gXt-AnPvdUvzRBuUl5gVr8KZMOwCLcBGAs/s640/jasa-perawat-home-care-terbaik-di-indonesia.jpg',
-    'https://medi-call.id/img/content/slider/Banner%20HCC%203%20Medi-Call-01.jpg',
-    'https://assets.klikindomaret.com///products/promopage/TNC%20Promosi%20Homecare.jpg',
-    'https://assets.klikindomaret.com///products/promopage/TNC%20Promosi%20Homecare.jpg',
-    'https://assets.klikindomaret.com///products/promopage/TNC%20Promosi%20Homecare.jpg',
-  ];
+  BannerRepository _bannerRepo = BannerRepository();
+  CategoryServiceRepository _categoryServiceRepo = CategoryServiceRepository();
+  ServiceRepository _serviceRepo = ServiceRepository();
 
-  List<String> imgCategory = [
-    'https://image.flaticon.com/icons/png/512/479/479358.png',
-    'https://cdn-icons-png.flaticon.com/512/2575/2575842.png',
-    'https://image.flaticon.com/icons/png/512/1253/1253655.png',
-    'https://image.flaticon.com/icons/png/512/479/479358.png',
-    'https://cdn-icons-png.flaticon.com/512/2575/2575842.png',
-    'https://image.flaticon.com/icons/png/512/1253/1253655.png',
-  ];
+  // List<String> bannerList = [
+  //   'https://1.bp.blogspot.com/-pXvN7Ec8zA8/XVWjOqWiwyI/AAAAAAAABLU/6iVTf2gXt-AnPvdUvzRBuUl5gVr8KZMOwCLcBGAs/s640/jasa-perawat-home-care-terbaik-di-indonesia.jpg',
+  //   'https://medi-call.id/img/content/slider/Banner%20HCC%203%20Medi-Call-01.jpg',
+  //   'https://assets.klikindomaret.com///products/promopage/TNC%20Promosi%20Homecare.jpg',
+  //   'https://assets.klikindomaret.com///products/promopage/TNC%20Promosi%20Homecare.jpg',
+  //   'https://assets.klikindomaret.com///products/promopage/TNC%20Promosi%20Homecare.jpg',
+  // ];
+
+  List<BannerModel>? listBanner;
+  List<CategoryServiceModel>? listCategoryService;
+  List<ServiceModel>? listServices;
+
+  Future getBanner() async {
+    listBanner = await _bannerRepo.getBanners();
+    setState(() {});
+  }
+
+  Future getCategoryService() async {
+    listCategoryService = await _categoryServiceRepo.getCategoryServices();
+    setState(() {});
+  }
+
+  Future getServices() async {
+    listServices = await _serviceRepo.getServices();
+  }
+
+  // List<String> imgCategory = [
+  //   'https://image.flaticon.com/icons/png/512/479/479358.png',
+  //   'https://cdn-icons-png.flaticon.com/512/2575/2575842.png',
+  //   'https://image.flaticon.com/icons/png/512/1253/1253655.png',
+  //   'https://image.flaticon.com/icons/png/512/479/479358.png',
+  //   'https://cdn-icons-png.flaticon.com/512/2575/2575842.png',
+  //   'https://image.flaticon.com/icons/png/512/1253/1253655.png',
+  // ];
 
   List<String> imgService = [
     'https://psdfreebies.com/wp-content/uploads/2019/01/Travel-Service-Banner-Ads-Templates-PSD.jpg',
@@ -48,7 +76,20 @@ class _DashboardState extends State<Dashboard> {
 
   Future<void> _refresh() async {
     await Future.delayed(Duration(seconds: 1));
+    getInitData();
     print('Refresing...');
+  }
+
+  getInitData() {
+    getBanner();
+    getCategoryService();
+    getServices();
+  }
+
+  @override
+  void initState() {
+    getInitData();
+    super.initState();
   }
 
   @override
@@ -110,60 +151,73 @@ class _DashboardState extends State<Dashboard> {
             slivers: [
               SliverList(
                   delegate: SliverChildListDelegate([
-                Container(
-                  width: size.width,
-                  height: size.height * 0.2,
-                  margin: EdgeInsets.only(top: 10),
-                  child: CarouselSlider(
-                    options: CarouselOptions(
-                      autoPlay: true,
-                      aspectRatio: 2.0,
-                      enlargeCenterPage: true,
-                    ),
-                    items: imgList
-                        .map((item) => Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: CachedNetworkImage(
-                                imageUrl: item,
-                                fit: BoxFit.cover,
-                                imageBuilder: (context, imageProvider) =>
-                                    Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    image: DecorationImage(
-                                      image: imageProvider,
+                listBanner != null
+                    ? Container(
+                        width: size.width,
+                        height: size.height * 0.2,
+                        margin: EdgeInsets.only(top: 10),
+                        child: CarouselSlider(
+                          options: CarouselOptions(
+                            autoPlay: true,
+                            aspectRatio: 2.0,
+                            enlargeCenterPage: true,
+                          ),
+                          items: listBanner!
+                              .map((item) => Container(
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: CachedNetworkImage(
+                                      // imageUrl: item.images ??
+                                      //     'https://medi-call.id/img/content/slider/Banner%20HCC%203%20Medi-Call-01.jpg',
+                                      imageUrl:
+                                          'https://medi-call.id/img/content/slider/Banner%20HCC%203%20Medi-Call-01.jpg',
                                       fit: BoxFit.cover,
-                                    ),
-                                  ),
-                                ),
-                                placeholder: (context, url) =>
-                                    Shimmer.fromColors(
-                                        baseColor: Colors.grey.shade300,
-                                        highlightColor: Colors.grey.shade100,
-                                        child: Container(
-                                            decoration: BoxDecoration(
-                                                color: Colors.grey.shade100,
-                                                borderRadius:
-                                                    BorderRadius.circular(10)),
-                                            width: double.infinity,
-                                            height: double.infinity,
+                                      imageBuilder: (context, imageProvider) =>
+                                          Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      placeholder: (context, url) =>
+                                          Shimmer.fromColors(
+                                              baseColor: Colors.grey.shade300,
+                                              highlightColor:
+                                                  Colors.grey.shade100,
+                                              child: Container(
+                                                  decoration: BoxDecoration(
+                                                      color:
+                                                          Colors.grey.shade100,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10)),
+                                                  width: double.infinity,
+                                                  height: double.infinity,
+                                                  child: Icon(Icons.image,
+                                                      size: 100))),
+                                      errorWidget: (context, url, error) =>
+                                          Container(
+                                        color: Colors.grey.shade100,
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        child: Shimmer.fromColors(
+                                            baseColor: Colors.grey.shade200,
+                                            highlightColor:
+                                                Colors.grey.shade100,
                                             child:
-                                                Icon(Icons.image, size: 100))),
-                                errorWidget: (context, url, error) => Container(
-                                  color: Colors.grey.shade100,
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  child: Shimmer.fromColors(
-                                      baseColor: Colors.grey.shade200,
-                                      highlightColor: Colors.grey.shade100,
-                                      child: Icon(Icons.error)),
-                                ),
-                              ),
-                            ))
-                        .toList(),
-                  ),
-                )
+                                                Icon(Icons.image, size: 100)),
+                                      ),
+                                    ),
+                                  ))
+                              .toList(),
+                        ),
+                      )
+                    : Container()
               ])),
               SliverList(
                   delegate: SliverChildListDelegate([
@@ -204,46 +258,55 @@ class _DashboardState extends State<Dashboard> {
                 SizedBox(
                   height: 25,
                 ),
-                Container(
-                    margin: EdgeInsets.symmetric(horizontal: 15),
-                    child: Text('Kategori Layanan',
-                        style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.w700))),
+                listCategoryService != null
+                    ? Container(
+                        margin: EdgeInsets.symmetric(horizontal: 15),
+                        child: Text('Kategori Layanan',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w700)))
+                    : Container(),
                 SizedBox(
                   height: 5,
                 ),
-                Container(
-                  height: 100,
-                  child: ListView.builder(
-                      physics: BouncingScrollPhysics(
-                          parent: AlwaysScrollableScrollPhysics()),
-                      padding: EdgeInsets.all(15),
-                      scrollDirection: Axis.horizontal,
-                      itemCount: imgCategory.length,
-                      itemBuilder: (context, index) {
-                        return Container(
-                          margin: EdgeInsets.only(right: 15),
-                          child: Column(
-                            children: [
-                              ClipOval(
-                                child: Container(
-                                  height: 40,
-                                  color: Colors.orangeAccent,
-                                  child: CachedNetworkImage(
-                                    imageUrl: imgCategory[index],
-                                    fit: BoxFit.cover,
-                                  ),
+                listCategoryService != null
+                    ? Container(
+                        height: 100,
+                        child: ListView.builder(
+                            physics: BouncingScrollPhysics(
+                                parent: AlwaysScrollableScrollPhysics()),
+                            padding: EdgeInsets.all(15),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: listCategoryService!.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                margin: EdgeInsets.only(right: 15),
+                                width: 60,
+                                child: Column(
+                                  children: [
+                                    ClipOval(
+                                      child: Container(
+                                        height: 40,
+                                        color: Colors.orangeAccent,
+                                        child: CachedNetworkImage(
+                                          imageUrl: listCategoryService![index]
+                                              .images!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                      listCategoryService![index].name!,
+                                      overflow: TextOverflow.ellipsis,
+                                    )
+                                  ],
                                 ),
-                              ),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Text(textCategory[index])
-                            ],
-                          ),
-                        );
-                      }),
-                ),
+                              );
+                            }),
+                      )
+                    : Container(),
                 Container(
                     margin: EdgeInsets.symmetric(horizontal: 15),
                     child: Text('Semua Layanan',
