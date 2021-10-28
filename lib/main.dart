@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
+import 'package:tukangku/blocs/home_bloc/home_bloc.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner.dart';
 import 'package:tukangku/screens/account/master/category/master_category_service.dart';
 import 'package:tukangku/screens/account/master/consumen/master_consumen.dart';
@@ -42,6 +43,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider<AuthBloc>(
           create: (BuildContext context) => AuthBloc(),
+        ),
+        BlocProvider<HomeBloc>(
+          create: (BuildContext context) => HomeBloc(),
         ),
       ],
       child: MaterialApp(
