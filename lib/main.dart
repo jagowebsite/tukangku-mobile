@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
+import 'package:tukangku/blocs/design_bloc/design_bloc.dart';
 import 'package:tukangku/blocs/home_bloc/home_bloc.dart';
+import 'package:tukangku/blocs/service_bloc/service_bloc.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner.dart';
 import 'package:tukangku/screens/account/master/category/master_category_service.dart';
 import 'package:tukangku/screens/account/master/consumen/master_consumen.dart';
@@ -47,6 +49,12 @@ class MyApp extends StatelessWidget {
         BlocProvider<HomeBloc>(
           create: (BuildContext context) => HomeBloc(),
         ),
+        BlocProvider<DesignBloc>(
+          create: (BuildContext context) => DesignBloc(),
+        ),
+        BlocProvider<ServiceBloc>(
+          create: (BuildContext context) => ServiceBloc(),
+        ),
       ],
       child: MaterialApp(
         title: 'Tukangku',
@@ -63,8 +71,6 @@ class MyApp extends StatelessWidget {
           '/navbar': (context) => Navbar(),
           '/search': (context) => Search(),
           '/filter': (context) => Filter(),
-          '/services': (context) => Services(),
-          '/service-detail': (context) => ServiceDetail(),
           '/cart': (context) => Cart(),
           '/update-profile': (context) => UpdateProfil(),
           '/update-password': (context) => UpdatePassword(),

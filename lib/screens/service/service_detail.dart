@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:readmore/readmore.dart';
+import 'package:tukangku/models/service_model.dart';
+import 'package:tukangku/utils/currency_format.dart';
 
 class ServiceDetail extends StatefulWidget {
-  const ServiceDetail({Key? key}) : super(key: key);
+  final ServiceModel serviceModel;
+  const ServiceDetail({Key? key, required this.serviceModel}) : super(key: key);
 
   @override
   _ServiceDetailState createState() => _ServiceDetailState();
@@ -17,15 +20,6 @@ class _ServiceDetailState extends State<ServiceDetail> {
 
   // Index untuk indicator carousel
   int _currentCarrousel = 0;
-
-  List<String> imgList = [
-    'https://psdfreebies.com/wp-content/uploads/2019/01/Travel-Service-Banner-Ads-Templates-PSD.jpg',
-    'https://thumbs.dreamstime.com/z/phone-repair-service-banner-template-smartphone-broken-screen-phone-repair-service-banner-template-smartphone-broken-134038666.jpg',
-    'https://harjaditutoring.weebly.com/uploads/1/8/9/7/18970359/online-classes-05_orig.jpg',
-    'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/personal-online-tutor-english-instagram-design-template-e05c3f54e7f260d3718e903817cc1c9f_screen.jpg?ts=1589149599',
-    'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/personal-online-tutor-english-instagram-design-template-ac46499da9cc2c4b5f373def35a14a6b_screen.jpg?ts=1591005575',
-    'https://cdn4.vectorstock.com/i/1000x1000/31/38/airport-online-service-flat-banners-vector-18313138.jpg',
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +57,11 @@ class _ServiceDetailState extends State<ServiceDetail> {
                     Row(
                       children: [
                         Text(
-                          "Rp 100.000",
+                          widget.serviceModel.price != null
+                              ? currencyId
+                                  .format(widget.serviceModel.price)
+                                  .toString()
+                              : 'Rp 0',
                           style: TextStyle(
                               fontSize: 25,
                               fontWeight: FontWeight.bold,
@@ -71,7 +69,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                         ),
                         Expanded(
                           child: Text(
-                            " / per Jam",
+                            " / per ${widget.serviceModel.typeQuantity}",
                             style: TextStyle(
                               fontSize: 14,
                             ),
@@ -83,7 +81,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                       height: 10,
                     ),
                     Text(
-                      "Instalasi Pemasangan AC",
+                      widget.serviceModel.name ?? '',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
@@ -91,7 +89,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                       height: 10,
                     ),
                     Text(
-                      "Service AC",
+                      widget.serviceModel.categoryService!.name ?? '',
                       style: TextStyle(color: Colors.grey),
                     ),
                     SizedBox(
@@ -106,7 +104,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                       height: 10,
                     ),
                     ReadMoreText(
-                      'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.',
+                      widget.serviceModel.description ?? '',
                       trimLines: 3,
                       style: TextStyle(color: Colors.grey),
                       colorClickableText: Colors.pink,
@@ -151,7 +149,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                           }
                           // enlargeCenterPage: true,
                           ),
-                      items: imgList
+                      items: (widget.serviceModel.images ?? [])
                           .map((item) => Container(
                                 width: size.width,
                                 child: CachedNetworkImage(
@@ -220,7 +218,10 @@ class _ServiceDetailState extends State<ServiceDetail> {
                         margin: EdgeInsets.only(top: size.height * 0.4),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: imgList.asMap().entries.map((entry) {
+                          children: (widget.serviceModel.images ?? [])
+                              .asMap()
+                              .entries
+                              .map((entry) {
                             return GestureDetector(
                               onTap: () => _controller.animateToPage(entry.key),
                               child: Container(

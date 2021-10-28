@@ -29,25 +29,23 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             await _serviceRepo.getServices(page: page, limit: event.limit);
         if (data != null) {
           listServices = data;
+          data.length < event.limit
+              ? emit(ServiceHomeData(listServices, true))
+              : emit(ServiceHomeData(listServices, false));
+        } else {
+          emit(ServiceHomeData(listServices, false));
         }
-        emit(ServiceHomeData(listServices, false));
       } else {
-        // emit(ServiceHomeSuccess(''));
         print('Get more service...');
         page++;
         List<ServiceModel>? data =
             await _serviceRepo.getServices(page: page, limit: event.limit);
         if (data != null) {
           listServices.addAll(data);
-          print('Ini adalah panjang data = ' + data.length.toString());
           data.length < event.limit
               ? emit(ServiceHomeData(listServices, true))
               : emit(ServiceHomeData(listServices, false));
-
-          // emit(ServiceHomeError('Error 1'));
-          // emit(ServiceHomeError('Error 2'));
         } else {
-          print('im here get more');
           emit(ServiceHomeData(listServices, false));
         }
       }

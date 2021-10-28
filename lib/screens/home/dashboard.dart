@@ -6,10 +6,9 @@ import 'package:shimmer/shimmer.dart';
 import 'package:tukangku/blocs/home_bloc/home_bloc.dart';
 import 'package:tukangku/models/banner_model.dart';
 import 'package:tukangku/models/category_service_model.dart';
-import 'package:tukangku/models/service_model.dart';
 import 'package:tukangku/repositories/banner_repository.dart';
 import 'package:tukangku/repositories/category_service_repository.dart';
-import 'package:tukangku/repositories/service_repository.dart';
+import 'package:tukangku/screens/widgets/service_item.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
 
 class Dashboard extends StatefulWidget {
@@ -22,7 +21,6 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   BannerRepository _bannerRepo = BannerRepository();
   CategoryServiceRepository _categoryServiceRepo = CategoryServiceRepository();
-  ServiceRepository _serviceRepo = ServiceRepository();
 
   ScrollController _scrollController = ScrollController();
 
@@ -36,7 +34,6 @@ class _DashboardState extends State<Dashboard> {
 
   List<BannerModel>? listBanner;
   List<CategoryServiceModel>? listCategoryService;
-  List<ServiceModel>? listServices;
 
   Future getBanner() async {
     listBanner = await _bannerRepo.getBanners();
@@ -46,10 +43,6 @@ class _DashboardState extends State<Dashboard> {
   Future getCategoryService() async {
     listCategoryService = await _categoryServiceRepo.getCategoryServices();
     setState(() {});
-  }
-
-  Future getServices() async {
-    listServices = await _serviceRepo.getServices();
   }
 
   void onScroll() {
@@ -64,14 +57,13 @@ class _DashboardState extends State<Dashboard> {
 
   Future<void> _refresh() async {
     await Future.delayed(Duration(seconds: 1));
-    await getInitData();
+    getInitData();
     print('Refresing...');
   }
 
   getInitData() {
     getBanner();
     getCategoryService();
-    getServices();
     homeBloc.add(GetServiceHome(2, true));
   }
 
@@ -83,12 +75,12 @@ class _DashboardState extends State<Dashboard> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    homeBloc.close();
-    _scrollController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   homeBloc.close();
+  //   _scrollController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -96,14 +88,10 @@ class _DashboardState extends State<Dashboard> {
     return BlocListener<HomeBloc, HomeState>(
       listener: (context, state) {
         if (state is ServiceHomeError) {
-          print('State is Service Home Error');
           CustomSnackbar.showSnackbar(
               context, state.message, SnackbarType.error);
         } else if (state is ServiceHomeData) {
-          // Mengupdate _hasReachMax sesuai dengan data
-          // Jika true, maka infinite loop tidak dilanjutkan
           _hasReachMax = state.hasReachMax;
-          print('State is ServiceHomeData');
         }
       },
       child: Scaffold(
@@ -373,76 +361,6 @@ class _DashboardState extends State<Dashboard> {
                   )
                 ])),
               ]),
-        ),
-      ),
-    );
-  }
-}
-
-class ServiceItem extends StatelessWidget {
-  final ServiceModel serviceModel;
-  final Function()? onTap;
-  const ServiceItem({required this.serviceModel, this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Card(
-        elevation: 0,
-        child: GestureDetector(
-          onTap: () =>
-              onTap ?? Navigator.of(context).pushNamed('/service-detail'),
-          child: Container(
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                color: Colors.grey.shade100),
-            child: Stack(
-              children: [
-                Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: CachedNetworkImage(
-                      imageUrl: serviceModel.images!.length != 0
-                          ? serviceModel.images![0]
-                          : 'https://psdfreebies.com/wp-content/uploads/2019/01/Travel-Service-Banner-Ads-Templates-PSD.jpg',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                Container(
-                  width: double.infinity,
-                  height: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    gradient: LinearGradient(
-                      colors: [
-                        Colors.black,
-                        Colors.transparent,
-                        Colors.transparent,
-                        Colors.black
-                      ],
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      stops: [0, 0, 0.7, 1],
-                    ),
-                  ),
-                ),
-                Positioned(
-                    child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      serviceModel.name ?? 'Service Layanan TukangKita',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ))
-              ],
-            ),
-          ),
         ),
       ),
     );
