@@ -12,7 +12,7 @@ class CustomSnackbar {
               ? Colors.orange.shade700
               : Colors.red.shade700,
       content: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(
               type == SnackbarType.success

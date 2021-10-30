@@ -30,13 +30,6 @@ class _LoginState extends State<Login> {
           username: usernameController.text, password: passwordController.text);
       authBloc.add(LoginProcess(loginModel));
     }
-
-    // Navigator.push(context, MaterialPageRoute(builder: (context) {
-    //   return const VerifyEmailScreen();
-    // }));
-
-    // authBloc.add(GetAuthData());
-    // authBloc.add(OnLogout());
   }
 
   Widget _submitButton() {

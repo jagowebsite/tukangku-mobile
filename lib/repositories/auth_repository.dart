@@ -134,7 +134,7 @@ class AuthRepository {
         'email': email,
       });
 
-      print(response.body);
+      // print(response.body);
 
       // Error handling
       if (response.statusCode == 200) {

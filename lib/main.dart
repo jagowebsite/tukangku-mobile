@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
 import 'package:tukangku/blocs/design_bloc/design_bloc.dart';
 import 'package:tukangku/blocs/home_bloc/home_bloc.dart';
+import 'package:tukangku/blocs/profile_bloc/profile_bloc.dart';
 import 'package:tukangku/blocs/service_bloc/service_bloc.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner.dart';
 import 'package:tukangku/screens/account/master/category/master_category_service.dart';
@@ -27,8 +28,6 @@ import 'package:tukangku/screens/navbar.dart';
 import 'package:tukangku/screens/others/filter.dart';
 import 'package:tukangku/screens/others/map_coordinate.dart';
 import 'package:tukangku/screens/others/search.dart';
-import 'package:tukangku/screens/service/service_detail.dart';
-import 'package:tukangku/screens/service/services.dart';
 import 'package:tukangku/screens/transaction/cart.dart';
 import 'package:tukangku/screens/transaction/payment.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -54,6 +53,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<ServiceBloc>(
           create: (BuildContext context) => ServiceBloc(),
+        ),
+        BlocProvider<ProfileBloc>(
+          create: (BuildContext context) => ProfileBloc(),
         ),
       ],
       child: MaterialApp(
