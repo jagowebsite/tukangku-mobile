@@ -38,8 +38,8 @@ class _LoginState extends State<Login> {
 
   Widget _submitButton() {
     return InkWell(
-      // onTap: () => loginProcess(),
-      onTap: () => Navigator.of(context).pushNamed('/navbar'),
+      onTap: () => loginProcess(),
+      // onTap: () => Navigator.of(context).pushNamed('/navbar'),
       child: Container(
         width: MediaQuery.of(context).size.width,
         padding: EdgeInsets.symmetric(vertical: 10),
@@ -196,6 +196,7 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     authBloc = BlocProvider.of<AuthBloc>(context);
+    authBloc.add(GetAuthData());
     super.initState();
   }
 
@@ -203,6 +204,7 @@ class _LoginState extends State<Login> {
   void dispose() {
     usernameController.dispose();
     passwordController.dispose();
+    // authBloc.close();
     super.dispose();
   }
 
@@ -217,6 +219,8 @@ class _LoginState extends State<Login> {
               loginModel: state.loginModel,
             );
           }));
+        } else if (state is LoginSuccess || state is Authorized) {
+          Navigator.of(context).popAndPushNamed('/navbar');
         }
       },
       child: Scaffold(

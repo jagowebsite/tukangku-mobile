@@ -18,7 +18,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LoginProcess>(_loginProcess);
     on<RegisterProcess>(_registerProcess);
     on<GetAuthData>(_authData);
-    on<OnLogout>(_logout);
+    on<Logout>(_logout);
   }
 
   Future _loginProcess(LoginProcess event, Emitter<AuthState> emit) async {
@@ -86,7 +86,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future _logout(OnLogout event, Emitter<AuthState> emit) async {
+  Future _logout(Logout event, Emitter<AuthState> emit) async {
     print('Logout process...');
     emit(LogoutLoading());
     try {

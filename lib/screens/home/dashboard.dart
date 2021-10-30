@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
 import 'package:tukangku/blocs/home_bloc/home_bloc.dart';
 import 'package:tukangku/models/banner_model.dart';
 import 'package:tukangku/models/category_service_model.dart';
 import 'package:tukangku/repositories/banner_repository.dart';
 import 'package:tukangku/repositories/category_service_repository.dart';
+import 'package:tukangku/screens/widgets/custom_cached_image.dart';
 import 'package:tukangku/screens/widgets/service_item.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
 
@@ -21,6 +23,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   BannerRepository _bannerRepo = BannerRepository();
   CategoryServiceRepository _categoryServiceRepo = CategoryServiceRepository();
+  late AuthBloc authBloc;
 
   ScrollController _scrollController = ScrollController();
 
@@ -61,15 +64,28 @@ class _DashboardState extends State<Dashboard> {
     print('Refresing...');
   }
 
+  String greeting() {
+    var hour = DateTime.now().hour;
+    if (hour < 12) {
+      return 'Selamat pagi';
+    }
+    if (hour < 17) {
+      return 'Selamat sore';
+    }
+    return 'Selamat malam';
+  }
+
   getInitData() {
     getBanner();
     getCategoryService();
+    authBloc.add(GetAuthData());
     homeBloc.add(GetServiceHome(2, true));
   }
 
   @override
   void initState() {
     homeBloc = BlocProvider.of<HomeBloc>(context);
+    authBloc = BlocProvider.of<AuthBloc>(context);
     getInitData();
     _scrollController.addListener(onScroll);
     super.initState();
@@ -103,12 +119,18 @@ class _DashboardState extends State<Dashboard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Selamat pagi,',
+                '${greeting()},',
                 style: TextStyle(color: Colors.black87, fontSize: 12),
               ),
-              Text(
-                'Boy William',
-                style: TextStyle(color: Colors.black87, fontSize: 16),
+              BlocBuilder<AuthBloc, AuthState>(
+                builder: (context, state) {
+                  return Text(
+                    state is Authorized
+                        ? (state.user.name ?? '...')
+                        : 'Cari Apa Hari Ini?',
+                    style: TextStyle(color: Colors.black87, fontSize: 16),
+                  );
+                },
               )
             ],
           ),
@@ -164,57 +186,12 @@ class _DashboardState extends State<Dashboard> {
                             ),
                             items: listBanner!
                                 .map((item) => Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      child: CachedNetworkImage(
-                                        // imageUrl: item.images ??
-                                        //     'https://medi-call.id/img/content/slider/Banner%20HCC%203%20Medi-Call-01.jpg',
-                                        imageUrl:
-                                            'https://medi-call.id/img/content/slider/Banner%20HCC%203%20Medi-Call-01.jpg',
-                                        fit: BoxFit.cover,
-                                        imageBuilder:
-                                            (context, imageProvider) =>
-                                                Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            image: DecorationImage(
-                                              image: imageProvider,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                        ),
-                                        placeholder: (context, url) =>
-                                            Shimmer.fromColors(
-                                                baseColor: Colors.grey.shade300,
-                                                highlightColor:
-                                                    Colors.grey.shade100,
-                                                child: Container(
-                                                    decoration: BoxDecoration(
-                                                        color: Colors
-                                                            .grey.shade100,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10)),
-                                                    width: double.infinity,
-                                                    height: double.infinity,
-                                                    child: Icon(Icons.image,
-                                                        size: 100))),
-                                        errorWidget: (context, url, error) =>
-                                            Container(
-                                          color: Colors.grey.shade100,
-                                          width: double.infinity,
-                                          height: double.infinity,
-                                          child: Shimmer.fromColors(
-                                              baseColor: Colors.grey.shade200,
-                                              highlightColor:
-                                                  Colors.grey.shade100,
-                                              child:
-                                                  Icon(Icons.image, size: 100)),
-                                        ),
-                                      ),
-                                    ))
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: CustomCachedImage.build(context,
+                                        imgUrl: item.images ??
+                                            'https://medi-call.id/img/content/slider/Banner%20HCC%203%20Medi-Call-01.jpg')))
                                 .toList(),
                           ),
                         )

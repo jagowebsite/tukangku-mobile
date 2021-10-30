@@ -28,4 +28,4 @@ class RegisterProcess extends AuthEvent {
 
 class GetAuthData extends AuthEvent {}
 
-class OnLogout extends AuthEvent {}
+class Logout extends AuthEvent {}

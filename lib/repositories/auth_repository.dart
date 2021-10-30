@@ -77,7 +77,7 @@ class AuthRepository {
           return User.fromJson(jsonResponse['data']);
         }
       } else {
-        throw Exception('Koneksi dengan server bermasalah.');
+        throw Exception('Response status code : ${response.statusCode}');
       }
     } catch (e) {
       print(e.toString());

@@ -13,7 +13,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  late AuthBloc _authBloc;
+  late AuthBloc authBloc;
 
   TextEditingController _emailController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
@@ -39,15 +39,22 @@ class _RegisterState extends State<Register> {
           username: _emailController.text,
           password: _passwordController.text,
           confirmPassword: _confirmPassController.text);
-      _authBloc.add(RegisterProcess(registerModel));
+      authBloc.add(RegisterProcess(registerModel));
     }
   }
 
   @override
   void initState() {
-    _authBloc = BlocProvider.of<AuthBloc>(context);
+    authBloc = BlocProvider.of<AuthBloc>(context);
+    authBloc.add(GetAuthData());
     super.initState();
   }
+
+  // @override
+  // void dispose() {
+  //   authBloc.close();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +72,8 @@ class _RegisterState extends State<Register> {
             type: CoolAlertType.warning,
             text: state.message,
           );
+        } else if (state is Authorized) {
+          Navigator.of(context).popAndPushNamed('/navbar');
         }
       },
       child: Scaffold(
