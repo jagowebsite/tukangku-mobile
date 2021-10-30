@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
+import 'package:tukangku/main.dart';
 import 'package:tukangku/screens/widgets/bottom_sheet_modal.dart';
 import 'package:tukangku/screens/widgets/custom_cached_image.dart';
 
@@ -30,7 +31,9 @@ class _AccountState extends State<Account> {
           ),
           SizedBox(width: 10),
           ElevatedButton(
-            child: const Text('Logout'),
+            style:
+                ElevatedButton.styleFrom(primary: Colors.orangeAccent.shade700),
+            child: const Text('Logout', style: TextStyle(color: Colors.white)),
             onPressed: () => authBloc.add(Logout()),
           ),
         ],
@@ -50,9 +53,16 @@ class _AccountState extends State<Account> {
     Size size = MediaQuery.of(context).size;
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
-        // if (state is LogoutSuccess) {
-        //   Navigator.of(context).popAndPushNamed('/');
-        // }
+        if (state is LogoutSuccess) {
+          // Navigator.of(context).popAndPushNamed('/');
+          Navigator.pushAndRemoveUntil<void>(
+            context,
+            MaterialPageRoute<void>(
+                builder: (BuildContext context) => MyHomePage()),
+            ModalRoute.withName('/'),
+            // (route) => false
+          );
+        }
       },
       child: Scaffold(
           appBar: AppBar(

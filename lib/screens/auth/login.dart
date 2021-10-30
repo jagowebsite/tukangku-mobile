@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
 import 'package:tukangku/models/login_model.dart';
 import 'package:tukangku/screens/auth/verify_email.dart';
+import 'package:tukangku/screens/navbar.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
 
 class Login extends StatefulWidget {
@@ -11,8 +12,10 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController usernameController =
+      TextEditingController(text: 'user@tukangku.co.id');
+  TextEditingController passwordController =
+      TextEditingController(text: 'user');
 
   late AuthBloc authBloc;
 
@@ -202,8 +205,8 @@ class _LoginState extends State<Login> {
 
   @override
   void dispose() {
-    usernameController.dispose();
-    passwordController.dispose();
+    // usernameController.dispose();
+    // passwordController.dispose();
     // authBloc.close();
     super.dispose();
   }
@@ -220,7 +223,13 @@ class _LoginState extends State<Login> {
             );
           }));
         } else if (state is LoginSuccess || state is Authorized) {
-          Navigator.of(context).popAndPushNamed('/navbar');
+          // Navigator.of(context).popAndPushNamed('/navbar');
+          Navigator.pushAndRemoveUntil<void>(
+            context,
+            MaterialPageRoute<void>(
+                builder: (BuildContext context) => const Navbar()),
+            ModalRoute.withName('/navbar'),
+          );
         }
       },
       child: Scaffold(

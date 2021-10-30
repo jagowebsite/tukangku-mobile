@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
+import 'package:tukangku/main.dart';
 import 'package:tukangku/screens/account/account.dart';
 import 'package:tukangku/screens/chat/chat.dart';
 import 'package:tukangku/screens/design/design.dart';
@@ -39,7 +40,13 @@ class _NavbarState extends State<Navbar> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is LogoutSuccess || state is UnAuthorized) {
-          Navigator.of(context).popAndPushNamed('/');
+          // Navigator.of(context).popAndPushNamed('/');
+          // Navigator.pushAndRemoveUntil<void>(
+          //   context,
+          //   MaterialPageRoute<void>(
+          //       builder: (BuildContext context) => MyHomePage()),
+          //   ModalRoute.withName('/'),
+          // );
         }
       },
       child: Scaffold(

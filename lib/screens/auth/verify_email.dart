@@ -6,6 +6,7 @@ import 'package:tukangku/models/login_model.dart';
 import 'package:tukangku/models/response_model.dart';
 import 'package:tukangku/repositories/auth_repository.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:tukangku/screens/navbar.dart';
 
 class VerifyEmailScreen extends StatefulWidget {
   final LoginModel? loginModel;
@@ -59,7 +60,13 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is LoginSuccess || state is Authorized) {
-          Navigator.of(context).popAndPushNamed('/navbar');
+          // Navigator.of(context).popAndPushNamed('/navbar');
+          Navigator.pushAndRemoveUntil<void>(
+            context,
+            MaterialPageRoute<void>(
+                builder: (BuildContext context) => const Navbar()),
+            ModalRoute.withName('/navbar'),
+          );
         }
       },
       child: Scaffold(

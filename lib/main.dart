@@ -128,7 +128,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is Authorized) {
-          Navigator.of(context).popAndPushNamed('/navbar');
+          // Navigator.of(context).popAndPushNamed('/navbar');
+          Navigator.pushAndRemoveUntil<void>(
+            context,
+            MaterialPageRoute<void>(
+                builder: (BuildContext context) => const Navbar()),
+            ModalRoute.withName('/navbar'),
+          );
         }
       },
       child: Scaffold(
