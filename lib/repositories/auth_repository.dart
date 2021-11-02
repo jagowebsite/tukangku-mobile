@@ -20,16 +20,16 @@ class AuthRepository {
         'device_name': 'mobile'
       });
 
-      // print(response.body);
+      print(response.body);
 
       // Error handling
       if (response.statusCode == 200) {
         var jsonResponse = json.decode(response.body);
-        if (jsonResponse['status'] == 'success') {
-          return LoginData.toJson(jsonResponse['data']);
-        } else {
-          throw Exception(jsonResponse['message']);
-        }
+        return LoginData.toJson(jsonResponse);
+        // if (jsonResponse['status'] == 'success') {
+        // } else {
+        //   throw Exception(jsonResponse['message']);
+        // }
       } else {
         throw Exception('Koneksi dengan server bermasalah');
       }

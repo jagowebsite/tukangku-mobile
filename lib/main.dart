@@ -31,6 +31,7 @@ import 'package:tukangku/screens/others/search.dart';
 import 'package:tukangku/screens/transaction/cart.dart';
 import 'package:tukangku/screens/transaction/payment.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:tukangku/screens/widgets/image_cropper.dart';
 
 void main() async {
   await dotenv.load(fileName: "assets/env/.env_production");
@@ -91,6 +92,7 @@ class MyApp extends StatelessWidget {
           '/master-gps-log': (context) => MasterGPSLog(),
           '/payment': (context) => Payment(),
           '/map-coordinate': (context) => MapCoordinate(),
+          '/image-cropper': (context) => ImageCropper(),
         },
       ),
     );

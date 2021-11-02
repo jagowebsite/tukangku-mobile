@@ -12,12 +12,16 @@ class LoginModel {
 }
 
 class LoginData {
-  String? token;
+  String? token, message, status;
   bool? verified;
 
-  LoginData({this.token, this.verified});
+  LoginData({this.token, this.verified, this.message, this.status});
 
   factory LoginData.toJson(Map<String, dynamic> json) {
-    return LoginData(token: json['token'], verified: json['verified']);
+    return LoginData(
+        status: json['status'],
+        token: json['data'] != null ? json['data']['token'] : null,
+        verified: json['data'] != null ? json['data']['verified'] : null,
+        message: json['message']);
   }
 }

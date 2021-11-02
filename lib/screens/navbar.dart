@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
-import 'package:tukangku/main.dart';
 import 'package:tukangku/screens/account/account.dart';
 import 'package:tukangku/screens/chat/chat.dart';
 import 'package:tukangku/screens/design/design.dart';

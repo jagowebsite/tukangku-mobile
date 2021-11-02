@@ -27,21 +27,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       LoginData? loginData = await _authRepo.login(event.loginModel);
       if (loginData != null) {
-        if (loginData.verified!) {
+        if (loginData.verified != null && loginData.verified!) {
           await _authRepo.setToken(loginData.token!);
 
           print('Login success');
           emit(LoginSuccess());
+        } else if (loginData.status == 'failed') {
+          emit(LoginError(loginData.message!));
         } else {
           print('Please verify your email...');
           emit(VerifyEmail(event.loginModel));
         }
       } else {
-        print('Login failed');
         emit(LoginError('Login Error'));
       }
     } catch (e) {
-      emit(LoginError('Login Error'));
+      emit(LoginError(e.toString()));
     }
   }
 

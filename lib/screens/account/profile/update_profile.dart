@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
@@ -41,6 +43,13 @@ class _UpdateProfilState extends State<UpdateProfil> {
       });
   }
 
+  /// Merefresh data ketika kembali ke page ini (current page)
+  /// Mencegah perbedaan state dalam satu bloc
+  FutureOr onGoBack(dynamic value) {
+    print('iam on goback...');
+    authBloc.add(GetAuthData());
+  }
+
   Future updateProfile() async {
     User user = User(
         name: nameController.text,
@@ -80,6 +89,12 @@ class _UpdateProfilState extends State<UpdateProfil> {
             } else if (state is UpdateProfileError) {
               CustomSnackbar.showSnackbar(
                   context, state.message, SnackbarType.error);
+            } else if (state is UpdatePhotoSuccess) {
+              CustomSnackbar.showSnackbar(
+                  context, state.message, SnackbarType.success);
+            } else if (state is UpdatePhotoError) {
+              CustomSnackbar.showSnackbar(
+                  context, state.message, SnackbarType.error);
             }
           },
         ),
@@ -112,7 +127,9 @@ class _UpdateProfilState extends State<UpdateProfil> {
                       width: 80,
                       height: 80,
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () => Navigator.of(context)
+                            .pushNamed('/image-cropper')
+                            .then(onGoBack),
                         child: Stack(
                           children: [
                             BlocBuilder<AuthBloc, AuthState>(

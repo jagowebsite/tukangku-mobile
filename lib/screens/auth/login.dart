@@ -223,6 +223,9 @@ class _LoginState extends State<Login> {
                 builder: (BuildContext context) => const Navbar()),
             ModalRoute.withName('/navbar'),
           );
+        } else if (state is LoginError) {
+          CustomSnackbar.showSnackbar(
+              context, state.message, SnackbarType.error);
         }
       },
       child: Scaffold(
