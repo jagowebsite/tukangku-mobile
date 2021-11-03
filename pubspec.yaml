@@ -40,6 +40,7 @@ dependencies:
   flutter_easyloading: ^3.0.3
   image_crop: ^0.4.0
   image_picker:
+  path_provider:
 
 
   # The following adds the Cupertino Icons font to your application.

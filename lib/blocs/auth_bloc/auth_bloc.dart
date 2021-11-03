@@ -75,11 +75,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (_token != null) {
         User? user = await _authRepo.getUser(_token);
         if (user != null) {
+          print('Authorized');
           emit(Authorized(user));
         } else {
+          print('Unauthorized');
           emit(UnAuthorized());
         }
       } else {
+        print('Unauthorized');
         emit(UnAuthorized());
       }
     } catch (e) {

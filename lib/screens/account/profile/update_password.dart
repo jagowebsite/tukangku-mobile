@@ -106,15 +106,13 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                 child: GestureDetector(
                   onTap: () => updatePassword(),
                   child: Container(
-                    padding: EdgeInsets.all(15),
                     color: Colors.white,
                     child: Container(
                         width: MediaQuery.of(context).size.width,
-                        height: 40,
+                        height: 50,
                         decoration: BoxDecoration(
-                            // border: Border.all(color: Colors.orangeAccent.shade700),
-                            color: Colors.orangeAccent.shade700,
-                            borderRadius: BorderRadius.circular(10)),
+                          color: Colors.orangeAccent.shade700,
+                        ),
                         child: Center(
                           child: Text('Update Password',
                               style: TextStyle(

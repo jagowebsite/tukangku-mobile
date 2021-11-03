@@ -1,9 +1,18 @@
+import 'dart:io';
+
 class BannerModel {
   int? id;
   String? name, images, urlAsset;
   bool? isActive;
+  File? imageFile;
 
-  BannerModel({this.id, this.name, this.images, this.urlAsset, this.isActive});
+  BannerModel(
+      {this.id,
+      this.name,
+      this.images,
+      this.urlAsset,
+      this.isActive,
+      this.imageFile});
 
   factory BannerModel.fromJson(Map<String, dynamic> json) {
     return BannerModel(

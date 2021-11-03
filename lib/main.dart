@@ -3,11 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
+import 'package:tukangku/blocs/banner_bloc/banner_bloc.dart';
 import 'package:tukangku/blocs/design_bloc/design_bloc.dart';
 import 'package:tukangku/blocs/home_bloc/home_bloc.dart';
 import 'package:tukangku/blocs/profile_bloc/profile_bloc.dart';
 import 'package:tukangku/blocs/service_bloc/service_bloc.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner.dart';
+import 'package:tukangku/screens/account/master/banner/master_banner_create.dart';
 import 'package:tukangku/screens/account/master/category/master_category_service.dart';
 import 'package:tukangku/screens/account/master/consumen/master_consumen.dart';
 import 'package:tukangku/screens/account/master/employee/master_employee.dart';
@@ -58,6 +60,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<ProfileBloc>(
           create: (BuildContext context) => ProfileBloc(),
         ),
+        BlocProvider<BannerBloc>(
+          create: (BuildContext context) => BannerBloc(),
+        ),
       ],
       child: MaterialApp(
         title: 'Tukangku',
@@ -81,6 +86,7 @@ class MyApp extends StatelessWidget {
           '/master-service-category': (context) => MasterCategoryService(),
           '/master-employee': (context) => MasterEmployee(),
           '/master-banner': (context) => MasterBanner(),
+          '/master-banner-create': (context) => MasterBannerCreate(),
           '/master-consumen': (context) => MasterConsumen(),
           '/master-user': (context) => MasterUser(),
           '/master-user-log': (context) => MasterUserLog(),

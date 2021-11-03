@@ -234,15 +234,13 @@ class _UpdateProfilState extends State<UpdateProfil> {
                 child: GestureDetector(
                   onTap: () => updateProfile(),
                   child: Container(
-                    padding: EdgeInsets.all(15),
                     color: Colors.white,
                     child: Container(
                         width: MediaQuery.of(context).size.width,
-                        height: 40,
+                        height: 50,
                         decoration: BoxDecoration(
-                            // border: Border.all(color: Colors.orangeAccent.shade700),
-                            color: Colors.orangeAccent.shade700,
-                            borderRadius: BorderRadius.circular(10)),
+                          color: Colors.orangeAccent.shade700,
+                        ),
                         child: Center(
                           child: Text('Update Profil',
                               style: TextStyle(

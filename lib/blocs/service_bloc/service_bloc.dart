@@ -6,15 +6,11 @@ import 'package:tukangku/repositories/service_repository.dart';
 part 'service_event.dart';
 part 'service_state.dart';
 
-enum ServiceStatus { initial, getMore }
-
 class ServiceBloc extends Bloc<ServiceEvent, ServiceState> {
   ServiceRepository _serviceRepo = ServiceRepository();
   FilterServiceModel? filterService;
   List<ServiceModel> listServices = [];
   int page = 1;
-
-  ServiceStatus serviceHomeStatus = ServiceStatus.initial;
 
   ServiceBloc() : super(ServiceInitial()) {
     on<GetService>(_getService);
