@@ -7,10 +7,11 @@ import 'package:tukangku/models/category_service_model.dart';
 class CategoryServiceRepository {
   final _baseUrl = dotenv.env['API_URL'].toString();
 
-  Future<List<CategoryServiceModel>?> getCategoryServices() async {
+  Future<List<CategoryServiceModel>?> getCategoryServices(
+      {int page = 1, int limit = 10}) async {
     try {
-      final response =
-          await http.get(Uri.parse(_baseUrl + '/category-services'));
+      final response = await http.get(
+          Uri.parse(_baseUrl + '/category-services?page=$page&limit=$limit'));
       // print(response.body);
 
       if (response.statusCode == 200) {

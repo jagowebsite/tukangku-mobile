@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
 import 'package:tukangku/blocs/banner_bloc/banner_bloc.dart';
+import 'package:tukangku/blocs/category_service_bloc/category_service_bloc.dart';
 import 'package:tukangku/blocs/design_bloc/design_bloc.dart';
 import 'package:tukangku/blocs/employee_bloc/employee_bloc.dart';
 import 'package:tukangku/blocs/home_bloc/home_bloc.dart';
@@ -67,6 +68,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<EmployeeBloc>(
           create: (BuildContext context) => EmployeeBloc(),
+        ),
+        BlocProvider<CategoryServiceBloc>(
+          create: (BuildContext context) => CategoryServiceBloc(),
         ),
       ],
       child: MaterialApp(

@@ -42,7 +42,7 @@ class EmployeeRepository {
           'POST', Uri.parse(_baseUrl + '/employee/create'));
       print(employeeModel.categoryService!.id.toString());
       // Request input data
-      request.fields['service_category_id'] =
+      request.fields['category_service_id'] =
           employeeModel.categoryService!.id.toString();
       request.fields['name'] = employeeModel.name!;
       request.fields['address'] = employeeModel.address!;
@@ -92,7 +92,7 @@ class EmployeeRepository {
           'POST', Uri.parse(_baseUrl + '/employee/update/${employeeModel.id}'));
 
       // Request input data
-      request.fields['service_category_id'] =
+      request.fields['category_service_id'] =
           employeeModel.categoryService!.id.toString();
       request.fields['name'] = employeeModel.name!;
       request.fields['address'] = employeeModel.address!;
