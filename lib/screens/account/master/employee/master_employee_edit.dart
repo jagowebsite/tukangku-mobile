@@ -4,60 +4,70 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:tukangku/blocs/banner_bloc/banner_bloc.dart';
-import 'package:tukangku/models/banner_model.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:http/http.dart' as http;
+import 'package:tukangku/blocs/employee_bloc/employee_bloc.dart';
+import 'package:tukangku/models/category_service_model.dart';
+import 'package:tukangku/models/employee_model.dart';
+import 'package:tukangku/repositories/category_service_repository.dart';
 import 'package:tukangku/screens/widgets/bottom_sheet_modal.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 
-class MasterBannerEdit extends StatefulWidget {
-  final BannerModel bannerModel;
-  const MasterBannerEdit({Key? key, required this.bannerModel})
+class MasaterEmployeeEdit extends StatefulWidget {
+  final EmployeeModel employeeModel;
+  const MasaterEmployeeEdit({Key? key, required this.employeeModel})
       : super(key: key);
 
   @override
-  _MasterBannerEditState createState() => _MasterBannerEditState();
+  _MasaterEmployeeEditState createState() => _MasaterEmployeeEditState();
 }
 
-class _MasterBannerEditState extends State<MasterBannerEdit> {
-  late BannerBloc bannerBloc;
+class _MasaterEmployeeEditState extends State<MasaterEmployeeEdit> {
+  CategoryServiceRepository _categoryServiceRepo = CategoryServiceRepository();
+  late EmployeeBloc employeeBloc;
 
-  TextEditingController _bannerNameController = TextEditingController();
-  TextEditingController _urlBannerController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController telpController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
 
-  bool isActive = true;
   File? imageFile;
+  List<CategoryServiceModel> listCategories = [];
+  CategoryServiceModel? categoryService;
 
-  Future pickImage() async {
-    final ImagePicker _picker = ImagePicker();
-    // Pick an image
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-    if (image != null) {
-      imageFile = File(image.path);
+  bool isReady = true;
+  bool isActive = true;
+
+  Future getCategoryService() async {
+    List<CategoryServiceModel>? data =
+        await _categoryServiceRepo.getCategoryServices();
+    if (data != null) {
+      listCategories = data;
       setState(() {});
     }
   }
 
-  Future updateBanner() async {
-    if (imageFile == null ||
-        _bannerNameController.text == '' ||
-        _urlBannerController.text == '') {
-      CustomSnackbar.showSnackbar(
-          context, 'Pastikan semua input sudah diisi', SnackbarType.error);
+  Future updateEmployee() async {
+    if (categoryService != null) {
+      EmployeeModel employeeModel = EmployeeModel(
+          id: widget.employeeModel.id,
+          name: nameController.text,
+          number: telpController.text,
+          address: addressController.text,
+          status: isActive ? 'active' : 'inactive',
+          isReady: isReady,
+          imageFile: imageFile,
+          categoryService: categoryService);
+      employeeBloc.add(UpdateEmployee(employeeModel));
     } else {
-      BannerModel bannerModel = BannerModel(
-          id: widget.bannerModel.id,
-          name: _bannerNameController.text,
-          urlAsset: _urlBannerController.text,
-          isActive: isActive,
-          imageFile: imageFile);
-      bannerBloc.add(UpdateBanner(bannerModel));
+      CustomSnackbar.showSnackbar(
+          context,
+          'Silahkan masukkan kategori service terlebih dahulu',
+          SnackbarType.warning);
     }
   }
 
   Future deleteBanner() async {
-    BannerModel bannerModel = BannerModel(id: widget.bannerModel.id);
+    EmployeeModel employeeModel = EmployeeModel(id: widget.employeeModel.id);
     BottomSheetModal.show(context, children: [
       const Text('Apakah kamu yakin ingin menghapus?'),
       Row(
@@ -77,7 +87,7 @@ class _MasterBannerEditState extends State<MasterBannerEdit> {
                 ElevatedButton.styleFrom(primary: Colors.orangeAccent.shade700),
             child: const Text('Delete', style: TextStyle(color: Colors.white)),
             onPressed: () {
-              bannerBloc.add(DeleteBanner(bannerModel));
+              employeeBloc.add(DeleteEmployee(employeeModel));
               Navigator.pop(context);
             },
           ),
@@ -98,19 +108,39 @@ class _MasterBannerEditState extends State<MasterBannerEdit> {
     setState(() {});
   }
 
-  void initValue() {
-    _bannerNameController.text = widget.bannerModel.name ?? '';
-    _urlBannerController.text = widget.bannerModel.urlAsset ?? '';
-    isActive = widget.bannerModel.isActive ?? false;
-    if (widget.bannerModel.images != null) {
-      urlToFile(widget.bannerModel.images!);
+  Future pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    // Pick an image
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      imageFile = File(image.path);
+      setState(() {});
+    }
+  }
+
+  Future initValue() async {
+    nameController.text = widget.employeeModel.name ?? '';
+    telpController.text = widget.employeeModel.number ?? '';
+    addressController.text = widget.employeeModel.address ?? '';
+    isActive = widget.employeeModel.status == 'active' ? true : false;
+    isReady = widget.employeeModel.isReady ?? false;
+
+    await getCategoryService();
+    for (var i = 0; i < listCategories.length; i++) {
+      if (listCategories[i].id == widget.employeeModel.categoryService!.id) {
+        categoryService = listCategories[i];
+      }
+    }
+    // categoryService = widget.employeeModel.categoryService;
+    if (widget.employeeModel.images != null) {
+      urlToFile(widget.employeeModel.images!);
     }
     setState(() {});
   }
 
   @override
   void initState() {
-    bannerBloc = BlocProvider.of<BannerBloc>(context);
+    employeeBloc = BlocProvider.of<EmployeeBloc>(context);
     initValue();
     super.initState();
   }
@@ -118,20 +148,20 @@ class _MasterBannerEditState extends State<MasterBannerEdit> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return BlocListener<BannerBloc, BannerState>(
+    return BlocListener<EmployeeBloc, EmployeeState>(
       listener: (context, state) {
-        if (state is UpdateBannerSuccess) {
+        if (state is UpdateEmployeeSuccess) {
           CustomSnackbar.showSnackbar(
               context, state.message, SnackbarType.success);
           Navigator.pop(context);
-        } else if (state is UpdateBannerError) {
+        } else if (state is UpdateEmployeeError) {
           CustomSnackbar.showSnackbar(
               context, state.message, SnackbarType.error);
-        } else if (state is DeleteBannerSuccess) {
+        } else if (state is DeleteEmployeeSuccess) {
           CustomSnackbar.showSnackbar(
               context, state.message, SnackbarType.success);
           Navigator.pop(context);
-        } else if (state is DeleteBannerError) {
+        } else if (state is DeleteEmployeeError) {
           CustomSnackbar.showSnackbar(
               context, state.message, SnackbarType.error);
         }
@@ -141,7 +171,7 @@ class _MasterBannerEditState extends State<MasterBannerEdit> {
               backgroundColor: Colors.white,
               elevation: 0,
               title: Text(
-                widget.bannerModel.name ?? '',
+                widget.employeeModel.name ?? '',
                 style: TextStyle(color: Colors.black87),
               ),
               centerTitle: true,
@@ -168,58 +198,118 @@ class _MasterBannerEditState extends State<MasterBannerEdit> {
                           Container(
                               margin: EdgeInsets.only(bottom: 5),
                               child: Text(
-                                'Data Banner',
+                                'Data Tukang',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               )),
                           SizedBox(
                             height: 10,
                           ),
-                          Text('Nama Banner'),
+                          Text('Nama Tukang'),
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 10),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.grey.shade100),
                             child: TextField(
-                              controller: _bannerNameController,
+                              controller: nameController,
                               decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText:
-                                      'Contoh: Diskon 10% Untuk Service...'),
+                                  hintText: 'Contoh: Sandono...'),
                             ),
                           ),
                           SizedBox(
                             height: 10,
                           ),
-                          Text('URL Banner'),
+                          Text('Nomor Telp'),
                           Container(
                             padding: EdgeInsets.symmetric(horizontal: 10),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 color: Colors.grey.shade100),
                             child: TextField(
-                              controller: _urlBannerController,
+                              controller: telpController,
                               decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText:
-                                      'Contoh: https://tukangku.co.id...'),
+                                  hintText: 'Contoh: 0856663...'),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text('Alamat'),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.grey.shade100),
+                            child: TextField(
+                              controller: addressController,
+                              decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Contoh: Jl. Simpang lima...'),
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Text('Kategori Service'),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.grey.shade100),
+                            child: DropdownButton<CategoryServiceModel>(
+                              dropdownColor: Colors.grey.shade100,
+                              value: categoryService,
+                              isExpanded: true,
+                              icon: Icon(Icons.expand_more),
+                              iconSize: 24,
+                              elevation: 1,
+                              style: TextStyle(color: Colors.black),
+                              underline: Container(),
+                              onChanged: (CategoryServiceModel? newValue) {
+                                setState(() {
+                                  categoryService = newValue!;
+                                });
+                              },
+                              items: listCategories
+                                  .map((CategoryServiceModel value) {
+                                return DropdownMenuItem<CategoryServiceModel>(
+                                  value: value,
+                                  child: Text(value.name!),
+                                );
+                              }).toList(),
                             ),
                           ),
                           SizedBox(
                             height: 10,
                           ),
                           Container(
-                              child: CheckboxListTile(
-                            contentPadding: EdgeInsets.zero,
-                            controlAffinity: ListTileControlAffinity.leading,
-                            title: Text('Is Active'),
-                            value: isActive,
-                            onChanged: (value) {
-                              setState(() {
-                                isActive = value!;
-                              });
-                            },
-                          )),
+                            child: CheckboxListTile(
+                              contentPadding: EdgeInsets.zero,
+                              controlAffinity: ListTileControlAffinity.leading,
+                              title: Text('Is Active'),
+                              value: isActive,
+                              onChanged: (value) {
+                                setState(() {
+                                  isActive = value!;
+                                });
+                              },
+                            ),
+                          ),
+                          Container(
+                            child: CheckboxListTile(
+                              contentPadding: EdgeInsets.zero,
+                              controlAffinity: ListTileControlAffinity.leading,
+                              title: Text('Is Ready'),
+                              value: isReady,
+                              onChanged: (value) {
+                                setState(() {
+                                  isReady = value!;
+                                });
+                              },
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -236,7 +326,7 @@ class _MasterBannerEditState extends State<MasterBannerEdit> {
                           Container(
                               margin: EdgeInsets.only(bottom: 5),
                               child: Text(
-                                'Foto Banner',
+                                'Foto Tukang',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               )),
                           SizedBox(
@@ -264,6 +354,9 @@ class _MasterBannerEditState extends State<MasterBannerEdit> {
                                             child: Image.file(imageFile!),
                                           ))),
                           ),
+                          SizedBox(
+                            height: 80,
+                          )
                         ],
                       ),
                     ),
@@ -314,7 +407,7 @@ class _MasterBannerEditState extends State<MasterBannerEdit> {
                           child: Container(
                             color: Colors.orangeAccent.shade700,
                             child: TextButton(
-                              onPressed: () => updateBanner(),
+                              onPressed: () => updateEmployee(),
                               child: Text('Update',
                                   style: TextStyle(color: Colors.white)),
                             ),
@@ -325,10 +418,10 @@ class _MasterBannerEditState extends State<MasterBannerEdit> {
                   ),
                 ),
               ),
-              BlocBuilder<BannerBloc, BannerState>(
+              BlocBuilder<EmployeeBloc, EmployeeState>(
                 builder: (context, state) {
-                  if (state is UpdateBannerLoading ||
-                      state is DeleteBannerLoading) {
+                  if (state is UpdateEmployeeLoading ||
+                      state is DeleteEmployeeLoading) {
                     return Container(
                         color: Colors.white.withOpacity(0.5),
                         child: Center(

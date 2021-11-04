@@ -72,6 +72,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     print('Get auth data...');
     try {
       String? _token = await _authRepo.hasToken();
+      print(_token);
       if (_token != null) {
         User? user = await _authRepo.getUser(_token);
         if (user != null) {

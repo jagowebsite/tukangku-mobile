@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:tukangku/models/category_service_model.dart';
 
 class EmployeeModel {
@@ -5,6 +7,7 @@ class EmployeeModel {
   String? name, address, number, status, images;
   bool? isReady;
   CategoryServiceModel? categoryService;
+  File? imageFile;
 
   EmployeeModel(
       {this.id,
@@ -14,6 +17,7 @@ class EmployeeModel {
       this.status,
       this.images,
       this.isReady,
+      this.imageFile,
       this.categoryService});
 
   factory EmployeeModel.fromJson(Map<String, dynamic> json) {
@@ -24,8 +28,8 @@ class EmployeeModel {
       number: json['number'],
       status: json['status'],
       images: json['images'],
-      categoryService: json['category'] != null
-          ? CategoryServiceModel.fromJson(json['category'])
+      categoryService: json['category_service'] != null
+          ? CategoryServiceModel.fromJson(json['category_service'])
           : null,
       isReady: json['is_ready'],
     );

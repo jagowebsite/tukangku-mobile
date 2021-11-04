@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
 import 'package:tukangku/blocs/banner_bloc/banner_bloc.dart';
 import 'package:tukangku/blocs/design_bloc/design_bloc.dart';
+import 'package:tukangku/blocs/employee_bloc/employee_bloc.dart';
 import 'package:tukangku/blocs/home_bloc/home_bloc.dart';
 import 'package:tukangku/blocs/profile_bloc/profile_bloc.dart';
 import 'package:tukangku/blocs/service_bloc/service_bloc.dart';
@@ -13,6 +14,7 @@ import 'package:tukangku/screens/account/master/banner/master_banner_create.dart
 import 'package:tukangku/screens/account/master/category/master_category_service.dart';
 import 'package:tukangku/screens/account/master/consumen/master_consumen.dart';
 import 'package:tukangku/screens/account/master/employee/master_employee.dart';
+import 'package:tukangku/screens/account/master/employee/master_employee_create.dart';
 import 'package:tukangku/screens/account/master/gps_log/master_gps_log.dart';
 import 'package:tukangku/screens/account/master/payment/master_payment.dart';
 import 'package:tukangku/screens/account/master/service/master_service.dart';
@@ -63,6 +65,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<BannerBloc>(
           create: (BuildContext context) => BannerBloc(),
         ),
+        BlocProvider<EmployeeBloc>(
+          create: (BuildContext context) => EmployeeBloc(),
+        ),
       ],
       child: MaterialApp(
         title: 'Tukangku',
@@ -85,6 +90,7 @@ class MyApp extends StatelessWidget {
           '/master-service': (context) => MasterService(),
           '/master-service-category': (context) => MasterCategoryService(),
           '/master-employee': (context) => MasterEmployee(),
+          '/master-employee-create': (context) => MasterEmployeeCreate(),
           '/master-banner': (context) => MasterBanner(),
           '/master-banner-create': (context) => MasterBannerCreate(),
           '/master-consumen': (context) => MasterConsumen(),
