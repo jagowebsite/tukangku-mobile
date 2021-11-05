@@ -13,6 +13,7 @@ import 'package:tukangku/blocs/service_bloc/service_bloc.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner_create.dart';
 import 'package:tukangku/screens/account/master/category/master_category_service.dart';
+import 'package:tukangku/screens/account/master/category/master_category_service_create.dart';
 import 'package:tukangku/screens/account/master/consumen/master_consumen.dart';
 import 'package:tukangku/screens/account/master/employee/master_employee.dart';
 import 'package:tukangku/screens/account/master/employee/master_employee_create.dart';
@@ -93,6 +94,8 @@ class MyApp extends StatelessWidget {
           '/update-password': (context) => UpdatePassword(),
           '/master-service': (context) => MasterService(),
           '/master-service-category': (context) => MasterCategoryService(),
+          '/master-service-category-create': (context) =>
+              MasterCategoryServiceCreate(),
           '/master-employee': (context) => MasterEmployee(),
           '/master-employee-create': (context) => MasterEmployeeCreate(),
           '/master-banner': (context) => MasterBanner(),

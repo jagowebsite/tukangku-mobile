@@ -1,8 +1,11 @@
+import 'dart:io';
+
 class CategoryServiceModel {
   int? id;
   String? name, images;
+  File? imageFile;
 
-  CategoryServiceModel({this.id, this.name, this.images});
+  CategoryServiceModel({this.id, this.name, this.images, this.imageFile});
 
   factory CategoryServiceModel.fromJson(Map<String, dynamic> json) {
     return CategoryServiceModel(

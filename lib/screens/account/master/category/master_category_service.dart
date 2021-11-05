@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/category_service_bloc/category_service_bloc.dart';
+import 'package:tukangku/screens/account/master/category/master_category_service_edit.dart';
 import 'package:tukangku/screens/widgets/custom_cached_image.dart';
 
 class MasterCategoryService extends StatefulWidget {
@@ -73,7 +74,9 @@ class _MasterCategoryServiceState extends State<MasterCategoryService> {
               ),
               actions: [
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () => Navigator.of(context)
+                      .pushNamed('/master-service-category-create')
+                      .then(onGoBack),
                   icon: Icon(
                     Icons.add,
                     color: Colors.black87,
@@ -97,13 +100,21 @@ class _MasterCategoryServiceState extends State<MasterCategoryService> {
                 builder: (context, state) {
                   if (state is CategoryServiceData) {
                     return ListView.builder(
+                        controller: _scrollController,
                         itemCount: state.hasReachMax
                             ? state.listCategoryServices.length
                             : state.listCategoryServices.length + 1,
                         itemBuilder: (context, index) {
                           if (index < state.listCategoryServices.length) {
                             return ListTile(
-                              onTap: () {},
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return MasterCategoryServiceEdit(
+                                      categoryService:
+                                          state.listCategoryServices[index]);
+                                })).then(onGoBack);
+                              },
                               leading: Container(
                                 decoration: BoxDecoration(
                                     color: Colors.orange,
