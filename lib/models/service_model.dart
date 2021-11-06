@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:tukangku/models/category_service_model.dart';
 
 class ServiceModel {
@@ -5,6 +7,7 @@ class ServiceModel {
   String? name, typeQuantity, description, status;
   List<String>? images;
   CategoryServiceModel? categoryService;
+  List<File>? imageFiles;
 
   ServiceModel(
       {this.id,
@@ -14,6 +17,7 @@ class ServiceModel {
       this.description,
       this.status,
       this.images,
+      this.imageFiles,
       this.categoryService});
 
   factory ServiceModel.fromJson(Map<String, dynamic> json) {

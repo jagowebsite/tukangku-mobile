@@ -8,6 +8,7 @@ import 'package:tukangku/blocs/category_service_bloc/category_service_bloc.dart'
 import 'package:tukangku/blocs/design_bloc/design_bloc.dart';
 import 'package:tukangku/blocs/employee_bloc/employee_bloc.dart';
 import 'package:tukangku/blocs/home_bloc/home_bloc.dart';
+import 'package:tukangku/blocs/master_service_bloc/master_service_bloc.dart';
 import 'package:tukangku/blocs/profile_bloc/profile_bloc.dart';
 import 'package:tukangku/blocs/service_bloc/service_bloc.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner.dart';
@@ -20,6 +21,7 @@ import 'package:tukangku/screens/account/master/employee/master_employee_create.
 import 'package:tukangku/screens/account/master/gps_log/master_gps_log.dart';
 import 'package:tukangku/screens/account/master/payment/master_payment.dart';
 import 'package:tukangku/screens/account/master/service/master_service.dart';
+import 'package:tukangku/screens/account/master/service/master_service_create.dart';
 import 'package:tukangku/screens/account/master/transaction/master_transaction.dart';
 import 'package:tukangku/screens/account/master/transaction/master_transaction_detail.dart';
 import 'package:tukangku/screens/account/master/user/master_user.dart';
@@ -61,6 +63,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<ServiceBloc>(
           create: (BuildContext context) => ServiceBloc(),
         ),
+        BlocProvider<MasterServiceBloc>(
+          create: (BuildContext context) => MasterServiceBloc(),
+        ),
         BlocProvider<ProfileBloc>(
           create: (BuildContext context) => ProfileBloc(),
         ),
@@ -93,6 +98,7 @@ class MyApp extends StatelessWidget {
           '/update-profile': (context) => UpdateProfil(),
           '/update-password': (context) => UpdatePassword(),
           '/master-service': (context) => MasterService(),
+          '/master-service-create': (context) => MasterServiceCreate(),
           '/master-service-category': (context) => MasterCategoryService(),
           '/master-service-category-create': (context) =>
               MasterCategoryServiceCreate(),

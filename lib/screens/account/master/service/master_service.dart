@@ -1,5 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:tukangku/blocs/master_service_bloc/master_service_bloc.dart';
+import 'package:tukangku/screens/account/master/service/master_service_create.dart';
+import 'package:tukangku/utils/custom_snackbar.dart';
 
 class MasterService extends StatefulWidget {
   const MasterService({Key? key}) : super(key: key);
@@ -9,109 +14,195 @@ class MasterService extends StatefulWidget {
 }
 
 class _MasterServiceState extends State<MasterService> {
-  List<String> imgService = [
-    'https://psdfreebies.com/wp-content/uploads/2019/01/Travel-Service-Banner-Ads-Templates-PSD.jpg',
-    'https://thumbs.dreamstime.com/z/phone-repair-service-banner-template-smartphone-broken-screen-phone-repair-service-banner-template-smartphone-broken-134038666.jpg',
-    'https://harjaditutoring.weebly.com/uploads/1/8/9/7/18970359/online-classes-05_orig.jpg',
-    'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/personal-online-tutor-english-instagram-design-template-e05c3f54e7f260d3718e903817cc1c9f_screen.jpg?ts=1589149599',
-    'https://d1csarkz8obe9u.cloudfront.net/posterpreviews/personal-online-tutor-english-instagram-design-template-ac46499da9cc2c4b5f373def35a14a6b_screen.jpg?ts=1591005575',
-    'https://cdn4.vectorstock.com/i/1000x1000/31/38/airport-online-service-flat-banners-vector-18313138.jpg',
-  ];
+  TextEditingController searchController = TextEditingController();
+  late MasterServiceBloc masterServiceBloc;
+  ScrollController _scrollController = ScrollController();
+
+  /// Set default hasReachMax value false
+  /// Variabel ini digunakan untuk menangani agaer scrollController tidak-
+  /// Berlangsung terus menerus.
+  bool _hasReachMax = false;
+
+  void onScroll() {
+    double maxScroll = _scrollController.position.maxScrollExtent;
+    double currentScroll = _scrollController.position.pixels;
+
+    if (currentScroll == maxScroll && !_hasReachMax) {
+      print('iam scrolling');
+      masterServiceBloc.add(GetServiceMaster(10, false));
+    }
+  }
+
+  Future<void> _refresh() async {
+    await Future.delayed(Duration(seconds: 1));
+    searchController.text = '';
+    masterServiceBloc.filterService = null;
+    masterServiceBloc.add(GetServiceMaster(10, true));
+    print('Refresing...');
+  }
+
+  @override
+  void initState() {
+    masterServiceBloc = BlocProvider.of<MasterServiceBloc>(context);
+    masterServiceBloc.add(GetServiceMaster(10, true));
+
+    _scrollController.addListener(onScroll);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          backgroundColor: Colors.white,
-          elevation: 0,
-          title: Text(
-            'Master Data Jasa',
-            style: TextStyle(color: Colors.black87),
-          ),
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.add,
-                color: Colors.black87,
-              ),
-            )
-          ],
-          centerTitle: true,
-          leading: IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: Icon(
-                Icons.arrow_back,
-                color: Colors.black87,
-              ))),
-      backgroundColor: Colors.white,
-      body: Container(
-        margin: EdgeInsets.all(10),
-        child: GridView.count(
-          physics: ScrollPhysics(),
-          shrinkWrap: true,
-          childAspectRatio: 1 / 1.3,
-          crossAxisCount: 2,
-          children: List.generate(imgService.length, (index) {
-            return Container(
-              child: Card(
-                elevation: 0,
-                child: GestureDetector(
-                  onTap: () =>
-                      Navigator.of(context).pushNamed('/service-detail'),
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.grey.shade100),
-                    child: Stack(
-                      children: [
-                        Container(
-                          width: double.infinity,
-                          height: double.infinity,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: CachedNetworkImage(
-                              imageUrl: imgService[index],
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: double.infinity,
-                          height: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.black,
-                                Colors.transparent,
-                                Colors.transparent,
-                                Colors.black
-                              ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              stops: [0, 0, 0.7, 1],
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                            child: Align(
-                          alignment: Alignment.bottomLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              'Service AC Rumah',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ))
-                      ],
-                    ),
-                  ),
+    return BlocListener<MasterServiceBloc, MasterServiceState>(
+      listener: (context, state) {
+        if (state is ServiceMasterData) {
+          _hasReachMax = state.hasReachMax;
+        } else if (state is ServiceMasterError) {
+          CustomSnackbar.showSnackbar(
+              context, state.message, SnackbarType.error);
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+            backgroundColor: Colors.white,
+            elevation: 0,
+            title: Text(
+              'Master Data Jasa',
+              style: TextStyle(color: Colors.black87),
+            ),
+            actions: [
+              IconButton(
+                onPressed: () =>
+                    Navigator.of(context).pushNamed('/master-service-create'),
+                icon: Icon(
+                  Icons.add,
+                  color: Colors.black87,
                 ),
-              ),
-            );
-          }),
+              )
+            ],
+            centerTitle: true,
+            leading: IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.black87,
+                ))),
+        backgroundColor: Colors.white,
+        body: RefreshIndicator(
+          backgroundColor: Colors.white,
+          color: Colors.orangeAccent.shade700,
+          displacement: 20,
+          onRefresh: () => _refresh(),
+          child: BlocBuilder<MasterServiceBloc, MasterServiceState>(
+            builder: (context, state) {
+              if (state is ServiceMasterData) {
+                return Container(
+                  margin: EdgeInsets.all(10),
+                  child: GridView.count(
+                    controller: _scrollController,
+                    physics: ScrollPhysics(),
+                    shrinkWrap: true,
+                    childAspectRatio: 1 / 1.3,
+                    crossAxisCount: 2,
+                    children: List.generate(
+                        state.hasReachMax
+                            ? state.listServices.length
+                            : state.listServices.length % 2 == 0
+                                ? state.listServices.length + 2
+                                : state.listServices.length + 1, (index) {
+                      if (index < state.listServices.length) {
+                        return Container(
+                          child: Card(
+                            elevation: 0,
+                            child: GestureDetector(
+                              onTap: () => Navigator.of(context)
+                                  .pushNamed('/service-detail'),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.grey.shade100),
+                                child: Stack(
+                                  children: [
+                                    Container(
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: CachedNetworkImage(
+                                          imageUrl: state.listServices[index]
+                                                      .images!.length !=
+                                                  0
+                                              ? state.listServices[index]
+                                                  .images![0]
+                                              : 'https://psdfreebies.com/wp-content/uploads/2019/01/Travel-Service-Banner-Ads-Templates-PSD.jpg',
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Colors.black,
+                                            Colors.transparent,
+                                            Colors.transparent,
+                                            Colors.black
+                                          ],
+                                          begin: Alignment.topCenter,
+                                          end: Alignment.bottomCenter,
+                                          stops: [0, 0, 0.7, 1],
+                                        ),
+                                      ),
+                                    ),
+                                    Positioned(
+                                        child: Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          state.listServices[index].name ?? '',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ),
+                                    ))
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Card(
+                          elevation: 0,
+                          child: Shimmer.fromColors(
+                            baseColor: Colors.grey.shade300,
+                            highlightColor: Colors.grey.shade100,
+                            child: Container(
+                              height: 30,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(10)),
+                            ),
+                          ),
+                        );
+                      }
+                    }),
+                  ),
+                );
+              } else {
+                return Center(
+                    child: Container(
+                  width: 30,
+                  height: 30,
+                  child: CircularProgressIndicator(
+                      color: Colors.orange.shade600, strokeWidth: 3),
+                ));
+              }
+            },
+          ),
         ),
       ),
     );
