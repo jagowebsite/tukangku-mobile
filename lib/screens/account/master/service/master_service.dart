@@ -1,9 +1,11 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tukangku/blocs/master_service_bloc/master_service_bloc.dart';
-import 'package:tukangku/screens/account/master/service/master_service_create.dart';
+import 'package:tukangku/screens/account/master/service/master_service_edit.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
 
 class MasterService extends StatefulWidget {
@@ -31,6 +33,13 @@ class _MasterServiceState extends State<MasterService> {
       print('iam scrolling');
       masterServiceBloc.add(GetServiceMaster(10, false));
     }
+  }
+
+  /// Merefresh data ketika kembali ke page ini (current page)
+  /// Mencegah perbedaan state dalam satu bloc
+  FutureOr onGoBack(dynamic value) {
+    print('iam on goback...');
+    masterServiceBloc.add(GetServiceMaster(10, true));
   }
 
   Future<void> _refresh() async {
@@ -71,8 +80,9 @@ class _MasterServiceState extends State<MasterService> {
             ),
             actions: [
               IconButton(
-                onPressed: () =>
-                    Navigator.of(context).pushNamed('/master-service-create'),
+                onPressed: () => Navigator.of(context)
+                    .pushNamed('/master-service-create')
+                    .then(onGoBack),
                 icon: Icon(
                   Icons.add,
                   color: Colors.black87,
@@ -114,8 +124,13 @@ class _MasterServiceState extends State<MasterService> {
                           child: Card(
                             elevation: 0,
                             child: GestureDetector(
-                              onTap: () => Navigator.of(context)
-                                  .pushNamed('/service-detail'),
+                              onTap: () {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return MasterServiceEdit(
+                                      serviceModel: state.listServices[index]);
+                                })).then(onGoBack);
+                              },
                               child: Container(
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),

@@ -1,26 +1,26 @@
 part of 'master_service_bloc.dart';
 
-abstract class MasterServiceEvent {
-  const MasterServiceEvent();
+abstract class ServiceMasterEvent {
+  const ServiceMasterEvent();
 }
 
-class GetServiceMaster extends MasterServiceEvent {
+class GetServiceMaster extends ServiceMasterEvent {
   final int limit;
   final bool isInit;
   GetServiceMaster(this.limit, this.isInit);
 }
 
-class CreateMasterService extends MasterServiceEvent {
+class CreateServiceMaster extends ServiceMasterEvent {
   final ServiceModel serviceModel;
-  CreateMasterService(this.serviceModel);
+  CreateServiceMaster(this.serviceModel);
 }
 
-class UpdateMasterService extends MasterServiceEvent {
+class UpdateServiceMaster extends ServiceMasterEvent {
   final ServiceModel serviceModel;
-  UpdateMasterService(this.serviceModel);
+  UpdateServiceMaster(this.serviceModel);
 }
 
-class DeleteMasterService extends MasterServiceEvent {
+class DeleteServiceMaster extends ServiceMasterEvent {
   final ServiceModel serviceModel;
-  DeleteMasterService(this.serviceModel);
+  DeleteServiceMaster(this.serviceModel);
 }

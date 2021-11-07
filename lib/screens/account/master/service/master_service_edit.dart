@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,16 +9,21 @@ import 'package:tukangku/blocs/master_service_bloc/master_service_bloc.dart';
 import 'package:tukangku/models/category_service_model.dart';
 import 'package:tukangku/models/service_model.dart';
 import 'package:tukangku/repositories/category_service_repository.dart';
+import 'package:tukangku/screens/widgets/bottom_sheet_modal.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 
-class MasterServiceCreate extends StatefulWidget {
-  const MasterServiceCreate({Key? key}) : super(key: key);
+class MasterServiceEdit extends StatefulWidget {
+  final ServiceModel serviceModel;
+  const MasterServiceEdit({Key? key, required this.serviceModel})
+      : super(key: key);
 
   @override
-  _MasterServiceCreateState createState() => _MasterServiceCreateState();
+  _MasterServiceEditState createState() => _MasterServiceEditState();
 }
 
-class _MasterServiceCreateState extends State<MasterServiceCreate> {
+class _MasterServiceEditState extends State<MasterServiceEdit> {
   CategoryServiceRepository _categoryServiceRepo = CategoryServiceRepository();
   late MasterServiceBloc masterServiceBloc;
   TextEditingController nameController = TextEditingController();
@@ -59,7 +65,7 @@ class _MasterServiceCreateState extends State<MasterServiceCreate> {
     setState(() {});
   }
 
-  Future createService() async {
+  Future updateService() async {
     if (nameController.text == '' ||
         priceController.text == '' ||
         descriptionController.text == '' ||
@@ -75,18 +81,84 @@ class _MasterServiceCreateState extends State<MasterServiceCreate> {
           name: nameController.text,
           categoryService: categoryService,
           status: isActive ? 'active' : 'inactive',
-          typeQuantity: (typeService ?? '').toLowerCase(),
+          typeQuantity: (typeService ?? '').toUpperCase(),
           price: int.parse(priceController.text),
           description: descriptionController.text,
           imageFiles: images);
-      masterServiceBloc.add(CreateServiceMaster(serviceModel));
+      masterServiceBloc.add(UpdateServiceMaster(serviceModel));
     }
+  }
+
+  Future deleteService() async {
+    ServiceModel serviceModel = ServiceModel(id: widget.serviceModel.id);
+    BottomSheetModal.show(context, children: [
+      const Text('Apakah kamu yakin ingin menghapus?'),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(primary: Colors.white),
+            child: const Text(
+              'Close',
+              style: TextStyle(color: Colors.black87),
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
+          SizedBox(width: 10),
+          ElevatedButton(
+            style:
+                ElevatedButton.styleFrom(primary: Colors.orangeAccent.shade700),
+            child: const Text('Delete', style: TextStyle(color: Colors.white)),
+            onPressed: () {
+              masterServiceBloc.add(DeleteServiceMaster(serviceModel));
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    ]);
+  }
+
+  Future urlToFile(String imageUrl) async {
+    var rng = new Random();
+    Directory tempDir = await getTemporaryDirectory();
+    String tempPath = tempDir.path;
+    File file = new File('$tempPath' + (rng.nextInt(100)).toString() + '.png');
+    http.Response response = await http.get(Uri.parse(imageUrl));
+    await file.writeAsBytes(response.bodyBytes);
+    images.add(file);
+
+    setState(() {});
+  }
+
+  Future initValue() async {
+    nameController.text = widget.serviceModel.name ?? '';
+    descriptionController.text = widget.serviceModel.description ?? '';
+    priceController.text = widget.serviceModel.price != null
+        ? widget.serviceModel.price.toString()
+        : '';
+    isActive = widget.serviceModel.status == 'active' ? true : false;
+    typeService = (widget.serviceModel.typeQuantity ?? '').toUpperCase();
+
+    await getCategoryService();
+    for (var i = 0; i < listCategories.length; i++) {
+      if (listCategories[i].id == widget.serviceModel.categoryService!.id) {
+        categoryService = listCategories[i];
+      }
+    }
+
+    if (widget.serviceModel.images != null) {
+      for (var i = 0; i < widget.serviceModel.images!.length; i++) {
+        urlToFile(widget.serviceModel.images![i]);
+      }
+    }
+    setState(() {});
   }
 
   @override
   void initState() {
     masterServiceBloc = BlocProvider.of<MasterServiceBloc>(context);
-    getCategoryService();
+    initValue();
     super.initState();
   }
 
@@ -95,11 +167,18 @@ class _MasterServiceCreateState extends State<MasterServiceCreate> {
     Size size = MediaQuery.of(context).size;
     return BlocListener<MasterServiceBloc, MasterServiceState>(
       listener: (context, state) {
-        if (state is CreateMasterServiceSuccess) {
+        if (state is UpdateMasterServiceSuccess) {
           CustomSnackbar.showSnackbar(
               context, state.message, SnackbarType.success);
           Navigator.pop(context);
-        } else if (state is CreateMasterServiceError) {
+        } else if (state is UpdateMasterServiceError) {
+          CustomSnackbar.showSnackbar(
+              context, state.message, SnackbarType.error);
+        } else if (state is DeleteMasterServiceSuccess) {
+          CustomSnackbar.showSnackbar(
+              context, state.message, SnackbarType.success);
+          Navigator.pop(context);
+        } else if (state is DeleteMasterServiceError) {
           CustomSnackbar.showSnackbar(
               context, state.message, SnackbarType.error);
         }
@@ -109,7 +188,7 @@ class _MasterServiceCreateState extends State<MasterServiceCreate> {
               backgroundColor: Colors.white,
               elevation: 0,
               title: Text(
-                'Tambah Jasa',
+                'Edit Jasa',
                 style: TextStyle(color: Colors.black87),
               ),
               centerTitle: true,
@@ -315,32 +394,62 @@ class _MasterServiceCreateState extends State<MasterServiceCreate> {
               Positioned(
                 child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: Container(
-                    width: size.width,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black54,
-                          blurRadius: 7,
-                          offset: Offset(0, 5),
-                        )
-                      ],
-                    ),
-                    child: Container(
-                      color: Colors.orangeAccent.shade700,
-                      child: TextButton(
-                        onPressed: () => createService(),
-                        child: Text('Simpan',
-                            style: TextStyle(color: Colors.white)),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          width: size.width,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black54,
+                                blurRadius: 7,
+                                offset: Offset(0, 5),
+                              )
+                            ],
+                          ),
+                          child: Container(
+                            color: Colors.red.shade500,
+                            child: TextButton(
+                              onPressed: () => deleteService(),
+                              child: Text('Delete',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      Expanded(
+                        child: Container(
+                          width: size.width,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black54,
+                                blurRadius: 7,
+                                offset: Offset(0, 5),
+                              )
+                            ],
+                          ),
+                          child: Container(
+                            color: Colors.orangeAccent.shade700,
+                            child: TextButton(
+                              onPressed: () => updateService(),
+                              child: Text('Update',
+                                  style: TextStyle(color: Colors.white)),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
               BlocBuilder<MasterServiceBloc, MasterServiceState>(
                 builder: (context, state) {
-                  if (state is CreateMasterServiceLoading) {
+                  if (state is UpdateMasterServiceLoading ||
+                      state is DeleteMasterServiceLoading) {
                     return Container(
                         color: Colors.white.withOpacity(0.5),
                         child: Center(
