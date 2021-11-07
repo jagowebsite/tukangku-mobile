@@ -118,7 +118,7 @@ class EmployeeRepository {
       print(response.body);
 
       // Error handling
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         var jsonResponse = json.decode(response.body);
         return ResponseModel.toJson(jsonResponse);
       } else {

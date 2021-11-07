@@ -78,6 +78,7 @@ class _MasterServiceEditState extends State<MasterServiceEdit> {
           'Silahkan masukkan foto property terlebih dulu', SnackbarType.error);
     } else {
       ServiceModel serviceModel = ServiceModel(
+          id: widget.serviceModel.id,
           name: nameController.text,
           categoryService: categoryService,
           status: isActive ? 'active' : 'inactive',

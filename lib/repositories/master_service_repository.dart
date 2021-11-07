@@ -124,7 +124,6 @@ class MasterServiceRepository {
       http.StreamedResponse streamedResponse = await request.send();
       final response =
           await http.Response.fromStream(streamedResponse); // get body response
-      print(response.body);
 
       // Error handling
       if (response.statusCode == 201) {
