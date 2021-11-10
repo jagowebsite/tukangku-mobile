@@ -26,8 +26,10 @@ import 'package:tukangku/screens/account/master/transaction/master_transaction.d
 import 'package:tukangku/screens/account/master/transaction/master_transaction_detail.dart';
 import 'package:tukangku/screens/account/master/user/master_user.dart';
 import 'package:tukangku/screens/account/master/user/master_user_log.dart';
-import 'package:tukangku/screens/account/master/user_role/master_user_permission.dart';
-import 'package:tukangku/screens/account/master/user_role/master_user_role.dart';
+import 'package:tukangku/screens/account/master/user_role/permissions/master_user_permission.dart';
+import 'package:tukangku/screens/account/master/user_role/permissions/master_user_permission_create.dart';
+import 'package:tukangku/screens/account/master/user_role/roles/master_user_role.dart';
+import 'package:tukangku/screens/account/master/user_role/roles/master_user_role_create.dart';
 import 'package:tukangku/screens/account/profile/update_password.dart';
 import 'package:tukangku/screens/account/profile/update_profile.dart';
 import 'package:tukangku/screens/auth/login.dart';
@@ -110,7 +112,10 @@ class MyApp extends StatelessWidget {
           '/master-user': (context) => MasterUser(),
           '/master-user-log': (context) => MasterUserLog(),
           '/master-user-role': (context) => MasterUserRole(),
+          '/master-user-role-create': (context) => MasterUserRoleCreate(),
           '/master-user-permission': (context) => MasterUserPermission(),
+          '/master-user-permission-create': (context) =>
+              MasterUserPermissionCreate(),
           '/master-transaction': (context) => MasterTransaction(),
           '/master-transaction-detail': (context) => MasterTransactionDetail(),
           '/master-payment': (context) => MasterPayment(),

@@ -1,9 +1,13 @@
+import 'dart:io';
+
 class User {
-  int? id;
+  int? id, roleAccessId;
   String? email, password, name, dateOfBirth, address, number, images, ktpImage;
+  File? imageFile, ktpImageFile;
 
   User(
       {this.id,
+      this.roleAccessId,
       this.email,
       this.password,
       this.name,
@@ -11,11 +15,14 @@ class User {
       this.address,
       this.number,
       this.images,
+      this.imageFile,
+      this.ktpImageFile,
       this.ktpImage});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
+      roleAccessId: json['role_access_id'],
       email: json['email'],
       password: json['password'],
       name: json['name'],
@@ -30,6 +37,7 @@ class User {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
+    data['role_access_id'] = this.roleAccessId;
     data['email'] = this.email;
     data['password'] = this.password;
     data['name'] = this.name;

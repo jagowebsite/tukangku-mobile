@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:tukangku/screens/account/master/user_role/permissions/master_user_permission_edit.dart';
 
-class MasterUserRole extends StatefulWidget {
-  const MasterUserRole({Key? key}) : super(key: key);
+class MasterUserPermission extends StatefulWidget {
+  const MasterUserPermission({Key? key}) : super(key: key);
 
   @override
-  _MasterUserRoleState createState() => _MasterUserRoleState();
+  _MasterUserPermissionState createState() => _MasterUserPermissionState();
 }
 
-class _MasterUserRoleState extends State<MasterUserRole> {
-  List<String> roles = [
-    'Superadmin',
-    'Administrator',
+class _MasterUserPermissionState extends State<MasterUserPermission> {
+  List<String> permissions = [
+    'dashboard_view',
+    'profile_view',
+    'service_view',
   ];
 
   @override
@@ -20,19 +22,20 @@ class _MasterUserRoleState extends State<MasterUserRole> {
             backgroundColor: Colors.white,
             elevation: 0,
             title: Text(
-              'Role Akses',
+              'Role Permission',
               style: TextStyle(color: Colors.black87),
             ),
-            centerTitle: true,
             actions: [
               IconButton(
-                onPressed: () {},
+                onPressed: () => Navigator.of(context)
+                    .pushNamed('/master-user-permission-create'),
                 icon: Icon(
                   Icons.add,
                   color: Colors.black87,
                 ),
               )
             ],
+            centerTitle: true,
             leading: IconButton(
                 onPressed: () => Navigator.pop(context),
                 icon: Icon(
@@ -44,10 +47,17 @@ class _MasterUserRoleState extends State<MasterUserRole> {
           child: ListView.separated(
               itemBuilder: (context, index) {
                 return ListTile(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const MasterUserPermissionEdit()),
+                    );
+                  },
                   title: Container(
                     child: Text(
-                      roles[index],
+                      permissions[index],
                       style: TextStyle(
                         fontSize: 16,
                       ),
@@ -62,7 +72,7 @@ class _MasterUserRoleState extends State<MasterUserRole> {
                   thickness: 0.3,
                 );
               },
-              itemCount: roles.length),
+              itemCount: permissions.length),
         ));
   }
 }

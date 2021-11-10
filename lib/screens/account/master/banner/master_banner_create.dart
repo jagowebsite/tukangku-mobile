@@ -179,7 +179,8 @@ class _MasterBannerCreateState extends State<MasterBannerCreate> {
                             onTap: () => pickImage(),
                             child: Container(
                                 width: size.width,
-                                height: 50,
+                                height: 100,
+                                padding: EdgeInsets.all(5),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
