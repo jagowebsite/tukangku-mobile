@@ -9,11 +9,16 @@ import 'package:tukangku/utils/error_message.dart';
 class RoleRepository {
   final _baseUrl = dotenv.env['API_URL'].toString();
 
-  Future<List<RoleAccessModel>?> getRoleAccess(
+  Future<List<RoleAccessModel>?> getRoleAccess(String _token,
       {int page = 1, int limit = 10}) async {
     try {
-      final response = await http
-          .get(Uri.parse(_baseUrl + '/role-access?page=$page&limit=$limit'));
+      final response = await http.get(
+        Uri.parse(_baseUrl + '/role-access?page=$page&limit=$limit'),
+        headers: {
+          'Authorization': 'Bearer $_token',
+          'Accept': 'application/json',
+        },
+      );
       // print(response.body);
 
       if (response.statusCode == 200) {
@@ -112,6 +117,8 @@ class RoleRepository {
   Future<ResponseModel?> updateRoleAccess(
       String _token, RoleAccessModel roleAccessModel) async {
     try {
+      // print(_token);
+      print('/role-access/update/${roleAccessModel.id}');
       final response = await http.patch(
           Uri.parse(_baseUrl + '/role-access/update/${roleAccessModel.id}'),
           headers: {
@@ -159,11 +166,15 @@ class RoleRepository {
     }
   }
 
-  Future<List<RolePermissionModel>?> getRolePermission(
+  Future<List<RolePermissionModel>?> getRolePermission(String _token,
       {int page = 1, int limit = 10}) async {
     try {
       final response = await http.get(
-          Uri.parse(_baseUrl + '/role-permission?page=$page&limit=$limit'));
+          Uri.parse(_baseUrl + '/role-permission?page=$page&limit=$limit'),
+          headers: {
+            'Authorization': 'Bearer $_token',
+            'Accept': 'application/json',
+          });
       print(response.body);
 
       if (response.statusCode == 200) {

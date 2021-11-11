@@ -8,8 +8,11 @@ import 'package:tukangku/blocs/category_service_bloc/category_service_bloc.dart'
 import 'package:tukangku/blocs/design_bloc/design_bloc.dart';
 import 'package:tukangku/blocs/employee_bloc/employee_bloc.dart';
 import 'package:tukangku/blocs/home_bloc/home_bloc.dart';
+import 'package:tukangku/blocs/log_bloc/log_bloc.dart';
 import 'package:tukangku/blocs/master_service_bloc/master_service_bloc.dart';
 import 'package:tukangku/blocs/profile_bloc/profile_bloc.dart';
+import 'package:tukangku/blocs/role_access_bloc/role_access_bloc.dart';
+import 'package:tukangku/blocs/role_permission_bloc/role_permission_bloc.dart';
 import 'package:tukangku/blocs/service_bloc/service_bloc.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner_create.dart';
@@ -79,6 +82,15 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<CategoryServiceBloc>(
           create: (BuildContext context) => CategoryServiceBloc(),
+        ),
+        BlocProvider<LogBloc>(
+          create: (BuildContext context) => LogBloc(),
+        ),
+        BlocProvider<RoleAccessBloc>(
+          create: (BuildContext context) => RoleAccessBloc(),
+        ),
+        BlocProvider<RolePermissionBloc>(
+          create: (BuildContext context) => RolePermissionBloc(),
         ),
       ],
       child: MaterialApp(
