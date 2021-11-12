@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/role_access_bloc/role_access_bloc.dart';
+import 'package:tukangku/models/response_model.dart';
 import 'package:tukangku/models/role_model.dart';
+import 'package:tukangku/repositories/auth_repository.dart';
+import 'package:tukangku/repositories/role_repository.dart';
 import 'package:tukangku/screens/widgets/bottom_sheet_modal.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
 
@@ -15,31 +18,54 @@ class MasterUserRoleEdit extends StatefulWidget {
 }
 
 class _MasterUserRoleEditState extends State<MasterUserRoleEdit> {
+  AuthRepository authRepo = AuthRepository();
+  RoleRepository roleRepo = RoleRepository();
   late RoleAccessBloc roleAccessBloc;
   RolePermissionModel? permission;
   TextEditingController nameController = TextEditingController();
   TextEditingController guardController = TextEditingController();
 
-  List<RolePermissionModel> listPermissions = [
-    RolePermissionModel(id: 1, name: 'Superadmin'),
-    RolePermissionModel(id: 2, name: 'Admin'),
-  ];
+  List<RolePermissionModel> listPermissions = [];
 
   List<RolePermissionModel> listPermissionsSelected = [];
 
-  void addPermissionToRole() {
+  Future getRolePermission() async {
+    String? token = await authRepo.hasToken();
+    List<RolePermissionModel>? listRolePermission =
+        await roleRepo.getRolePermission(token!);
+    if (listRolePermission != null) {
+      if (listRolePermission.length != 0) {
+        permission = listRolePermission[0];
+      }
+      listPermissions = listRolePermission;
+    }
+    setState(() {});
+  }
+
+  Future addPermissionToRole() async {
+    String? token = await authRepo.hasToken();
     if (permission != null) {
       if (listPermissionsSelected.any((item) => item.id == permission!.id)) {
+        // Permission sudah dipilih
       } else {
-        listPermissionsSelected.add(permission!);
+        ResponseModel? responseModel = await roleRepo.createPermissionToRole(
+            token!, widget.roleAccessModel, permission!);
+        if (responseModel != null && responseModel.status == 'success') {
+          listPermissionsSelected.add(permission!);
+        }
       }
     }
     setState(() {});
   }
 
-  void deletePermissionToRole(RolePermissionModel permissionModel) {
-    listPermissionsSelected
-        .removeWhere((item) => item.id == permissionModel.id);
+  Future deletePermissionToRole(RolePermissionModel rolePermissionModel) async {
+    String? token = await authRepo.hasToken();
+    ResponseModel? responseModel = await roleRepo.deletePermissionToRole(
+        token!, widget.roleAccessModel, rolePermissionModel);
+    if (responseModel != null && responseModel.status == 'success') {
+      listPermissionsSelected
+          .removeWhere((item) => item.id == rolePermissionModel.id);
+    }
     setState(() {});
   }
 
@@ -82,9 +108,11 @@ class _MasterUserRoleEditState extends State<MasterUserRoleEdit> {
     ]);
   }
 
-  initValue() {
+  Future initValue() async {
     nameController.text = widget.roleAccessModel.name ?? '';
     guardController.text = widget.roleAccessModel.guardName ?? '';
+    listPermissionsSelected = widget.roleAccessModel.permissions ?? [];
+    await getRolePermission();
   }
 
   @override

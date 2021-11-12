@@ -11,11 +11,17 @@ import 'package:tukangku/utils/error_message.dart';
 class UserDataRepository {
   final _baseUrl = dotenv.env['API_URL'].toString();
 
-  Future<List<User>?> getUserData(
+  Future<List<User>?> getUserData(String _token,
       {int page = 1, int limit = 10, bool isConsumen = false}) async {
     try {
-      final response = await http.get(Uri.parse(_baseUrl +
-          '/user-data?page=$page&limit=$limit&is_consumen=$isConsumen'));
+      final response = await http.get(
+        Uri.parse(_baseUrl +
+            '/user-data?page=$page&limit=$limit&is_consumen=$isConsumen'),
+        headers: {
+          'Authorization': 'Bearer $_token',
+          'Accept': 'application/json',
+        },
+      );
       // print(response.body);
 
       if (response.statusCode == 200) {
@@ -40,8 +46,10 @@ class UserDataRepository {
       request.fields['email'] = user.email!;
       request.fields['date_of_birth'] = user.dateOfBirth!;
       request.fields['address'] = user.address!;
+      request.fields['password'] = user.password!;
+      request.fields['password_confirmation'] = user.passwordConfirmation!;
       request.fields['number'] = user.number!;
-      request.fields['role_access_id'] = user.roleAccessId!.toString();
+      request.fields['user_role_id'] = user.roleAccessModel!.id!.toString();
 
       // Convert image file type to byte data
       final byte = await user.imageFile!.readAsBytes();
@@ -66,7 +74,7 @@ class UserDataRepository {
       http.StreamedResponse streamedResponse = await request.send();
       final response =
           await http.Response.fromStream(streamedResponse); // get body response
-      // print(response.body);
+      print(response.body);
 
       // Error handling
       if (response.statusCode == 201) {
@@ -92,8 +100,10 @@ class UserDataRepository {
       request.fields['email'] = user.email!;
       request.fields['date_of_birth'] = user.dateOfBirth!;
       request.fields['address'] = user.address!;
+      request.fields['password'] = user.password!;
+      request.fields['password_confirmation'] = user.passwordConfirmation!;
       request.fields['number'] = user.number!;
-      request.fields['role_access_id'] = user.roleAccessId!.toString();
+      request.fields['user_role_id'] = user.roleAccessModel!.id!.toString();
 
       // Convert image file type to byte data
       final byte = await user.imageFile!.readAsBytes();

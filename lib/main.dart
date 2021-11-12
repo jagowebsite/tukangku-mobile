@@ -14,6 +14,7 @@ import 'package:tukangku/blocs/profile_bloc/profile_bloc.dart';
 import 'package:tukangku/blocs/role_access_bloc/role_access_bloc.dart';
 import 'package:tukangku/blocs/role_permission_bloc/role_permission_bloc.dart';
 import 'package:tukangku/blocs/service_bloc/service_bloc.dart';
+import 'package:tukangku/blocs/user_data_bloc/user_data_bloc.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner_create.dart';
 import 'package:tukangku/screens/account/master/category/master_category_service.dart';
@@ -28,6 +29,7 @@ import 'package:tukangku/screens/account/master/service/master_service_create.da
 import 'package:tukangku/screens/account/master/transaction/master_transaction.dart';
 import 'package:tukangku/screens/account/master/transaction/master_transaction_detail.dart';
 import 'package:tukangku/screens/account/master/user/master_user.dart';
+import 'package:tukangku/screens/account/master/user/master_user_create.dart';
 import 'package:tukangku/screens/account/master/user/master_user_log.dart';
 import 'package:tukangku/screens/account/master/user_role/permissions/master_user_permission.dart';
 import 'package:tukangku/screens/account/master/user_role/permissions/master_user_permission_create.dart';
@@ -92,6 +94,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<RolePermissionBloc>(
           create: (BuildContext context) => RolePermissionBloc(),
         ),
+        BlocProvider<UserDataBloc>(
+          create: (BuildContext context) => UserDataBloc(),
+        ),
       ],
       child: MaterialApp(
         title: 'Tukangku',
@@ -122,6 +127,7 @@ class MyApp extends StatelessWidget {
           '/master-banner-create': (context) => MasterBannerCreate(),
           '/master-consumen': (context) => MasterConsumen(),
           '/master-user': (context) => MasterUser(),
+          '/master-user-create': (context) => MasterUserCreate(),
           '/master-user-log': (context) => MasterUserLog(),
           '/master-user-role': (context) => MasterUserRole(),
           '/master-user-role-create': (context) => MasterUserRoleCreate(),

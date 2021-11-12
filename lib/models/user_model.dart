@@ -1,9 +1,20 @@
 import 'dart:io';
 
+import 'package:tukangku/models/role_model.dart';
+
 class User {
   int? id, roleAccessId;
-  String? email, password, name, dateOfBirth, address, number, images, ktpImage;
+  String? email,
+      password,
+      passwordConfirmation,
+      name,
+      dateOfBirth,
+      address,
+      number,
+      images,
+      ktpImage;
   File? imageFile, ktpImageFile;
+  RoleAccessModel? roleAccessModel;
 
   User(
       {this.id,
@@ -11,13 +22,15 @@ class User {
       this.email,
       this.password,
       this.name,
+      this.passwordConfirmation,
       this.dateOfBirth,
       this.address,
       this.number,
       this.images,
       this.imageFile,
       this.ktpImageFile,
-      this.ktpImage});
+      this.ktpImage,
+      this.roleAccessModel});
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(

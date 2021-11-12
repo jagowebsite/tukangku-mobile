@@ -46,7 +46,7 @@ class RoleRepository {
                 'name': roleAccessModel.name,
                 'guard_name': roleAccessModel.guardName,
               }));
-      print(response.body);
+      // print(response.body);
       // Error handling
       if (response.statusCode == 201) {
         var jsonResponse = json.decode(response.body);
@@ -73,7 +73,7 @@ class RoleRepository {
             'Content-Type': 'application/json',
           },
           body: json.encode({'role_permission_id': rolePermissionModel.id}));
-      print(response.body);
+      // print(response.body);
       // Error handling
       if (response.statusCode == 201) {
         var jsonResponse = json.decode(response.body);
@@ -130,7 +130,7 @@ class RoleRepository {
             'name': roleAccessModel.name,
             'guard_name': roleAccessModel.guardName,
           }));
-      print(response.body);
+      // print(response.body);
       // Error handling
       if (response.statusCode == 201) {
         var jsonResponse = json.decode(response.body);
@@ -152,7 +152,7 @@ class RoleRepository {
             'Authorization': 'Bearer $_token',
             'Accept': 'application/json'
           });
-      print(response.body);
+      // print(response.body);
 
       // Error handling
       if (response.statusCode == 201) {
@@ -175,7 +175,7 @@ class RoleRepository {
             'Authorization': 'Bearer $_token',
             'Accept': 'application/json',
           });
-      print(response.body);
+      // print(response.body);
 
       if (response.statusCode == 200) {
         Iterable iterable = json.decode(response.body)['data'];
@@ -202,7 +202,7 @@ class RoleRepository {
                 'name': rolePermissionModel.name,
                 'guard_name': rolePermissionModel.guardName,
               }));
-      print(response.body);
+      // print(response.body);
       // Error handling
       if (response.statusCode == 201) {
         var jsonResponse = json.decode(response.body);
@@ -230,7 +230,7 @@ class RoleRepository {
             'name': rolePermissionModel.name,
             'guard_name': rolePermissionModel.guardName,
           }));
-      print(response.body);
+      // print(response.body);
       // Error handling
       if (response.statusCode == 201) {
         var jsonResponse = json.decode(response.body);

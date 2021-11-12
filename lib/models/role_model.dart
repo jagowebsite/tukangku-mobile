@@ -1,7 +1,7 @@
 class RoleAccessModel {
   final int? id;
   final String? name, guardName;
-  final List<String>? permissions;
+  final List<RolePermissionModel>? permissions;
 
   RoleAccessModel({this.id, this.name, this.guardName, this.permissions});
 
@@ -10,8 +10,9 @@ class RoleAccessModel {
         id: json['id'],
         name: json['name'],
         guardName: json['guard_name'],
-        permissions: json["permissions"] != null
-            ? List<String>.from(json["permissions"])
+        permissions: json["permission"] != null
+            ? List<RolePermissionModel>.from(
+                json["permission"].map((e) => RolePermissionModel.fromJson(e)))
             : null);
   }
 
