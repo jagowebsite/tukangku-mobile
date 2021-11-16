@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/user_data_bloc/user_data_bloc.dart';
+import 'package:tukangku/screens/account/master/user/master_user_edit.dart';
 
 class MasterUser extends StatefulWidget {
   const MasterUser({Key? key}) : super(key: key);
@@ -65,7 +66,7 @@ class _MasterUserState extends State<MasterUser> {
               backgroundColor: Colors.white,
               elevation: 0,
               title: Text(
-                'Master Data Konsumen',
+                'Master Data Admin',
                 style: TextStyle(color: Colors.black87),
               ),
               actions: [
@@ -96,6 +97,7 @@ class _MasterUserState extends State<MasterUser> {
               builder: (context, state) {
                 if (state is UserData) {
                   return ListView.separated(
+                    physics: AlwaysScrollableScrollPhysics(),
                     controller: _scrollController,
                     itemCount: state.hasReachMax
                         ? state.listUsers.length
@@ -103,7 +105,13 @@ class _MasterUserState extends State<MasterUser> {
                     itemBuilder: (context, index) {
                       if (index < state.listUsers.length) {
                         return ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return MasterUserEdit(
+                                  user: state.listUsers[index]);
+                            })).then(onGoBack);
+                          },
                           leading: Container(
                             decoration: BoxDecoration(
                                 color: Colors.orange, shape: BoxShape.circle),
@@ -122,7 +130,7 @@ class _MasterUserState extends State<MasterUser> {
                               ),
                             ),
                           ),
-                          subtitle: Text('rudi@gmail.com'),
+                          subtitle: Text(state.listUsers[index].email ?? ''),
                           trailing:
                               Icon(Icons.chevron_right, color: Colors.black87),
                         );

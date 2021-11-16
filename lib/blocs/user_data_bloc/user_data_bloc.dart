@@ -18,6 +18,7 @@ class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
     on<CreateUserData>(_createUserData);
     on<UpdateUserData>(_updateUserData);
     on<DeleteUserData>(_deleteUserData);
+    on<ChangePasswordUserData>(_changePasswordUserData);
   }
 
   Future _getUserData(GetUserData event, Emitter<UserDataState> emit) async {
@@ -101,6 +102,33 @@ class UserDataBloc extends Bloc<UserDataEvent, UserDataState> {
     } catch (e) {
       print(e.toString());
       emit(UpdateUserDataError('Update user gagal, silahkan coba kembali'));
+    }
+  }
+
+  Future _changePasswordUserData(
+      ChangePasswordUserData event, Emitter<UserDataState> emit) async {
+    emit(ChangePasswordUserDataLoading());
+    try {
+      String? _token = await _authRepo.hasToken();
+      if (_token != null) {
+        ResponseModel? responseModel =
+            await _userDataRepo.changePasswordUserData(_token, event.user.id!,
+                event.user.password!, event.user.passwordConfirmation!);
+        if (responseModel != null) {
+          if (responseModel.status == 'success') {
+            emit(ChangePasswordUserDataSuccess(responseModel.message ?? ''));
+          } else {
+            emit(ChangePasswordUserDataError(responseModel.message ?? ''));
+          }
+        } else {
+          emit(ChangePasswordUserDataError(
+              'Change password user gagal, silahkan coba kembali'));
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+      emit(ChangePasswordUserDataError(
+          'Change password user gagal, silahkan coba kembali'));
     }
   }
 

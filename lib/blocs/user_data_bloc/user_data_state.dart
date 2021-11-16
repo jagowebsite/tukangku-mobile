@@ -59,3 +59,15 @@ class DeleteUserDataError extends UserDataState {
   final String message;
   DeleteUserDataError(this.message);
 }
+
+class ChangePasswordUserDataLoading extends UserDataState {}
+
+class ChangePasswordUserDataSuccess extends UserDataState {
+  final String message;
+  ChangePasswordUserDataSuccess(this.message);
+}
+
+class ChangePasswordUserDataError extends UserDataState {
+  final String message;
+  ChangePasswordUserDataError(this.message);
+}

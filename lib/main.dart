@@ -190,97 +190,112 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       },
       child: Scaffold(
-        body: SafeArea(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Center(
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 15),
-                      child: Text(
-                        'Selamat Datang di Tukangku',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            fontSize: 23,
-                            fontWeight: FontWeight.w700,
-                            color: Colors.orangeAccent.shade700),
+        body: BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, state) {
+            if (state is UnAuthorized) {
+              return SafeArea(
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Expanded(
+                        flex: 1,
+                        child: Center(
+                          child: Container(
+                            margin: EdgeInsets.symmetric(horizontal: 15),
+                            child: Text(
+                              'Selamat Datang di Tukangku',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 23,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.orangeAccent.shade700),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                    flex: 3,
-                    child: Container(
-                      child: Image.network(
-                          'https://cdni.iconscout.com/illustration/premium/thumb/office-staff-discussing-creative-and-innovative-solution-2710133-2268505.png'),
-                    )),
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 15),
-                    child: Column(
-                      children: [
-                        Container(
-                          width: size.width,
-                          child: TextButton(
-                            onPressed: () =>
-                                Navigator.of(context).pushNamed('/login'),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 8),
-                              child: Text(
-                                'Sign in',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                            style: TextButton.styleFrom(
-                                backgroundColor: Colors.orangeAccent.shade700),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
-                          width: size.width,
-                          child: TextButton(
-                            onPressed: () =>
-                                Navigator.of(context).pushNamed('/register'),
-                            child: Container(
-                              padding: EdgeInsets.symmetric(vertical: 8),
-                              child: Text(
-                                'Sign up',
-                                style: TextStyle(
-                                    color: Colors.orangeAccent.shade700),
-                              ),
-                            ),
-                            style: TextButton.styleFrom(
-                              side: BorderSide(
-                                  color: Colors.orangeAccent.shade700,
-                                  width: 1),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
+                      Expanded(
+                          flex: 3,
+                          child: Container(
+                            child: Image.network(
+                                'https://cdni.iconscout.com/illustration/premium/thumb/office-staff-discussing-creative-and-innovative-solution-2710133-2268505.png'),
+                          )),
+                      Expanded(
+                        flex: 2,
+                        child: Container(
                           margin: EdgeInsets.symmetric(horizontal: 15),
-                          child: Text(
-                            'By using our mobile app, you agree with our Terms of Use and Privacy Policy',
-                            textAlign: TextAlign.center,
-                            style:
-                                TextStyle(color: Colors.black87, fontSize: 12),
+                          child: Column(
+                            children: [
+                              Container(
+                                width: size.width,
+                                child: TextButton(
+                                  onPressed: () =>
+                                      Navigator.of(context).pushNamed('/login'),
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(vertical: 8),
+                                    child: Text(
+                                      'Sign in',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                  style: TextButton.styleFrom(
+                                      backgroundColor:
+                                          Colors.orangeAccent.shade700),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Container(
+                                width: size.width,
+                                child: TextButton(
+                                  onPressed: () => Navigator.of(context)
+                                      .pushNamed('/register'),
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(vertical: 8),
+                                    child: Text(
+                                      'Sign up',
+                                      style: TextStyle(
+                                          color: Colors.orangeAccent.shade700),
+                                    ),
+                                  ),
+                                  style: TextButton.styleFrom(
+                                    side: BorderSide(
+                                        color: Colors.orangeAccent.shade700,
+                                        width: 1),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 15,
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(horizontal: 15),
+                                child: Text(
+                                  'By using our mobile app, you agree with our Terms of Use and Privacy Policy',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.black87, fontSize: 12),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
+              );
+            } else {
+              return Center(
+                  child: Container(
+                width: 30,
+                height: 30,
+                child: CircularProgressIndicator(
+                    color: Colors.orange.shade600, strokeWidth: 3),
+              ));
+            }
+          },
         ),
       ),
     );

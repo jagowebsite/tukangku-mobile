@@ -35,6 +35,23 @@ class _MasterUserCreateState extends State<MasterUserCreate> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController passwordConfirmController = TextEditingController();
 
+  // Date Picker
+  DateTime selectedDate = DateTime.now();
+  DateTime now = new DateTime.now();
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime((now.year - 100), 8),
+        lastDate: DateTime(now.year + 1));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        dateController.text = selectedDate.toLocal().toString().split(' ')[0];
+      });
+  }
+
   Future pickImage() async {
     final ImagePicker _picker = ImagePicker();
     // Pick an image
@@ -175,17 +192,29 @@ class _MasterUserCreateState extends State<MasterUserCreate> {
                             height: 10,
                           ),
                           Text('Tanggal Lahir'),
-                          Container(
-                            padding: EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.grey.shade100),
-                            child: TextField(
-                              controller: dateController,
-                              decoration: InputDecoration(
-                                border: InputBorder.none,
+                          Stack(
+                            children: [
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.grey.shade100),
+                                child: TextField(
+                                  controller: dateController,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                  ),
+                                ),
                               ),
-                            ),
+                              GestureDetector(
+                                  onTap: () async {
+                                    await _selectDate(context);
+                                  },
+                                  child: Container(
+                                    height: 50,
+                                    color: Colors.transparent,
+                                  ))
+                            ],
                           ),
                           SizedBox(
                             height: 10,
@@ -305,7 +334,7 @@ class _MasterUserCreateState extends State<MasterUserCreate> {
                           Container(
                               margin: EdgeInsets.only(bottom: 5),
                               child: Text(
-                                'Foto Anda',
+                                'Foto User',
                                 style: TextStyle(fontWeight: FontWeight.bold),
                               )),
                           SizedBox(

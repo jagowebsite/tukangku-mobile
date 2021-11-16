@@ -20,6 +20,11 @@ class UpdateUserData extends UserDataEvent {
   UpdateUserData(this.user);
 }
 
+class ChangePasswordUserData extends UserDataEvent {
+  final User user;
+  ChangePasswordUserData(this.user);
+}
+
 class DeleteUserData extends UserDataEvent {
   final User user;
   DeleteUserData(this.user);

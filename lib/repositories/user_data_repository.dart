@@ -16,7 +16,7 @@ class UserDataRepository {
     try {
       final response = await http.get(
         Uri.parse(_baseUrl +
-            '/user-data?page=$page&limit=$limit&is_consumen=$isConsumen'),
+            '/user-data?page=$page&limit=$limit&is_consumen=${isConsumen ? 1 : 0}'),
         headers: {
           'Authorization': 'Bearer $_token',
           'Accept': 'application/json',
@@ -52,20 +52,26 @@ class UserDataRepository {
       request.fields['user_role_id'] = user.roleAccessModel!.id!.toString();
 
       // Convert image file type to byte data
-      final byte = await user.imageFile!.readAsBytes();
-      ByteData byteData = byte.buffer.asByteData();
-      List<int> byteImage = byteData.buffer.asUint8List();
+      if (user.imageFile != null) {
+        final byte = await user.imageFile!.readAsBytes();
+        ByteData byteData = byte.buffer.asByteData();
+        List<int> byteImage = byteData.buffer.asUint8List();
 
-      // Convert ktp file type to byte data
-      final byteKTP = await user.imageFile!.readAsBytes();
-      ByteData byteDataKTP = byteKTP.buffer.asByteData();
-      List<int> byteImageKTP = byteDataKTP.buffer.asUint8List();
+        // Set request value
+        request.files.add(http.MultipartFile.fromBytes('images', byteImage,
+            filename: basename(user.imageFile!.path)));
+      }
 
-      // Set request value
-      request.files.add(http.MultipartFile.fromBytes('images', byteImage,
-          filename: basename(user.imageFile!.path)));
-      request.files.add(http.MultipartFile.fromBytes('ktp_image', byteImageKTP,
-          filename: basename(user.ktpImageFile!.path)));
+      if (user.ktpImageFile != null) {
+        // Convert ktp file type to byte data
+        final byteKTP = await user.ktpImageFile!.readAsBytes();
+        ByteData byteDataKTP = byteKTP.buffer.asByteData();
+        List<int> byteImageKTP = byteDataKTP.buffer.asUint8List();
+
+        request.files.add(http.MultipartFile.fromBytes(
+            'ktp_image', byteImageKTP,
+            filename: basename(user.ktpImageFile!.path)));
+      }
 
       request.headers['Authorization'] = "Bearer $_token";
       request.headers['Accept'] = "application/json";
@@ -97,29 +103,36 @@ class UserDataRepository {
 
       // Request input data
       request.fields['name'] = user.name!;
-      request.fields['email'] = user.email!;
+      // request.fields['email'] = user.email!;
       request.fields['date_of_birth'] = user.dateOfBirth!;
       request.fields['address'] = user.address!;
-      request.fields['password'] = user.password!;
-      request.fields['password_confirmation'] = user.passwordConfirmation!;
+      // request.fields['password'] = user.password!;
+      // request.fields['password_confirmation'] = user.passwordConfirmation!;
       request.fields['number'] = user.number!;
       request.fields['user_role_id'] = user.roleAccessModel!.id!.toString();
 
       // Convert image file type to byte data
-      final byte = await user.imageFile!.readAsBytes();
-      ByteData byteData = byte.buffer.asByteData();
-      List<int> byteImage = byteData.buffer.asUint8List();
 
-      // Convert ktp file type to byte data
-      final byteKTP = await user.imageFile!.readAsBytes();
-      ByteData byteDataKTP = byteKTP.buffer.asByteData();
-      List<int> byteImageKTP = byteDataKTP.buffer.asUint8List();
+      if (user.imageFile != null) {
+        final byte = await user.imageFile!.readAsBytes();
+        ByteData byteData = byte.buffer.asByteData();
+        List<int> byteImage = byteData.buffer.asUint8List();
 
-      // Set request value
-      request.files.add(http.MultipartFile.fromBytes('images', byteImage,
-          filename: basename(user.imageFile!.path)));
-      request.files.add(http.MultipartFile.fromBytes('ktp_image', byteImageKTP,
-          filename: basename(user.ktpImageFile!.path)));
+        // Set request value
+        request.files.add(http.MultipartFile.fromBytes('images', byteImage,
+            filename: basename(user.imageFile!.path)));
+      }
+
+      if (user.ktpImageFile != null) {
+        // Convert ktp file type to byte data
+        final byteKTP = await user.ktpImageFile!.readAsBytes();
+        ByteData byteDataKTP = byteKTP.buffer.asByteData();
+        List<int> byteImageKTP = byteDataKTP.buffer.asUint8List();
+
+        request.files.add(http.MultipartFile.fromBytes(
+            'ktp_image', byteImageKTP,
+            filename: basename(user.ktpImageFile!.path)));
+      }
 
       request.headers['Authorization'] = "Bearer $_token";
       request.headers['Accept'] = "application/json";
@@ -128,7 +141,7 @@ class UserDataRepository {
       http.StreamedResponse streamedResponse = await request.send();
       final response =
           await http.Response.fromStream(streamedResponse); // get body response
-      // print(response.body);
+      print(response.body);
 
       // Error handling
       if (response.statusCode == 201) {

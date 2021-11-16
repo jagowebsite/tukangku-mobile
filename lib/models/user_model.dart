@@ -34,17 +34,19 @@ class User {
 
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
-      id: json['id'],
-      roleAccessId: json['role_access_id'],
-      email: json['email'],
-      password: json['password'],
-      name: json['name'],
-      dateOfBirth: json['date_of_birth'],
-      address: json['address'],
-      number: json['number'],
-      images: json['images'],
-      ktpImage: json['ktp_image'],
-    );
+        id: json['id'],
+        roleAccessId: json['role_access_id'],
+        email: json['email'],
+        password: json['password'],
+        name: json['name'],
+        dateOfBirth: json['date_of_birth'],
+        address: json['address'],
+        number: json['number'],
+        images: json['images'],
+        ktpImage: json['ktp_image'],
+        roleAccessModel: json['role'] != null
+            ? RoleAccessModel.fromJson(json['role'])
+            : null);
   }
 
   Map<String, dynamic> toJson() {
