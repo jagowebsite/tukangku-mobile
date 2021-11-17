@@ -11,12 +11,17 @@ import 'package:tukangku/utils/error_message.dart';
 class PaymentRepository {
   final _baseUrl = dotenv.env['API_URL'].toString();
 
-  Future<List<PaymentModel>?> getPayments(
+  Future<List<PaymentModel>?> getPayments(String _token,
       {int page = 1, int limit = 10}) async {
     try {
-      final response = await http
-          .get(Uri.parse(_baseUrl + '/payments?page=$page&limit=$limit'));
-      // print(response.body);
+      final response = await http.get(
+        Uri.parse(_baseUrl + '/payments?page=$page&limit=$limit'),
+        headers: {
+          'Authorization': 'Bearer $_token',
+          'Accept': 'application/json',
+        },
+      );
+      print(response.body);
 
       if (response.statusCode == 200) {
         Iterable iterable = json.decode(response.body)['data'];
@@ -29,7 +34,7 @@ class PaymentRepository {
     }
   }
 
-  Future<ResponseModel?> createBanner(
+  Future<ResponseModel?> createPayment(
       String _token, PaymentModel paymentModel) async {
     try {
       // Create multipart request
@@ -90,7 +95,7 @@ class PaymentRepository {
     }
   }
 
-  Future<ResponseModel?> updateBanner(
+  Future<ResponseModel?> updatePayment(
       String _token, PaymentModel paymentModel) async {
     try {
       // Create multipart request

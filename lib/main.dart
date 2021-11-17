@@ -10,6 +10,7 @@ import 'package:tukangku/blocs/employee_bloc/employee_bloc.dart';
 import 'package:tukangku/blocs/home_bloc/home_bloc.dart';
 import 'package:tukangku/blocs/log_bloc/log_bloc.dart';
 import 'package:tukangku/blocs/master_service_bloc/master_service_bloc.dart';
+import 'package:tukangku/blocs/payment_bloc/payment_bloc.dart';
 import 'package:tukangku/blocs/profile_bloc/profile_bloc.dart';
 import 'package:tukangku/blocs/role_access_bloc/role_access_bloc.dart';
 import 'package:tukangku/blocs/role_permission_bloc/role_permission_bloc.dart';
@@ -96,6 +97,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<UserDataBloc>(
           create: (BuildContext context) => UserDataBloc(),
+        ),
+        BlocProvider<PaymentBloc>(
+          create: (BuildContext context) => PaymentBloc(),
         ),
       ],
       child: MaterialApp(
