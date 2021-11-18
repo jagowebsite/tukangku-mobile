@@ -46,6 +46,7 @@ import 'package:tukangku/screens/others/filter.dart';
 import 'package:tukangku/screens/others/map_coordinate.dart';
 import 'package:tukangku/screens/others/search.dart';
 import 'package:tukangku/screens/transaction/cart.dart';
+import 'package:tukangku/screens/transaction/my_transaction.dart';
 import 'package:tukangku/screens/transaction/payment.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:tukangku/screens/widgets/image_cropper.dart';
@@ -124,6 +125,7 @@ class MyApp extends StatelessWidget {
           '/cart': (context) => Cart(),
           '/update-profile': (context) => UpdateProfil(),
           '/update-password': (context) => UpdatePassword(),
+          '/my-transaction': (context) => MyTransaction(),
           '/master-service': (context) => MasterService(),
           '/master-service-create': (context) => MasterServiceCreate(),
           '/master-service-category': (context) => MasterCategoryService(),

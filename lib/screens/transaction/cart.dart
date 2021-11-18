@@ -1,5 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:tukangku/models/cart_model.dart';
+import 'package:tukangku/models/service_model.dart';
+import 'package:tukangku/utils/currency_format.dart';
 
 class Cart extends StatefulWidget {
   const Cart({Key? key}) : super(key: key);
@@ -9,6 +12,43 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
+  int totalAllPrice = 0;
+
+  List<CartModel> cartModels = [
+    CartModel(
+        quantity: 1,
+        serviceModel: ServiceModel(
+            id: 1, name: 'Service Banana', typeQuantity: 'Jam', price: 15000),
+        totalPrice: 15000),
+    CartModel(
+        quantity: 1,
+        serviceModel: ServiceModel(
+            id: 2, name: 'Service Apple', typeQuantity: 'Jam', price: 14000),
+        totalPrice: 14000),
+  ];
+
+  countTotalPrice() {
+    int totalPrice = 0;
+    for (var i = 0; i < cartModels.length; i++) {
+      int price = cartModels[i].quantity! * cartModels[i].serviceModel!.price!;
+      totalPrice = totalPrice + price;
+    }
+    totalAllPrice = totalPrice;
+    setState(() {});
+  }
+
+  removeCart(CartModel cart) {
+    cartModels
+        .removeWhere((item) => item.serviceModel!.id == cart.serviceModel!.id);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    countTotalPrice();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -36,9 +76,28 @@ class _CartState extends State<Cart> {
               physics: AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.symmetric(vertical: 10),
               // shrinkWrap: true,
-              itemCount: 3,
+              itemCount: cartModels.length,
               itemBuilder: (context, index) {
-                return CartItem();
+                return CartItem(
+                  cartModel: cartModels[index],
+                  addFunction: () {
+                    cartModels[index].quantity =
+                        cartModels[index].quantity! + 1;
+                    countTotalPrice();
+                    setState(() {});
+                  },
+                  minusFunction: () {
+                    if (cartModels[index].quantity! > 0) {
+                      cartModels[index].quantity =
+                          cartModels[index].quantity! - 1;
+                      countTotalPrice();
+                      setState(() {});
+                    }
+                    if (cartModels[index].quantity! <= 0) {
+                      removeCart(cartModels[index]);
+                    }
+                  },
+                );
               }),
           Positioned(
             child: Align(
@@ -72,7 +131,7 @@ class _CartState extends State<Cart> {
                               ),
                             ),
                             Text(
-                              'Rp 300.000',
+                              currencyId.format(totalAllPrice).toString(),
                               style: TextStyle(
                                   color: Colors.orangeAccent.shade700,
                                   fontWeight: FontWeight.bold),
@@ -82,14 +141,20 @@ class _CartState extends State<Cart> {
                       ),
                     ),
                     Expanded(
-                      child: Container(
-                        color: Colors.orangeAccent.shade700,
-                        child: Center(
-                          child: Text(
-                            'Checkout (3)',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
+                      child: GestureDetector(
+                        onTap: () {
+                          cartModels[0].quantity = cartModels[0].quantity! + 1;
+                          print(cartModels[0].quantity);
+                        },
+                        child: Container(
+                          color: Colors.orangeAccent.shade700,
+                          child: Center(
+                            child: Text(
+                              'Checkout (${cartModels.length})',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                       ),
@@ -105,11 +170,19 @@ class _CartState extends State<Cart> {
   }
 }
 
-class CartItem extends StatelessWidget {
-  const CartItem({
-    Key? key,
-  }) : super(key: key);
+class CartItem extends StatefulWidget {
+  final CartModel cartModel;
+  final Function()? addFunction;
+  final Function()? minusFunction;
+  const CartItem(
+      {Key? key, required this.cartModel, this.addFunction, this.minusFunction})
+      : super(key: key);
 
+  @override
+  State<CartItem> createState() => _CartItemState();
+}
+
+class _CartItemState extends State<CartItem> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -141,7 +214,7 @@ class CartItem extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Mengepel Semua Ruangan Rumah'),
+                  Text(widget.cartModel.serviceModel!.name ?? ''),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Text(
@@ -150,7 +223,7 @@ class CartItem extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'Rp 100.000',
+                    currencyId.format(widget.cartModel.serviceModel!.price),
                     style: TextStyle(
                         color: Colors.orangeAccent.shade700,
                         fontWeight: FontWeight.bold),
@@ -160,32 +233,40 @@ class CartItem extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Container(
-                        width: 30,
-                        height: 30,
-                        padding: EdgeInsets.all(5),
-                        color: Colors.grey.shade200,
-                        child: Center(child: Text('-')),
+                      GestureDetector(
+                        onTap: widget.minusFunction,
+                        child: Container(
+                          width: 30,
+                          height: 30,
+                          padding: EdgeInsets.all(5),
+                          color: Colors.grey.shade200,
+                          child: Center(child: Text('-')),
+                        ),
                       ),
                       Container(
                         width: 50,
                         height: 30,
                         padding: EdgeInsets.all(5),
                         color: Colors.grey.shade100,
-                        child: Center(child: Text('1')),
+                        child: Center(
+                            child: Text(widget.cartModel.quantity.toString())),
                       ),
-                      Container(
-                        width: 30,
-                        height: 30,
-                        padding: EdgeInsets.all(5),
-                        color: Colors.grey.shade200,
-                        child: Center(child: Text('+')),
+                      GestureDetector(
+                        onTap: widget.addFunction,
+                        child: Container(
+                          width: 30,
+                          height: 30,
+                          padding: EdgeInsets.all(5),
+                          color: Colors.grey.shade200,
+                          child: Center(child: Text('+')),
+                        ),
                       ),
                       SizedBox(
                         width: 10,
                       ),
                       Expanded(
-                        child: Text('Per Jam'),
+                        child: Text(
+                            widget.cartModel.serviceModel!.typeQuantity ?? ''),
                       )
                     ],
                   ),

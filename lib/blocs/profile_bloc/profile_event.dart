@@ -14,6 +14,11 @@ class UpdatePhoto extends ProfileEvent {
   UpdatePhoto(this.file);
 }
 
+class UpdateKTP extends ProfileEvent {
+  final File file;
+  UpdateKTP(this.file);
+}
+
 class ChangePassword extends ProfileEvent {
   final String currentPass, newPass, confirmPass;
   ChangePassword(this.currentPass, this.newPass, this.confirmPass);

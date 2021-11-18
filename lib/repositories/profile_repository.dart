@@ -79,6 +79,41 @@ class ProfileRepository {
     }
   }
 
+  Future<ResponseModel?> updateKTP(String _token, File file) async {
+    try {
+      // Initialize data
+      http.MultipartRequest request = http.MultipartRequest(
+          'POST', Uri.parse(_baseUrl + '/auth/change-ktp-image'));
+
+      // Convert file type to byte data
+      final byte = await file.readAsBytes();
+      ByteData byteData = byte.buffer.asByteData();
+      List<int> byteImage = byteData.buffer.asUint8List();
+
+      // Set request value
+      request.files.add(http.MultipartFile.fromBytes('ktp_image', byteImage,
+          filename: basename(file.path)));
+      request.headers['Authorization'] = "Bearer $_token";
+      request.headers['Accept'] = "application/json";
+
+      // Send request
+      http.StreamedResponse streamedResponse = await request.send();
+      final response =
+          await http.Response.fromStream(streamedResponse); // get body response
+      print(response.body);
+
+      // Error handling
+      if (response.statusCode == 201) {
+        var jsonResponse = json.decode(response.body);
+        return ResponseModel.toJson(jsonResponse);
+      } else {
+        throw Exception(ErrorMessage.statusCode(response.statusCode));
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   Future<ResponseModel?> updatePassword(String _token, String currentPassword,
       String newPassword, String confirmPassword) async {
     try {

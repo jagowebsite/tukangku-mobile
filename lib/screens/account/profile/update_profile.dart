@@ -1,13 +1,18 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
 import 'package:tukangku/blocs/profile_bloc/profile_bloc.dart';
 import 'package:tukangku/models/user_model.dart';
 import 'package:tukangku/screens/widgets/custom_cached_image.dart';
 import 'package:tukangku/screens/widgets/input_text.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:http/http.dart' as http;
 
 class UpdateProfil extends StatefulWidget {
   const UpdateProfil({Key? key}) : super(key: key);
@@ -24,6 +29,30 @@ class _UpdateProfilState extends State<UpdateProfil> {
   TextEditingController dateBirthController = TextEditingController();
   TextEditingController telpController = TextEditingController();
   TextEditingController addressController = TextEditingController();
+
+  File? ktpFile;
+
+  Future pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    // Pick an image
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      ktpFile = File(image.path);
+      setState(() {});
+    }
+  }
+
+  Future urlToFile(String imageUrl) async {
+    var rng = new Random();
+    Directory tempDir = await getTemporaryDirectory();
+    String tempPath = tempDir.path;
+    File file = new File('$tempPath' + (rng.nextInt(100)).toString() + '.png');
+    http.Response response = await http.get(Uri.parse(imageUrl));
+    await file.writeAsBytes(response.bodyBytes);
+    ktpFile = file;
+
+    setState(() {});
+  }
 
   // Date Picker
   DateTime selectedDate = DateTime.now();
@@ -50,6 +79,15 @@ class _UpdateProfilState extends State<UpdateProfil> {
     authBloc.add(GetAuthData());
   }
 
+  Future updateKTP() async {
+    if (ktpFile == null) {
+      CustomSnackbar.showSnackbar(
+          context, 'Silahkan pilih foto ktp', SnackbarType.warning);
+    } else {
+      profileBloc.add(UpdateKTP(ktpFile!));
+    }
+  }
+
   Future updateProfile() async {
     User user = User(
         name: nameController.text,
@@ -69,6 +107,7 @@ class _UpdateProfilState extends State<UpdateProfil> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return MultiBlocListener(
       listeners: [
         BlocListener<AuthBloc, AuthState>(
@@ -78,6 +117,9 @@ class _UpdateProfilState extends State<UpdateProfil> {
               dateBirthController.text = state.user.dateOfBirth ?? '';
               telpController.text = state.user.number ?? '';
               addressController.text = state.user.address ?? '';
+              if (state.user.ktpImage != null && state.user.ktpImage != '') {
+                urlToFile(state.user.ktpImage ?? '');
+              }
             }
           },
         ),
@@ -95,6 +137,14 @@ class _UpdateProfilState extends State<UpdateProfil> {
             } else if (state is UpdatePhotoError) {
               CustomSnackbar.showSnackbar(
                   context, state.message, SnackbarType.error);
+            } else if (state is UpdateKTPSuccess) {
+              CustomSnackbar.showSnackbar(
+                  context, state.message, SnackbarType.success);
+              authBloc.add(GetAuthData());
+            } else if (state is UpdateKTPError) {
+              CustomSnackbar.showSnackbar(
+                  context, state.message, SnackbarType.error);
+              authBloc.add(GetAuthData());
             }
           },
         ),
@@ -223,38 +273,84 @@ class _UpdateProfilState extends State<UpdateProfil> {
                     hintText: 'Alamat Lengkap',
                   ),
                   SizedBox(
+                    height: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () => updateProfile(),
+                    child: Container(
+                      color: Colors.white,
+                      child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.orangeAccent.shade700,
+                          ),
+                          child: Center(
+                            child: Text('Update Profil',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                )),
+                          )),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  GestureDetector(
+                    onTap: () => pickImage(),
+                    child: Container(
+                        width: size.width,
+                        height: 150,
+                        padding: EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Colors.orangeAccent.shade700,
+                            width: 1,
+                          ),
+                        ),
+                        child: Center(
+                            child: ktpFile == null
+                                ? Text('+ Pilih Foto KTP',
+                                    style: TextStyle(
+                                        color: Colors.orangeAccent.shade700))
+                                : Container(
+                                    child: Image.file(ktpFile!),
+                                  ))),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  GestureDetector(
+                    onTap: () => updateKTP(),
+                    child: Container(
+                      color: Colors.white,
+                      child: Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.orangeAccent.shade700,
+                          ),
+                          child: Center(
+                            child: Text('Upload KTP',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                )),
+                          )),
+                    ),
+                  ),
+                  SizedBox(
                     height: 100,
                   )
                 ],
               ),
             ),
-            Positioned(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: GestureDetector(
-                  onTap: () => updateProfile(),
-                  child: Container(
-                    color: Colors.white,
-                    child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.orangeAccent.shade700,
-                        ),
-                        child: Center(
-                          child: Text('Update Profil',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                              )),
-                        )),
-                  ),
-                ),
-              ),
-            ),
             BlocBuilder<ProfileBloc, ProfileState>(
               builder: (context, state) {
-                if (state is UpdateProfileLoading) {
+                if (state is UpdateProfileLoading ||
+                    state is UpdateKTPLoading) {
                   return Container(
                       color: Colors.white.withOpacity(0.5),
                       child: Center(

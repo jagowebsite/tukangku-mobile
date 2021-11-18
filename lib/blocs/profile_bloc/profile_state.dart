@@ -30,6 +30,18 @@ class UpdatePhotoError extends ProfileState {
   UpdatePhotoError(this.message);
 }
 
+class UpdateKTPLoading extends ProfileState {}
+
+class UpdateKTPSuccess extends ProfileState {
+  final String message;
+  UpdateKTPSuccess(this.message);
+}
+
+class UpdateKTPError extends ProfileState {
+  final String message;
+  UpdateKTPError(this.message);
+}
+
 class ChangePasswordLoading extends ProfileState {}
 
 class ChangePasswordSuccess extends ProfileState {

@@ -17,6 +17,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<UpdateProfile>(_updateProfile);
     on<UpdatePhoto>(_updatePhoto);
     on<ChangePassword>(_changePassword);
+    on<UpdateKTP>(_updateKTP);
   }
 
   Future _updateProfile(UpdateProfile event, Emitter<ProfileState> emit) async {
@@ -61,6 +62,28 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       }
     } catch (e) {
       emit(UpdatePhotoError(e.toString()));
+    }
+  }
+
+  Future _updateKTP(UpdateKTP event, Emitter<ProfileState> emit) async {
+    emit(UpdateKTPLoading());
+    try {
+      String? _token = await _authRepo.hasToken();
+      if (_token != null) {
+        ResponseModel? responseModel =
+            await _profileRepo.updateKTP(_token, event.file);
+        if (responseModel != null) {
+          if (responseModel.status == 'success') {
+            emit(UpdateKTPSuccess(responseModel.message ?? ''));
+          } else {
+            emit(UpdateKTPError(responseModel.message ?? ''));
+          }
+        } else {
+          emit(UpdateKTPError('Update ktp gagal, silahkan coba kembali'));
+        }
+      }
+    } catch (e) {
+      emit(UpdateKTPError(e.toString()));
     }
   }
 
