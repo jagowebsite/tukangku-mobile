@@ -15,6 +15,7 @@ import 'package:tukangku/blocs/profile_bloc/profile_bloc.dart';
 import 'package:tukangku/blocs/role_access_bloc/role_access_bloc.dart';
 import 'package:tukangku/blocs/role_permission_bloc/role_permission_bloc.dart';
 import 'package:tukangku/blocs/service_bloc/service_bloc.dart';
+import 'package:tukangku/blocs/transaction_bloc/transaction_bloc.dart';
 import 'package:tukangku/blocs/user_data_bloc/user_data_bloc.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner_create.dart';
@@ -101,6 +102,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<PaymentBloc>(
           create: (BuildContext context) => PaymentBloc(),
         ),
+        BlocProvider<TransactionBloc>(
+          create: (BuildContext context) => TransactionBloc(),
+        ),
       ],
       child: MaterialApp(
         title: 'Tukangku',
@@ -139,7 +143,6 @@ class MyApp extends StatelessWidget {
           '/master-user-permission-create': (context) =>
               MasterUserPermissionCreate(),
           '/master-transaction': (context) => MasterTransaction(),
-          '/master-transaction-detail': (context) => MasterTransactionDetail(),
           '/master-payment': (context) => MasterPayment(),
           '/master-gps-log': (context) => MasterGPSLog(),
           '/payment': (context) => Payment(),

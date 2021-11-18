@@ -17,6 +17,8 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     on<GetPayment>(_getPayment);
     on<CreatePayment>(_createPayment);
     on<UpdatePayment>(_updatePayment);
+    on<ConfirmPayment>(_confirmPayment);
+    on<CancelPayment>(_cancelPayment);
   }
 
   Future _getPayment(GetPayment event, Emitter<PaymentState> emit) async {
@@ -100,6 +102,55 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     } catch (e) {
       print(e.toString());
       emit(UpdatePaymentError('Update payment gagal, silahkan coba kembali'));
+    }
+  }
+
+  Future _confirmPayment(
+      ConfirmPayment event, Emitter<PaymentState> emit) async {
+    emit(ConfirmPaymentLoading());
+    try {
+      String? _token = await _authRepo.hasToken();
+      if (_token != null) {
+        ResponseModel? responseModel =
+            await _paymentRepo.confirmPayment(_token, event.id);
+        if (responseModel != null) {
+          if (responseModel.status == 'success') {
+            emit(ConfirmPaymentSuccess(responseModel.message ?? ''));
+          } else {
+            emit(ConfirmPaymentError(responseModel.message ?? ''));
+          }
+        } else {
+          emit(ConfirmPaymentError(
+              'Confirm payment gagal, silahkan coba kembali'));
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+      emit(ConfirmPaymentError('Confirm payment gagal, silahkan coba kembali'));
+    }
+  }
+
+  Future _cancelPayment(CancelPayment event, Emitter<PaymentState> emit) async {
+    emit(CancelPaymentLoading());
+    try {
+      String? _token = await _authRepo.hasToken();
+      if (_token != null) {
+        ResponseModel? responseModel =
+            await _paymentRepo.cancelPayment(_token, event.id);
+        if (responseModel != null) {
+          if (responseModel.status == 'success') {
+            emit(CancelPaymentSuccess(responseModel.message ?? ''));
+          } else {
+            emit(CancelPaymentError(responseModel.message ?? ''));
+          }
+        } else {
+          emit(CancelPaymentError(
+              'Cancel payment gagal, silahkan coba kembali'));
+        }
+      }
+    } catch (e) {
+      print(e.toString());
+      emit(CancelPaymentError('Cancel payment gagal, silahkan coba kembali'));
     }
   }
 }

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:tukangku/models/transaction_model.dart';
+import 'package:tukangku/screens/account/master/transaction/master_transaction_confirmation.dart';
+import 'package:tukangku/screens/account/master/user/master_user_edit.dart';
+import 'package:tukangku/utils/currency_format.dart';
 
 class MasterTransactionDetail extends StatefulWidget {
-  const MasterTransactionDetail({Key? key}) : super(key: key);
+  final TransactionModel transactionModel;
+  const MasterTransactionDetail({Key? key, required this.transactionModel})
+      : super(key: key);
 
   @override
   _MasterTransactionDetailState createState() =>
@@ -56,25 +62,32 @@ class _MasterTransactionDetailState extends State<MasterTransactionDetail> {
                       height: 15,
                     ),
                     ListTile(
+                      onTap: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return MasterUserEdit(
+                              user: widget.transactionModel.user!);
+                        }));
+                      },
                       leading: Container(
                         decoration: BoxDecoration(
                             color: Colors.orange, shape: BoxShape.circle),
                         child: Container(
                           child: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage('https://i.pravatar.cc/300'),
+                            backgroundImage: NetworkImage(
+                                widget.transactionModel.user!.images ?? ''),
                           ),
                         ),
                       ),
                       title: Container(
                         child: Text(
-                          'Aldebaran',
+                          widget.transactionModel.user!.name ?? '',
                           style: TextStyle(
                             fontSize: 16,
                           ),
                         ),
                       ),
-                      subtitle: Text('rudi@gmail.com'),
+                      subtitle: Text(widget.transactionModel.user!.email ?? ''),
                       trailing:
                           Icon(Icons.chevron_right, color: Colors.black87),
                     )
@@ -106,22 +119,35 @@ class _MasterTransactionDetailState extends State<MasterTransactionDetail> {
                     SizedBox(
                       height: 15,
                     ),
-                    ListTile(
-                        title: Text('Service AC - Bebersih'),
-                        subtitle: Text('Pending',
-                            style: TextStyle(color: Colors.orange)),
-                        isThreeLine: true,
-                        leading: Icon(Icons.close),
-                        trailing: Icon(Icons.check_circle)),
-                    ListTile(
-                        title: Text('Service AC - Bebersih'),
-                        subtitle: Text(
-                          'Selesai',
-                          style: TextStyle(color: Colors.green),
-                        ),
-                        isThreeLine: true,
-                        leading: Icon(Icons.close),
-                        trailing: Icon(Icons.more_horiz)),
+                    for (TransactionDetail transactionDetail
+                        in widget.transactionModel.transactionDetail!)
+                      ListTile(
+                          title: Text(
+                              '${transactionDetail.serviceModel!.name} - ${transactionDetail.serviceModel!.categoryService!.name}'),
+                          subtitle: Text(
+                              transactionDetail.statusOrderDetail ?? '',
+                              style: TextStyle(color: Colors.orange)),
+                          isThreeLine: true,
+                          leading: Icon(Icons.close),
+                          trailing: GestureDetector(
+                            onTap: () {
+                              if (transactionDetail.statusOrderDetail ==
+                                  'pending') {
+                                Navigator.push(context,
+                                    MaterialPageRoute(builder: (context) {
+                                  return MasterTransactionConfirmation(
+                                      transactionDetail: transactionDetail);
+                                }));
+                              }
+                            },
+                            child:
+                                transactionDetail.statusOrderDetail == 'success'
+                                    ? Icon(Icons.check_circle)
+                                    : transactionDetail.statusOrderDetail ==
+                                            'pending'
+                                        ? Icon(Icons.more_horiz)
+                                        : Icon(Icons.warning),
+                          )),
                   ],
                 ),
               ),
@@ -163,6 +189,7 @@ class _MasterTransactionDetailState extends State<MasterTransactionDetail> {
                         // isThreeLine: true,
                         leading: Container(
                           child: Container(
+                            width: MediaQuery.of(context).size.width * 0.15,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Image.network('https://picsum.photos/64'),
@@ -189,6 +216,7 @@ class _MasterTransactionDetailState extends State<MasterTransactionDetail> {
                         // isThreeLine: true,
                         leading: Container(
                           child: Container(
+                            width: MediaQuery.of(context).size.width * 0.15,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Image.network('https://picsum.photos/64'),
@@ -230,13 +258,13 @@ class _MasterTransactionDetailState extends State<MasterTransactionDetail> {
                     Row(
                       children: [
                         Expanded(child: Text('Invoice')),
-                        Text('8734J83493')
+                        Text(widget.transactionModel.invoiceId ?? '')
                       ],
                     ),
                     Row(
                       children: [
                         Expanded(child: Text('Tanggal')),
-                        Text('02-02-2021')
+                        Text(widget.transactionModel.createdAt ?? '')
                       ],
                     ),
                     Divider(
@@ -245,19 +273,17 @@ class _MasterTransactionDetailState extends State<MasterTransactionDetail> {
                     SizedBox(
                       height: 15,
                     ),
-                    Row(
-                      children: [
-                        Expanded(child: Text('Service Ac @1')),
-                        Text('Rp 100.000')
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: Text('Bersih Bersih - Mengepel Rumah @1')),
-                        Text('Rp 130.000')
-                      ],
-                    ),
+                    for (TransactionDetail transactionDetail
+                        in widget.transactionModel.transactionDetail!)
+                      Row(
+                        children: [
+                          Expanded(
+                              child: Text(
+                                  (transactionDetail.serviceModel!.name ?? '') +
+                                      '@${transactionDetail.quantity}')),
+                          Text(currencyId.format(transactionDetail.totalPrice))
+                        ],
+                      ),
                     Divider(
                       thickness: 0.4,
                     ),
@@ -269,7 +295,9 @@ class _MasterTransactionDetailState extends State<MasterTransactionDetail> {
                           style: TextStyle(fontWeight: FontWeight.bold),
                         )),
                         Text(
-                          'Rp 230.000',
+                          currencyId
+                              .format(widget.transactionModel.totalAllPrice)
+                              .toString(),
                           style: TextStyle(fontWeight: FontWeight.bold),
                         )
                       ],

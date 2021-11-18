@@ -9,11 +9,16 @@ import 'package:tukangku/utils/error_message.dart';
 class TransactionRepository {
   final _baseUrl = dotenv.env['API_URL'].toString();
 
-  Future<List<TransactionModel>?> getComplains(
+  Future<List<TransactionModel>?> getTransactions(String _token,
       {int page = 1, int limit = 10}) async {
     try {
-      final response = await http
-          .get(Uri.parse(_baseUrl + '/transactions?page=$page&limit=$limit'));
+      final response = await http.get(
+        Uri.parse(_baseUrl + '/transactions?page=$page&limit=$limit'),
+        headers: {
+          'Authorization': 'Bearer $_token',
+          'Accept': 'application/json',
+        },
+      );
       // print(response.body);
 
       if (response.statusCode == 200) {

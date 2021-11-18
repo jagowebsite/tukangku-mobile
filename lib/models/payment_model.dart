@@ -18,6 +18,7 @@ class PaymentModel {
       latitude,
       status,
       description,
+      createdAt,
       address;
   final int? totalPayment, id;
   final File? imageUserFie, imagePaymentFile;
@@ -41,6 +42,7 @@ class PaymentModel {
       this.imageUserFie,
       this.description,
       this.address,
+      this.createdAt,
       this.totalPayment});
 
   factory PaymentModel.fromJson(Map<String, dynamic> json) {
@@ -64,6 +66,7 @@ class PaymentModel {
       description: json['description'],
       address: json['address'],
       totalPayment: json['total_payment'],
+      createdAt: json['created_at'],
     );
   }
 }

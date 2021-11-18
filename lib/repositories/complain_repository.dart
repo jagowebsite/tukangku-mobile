@@ -27,7 +27,7 @@ class ComplainRepository {
     }
   }
 
-  Future<ResponseModel?> createRoleAccess(
+  Future<ResponseModel?> createComplain(
       String _token, ComplainModel complainModel) async {
     try {
       final response = await http.post(Uri.parse(_baseUrl + '/complain/create'),

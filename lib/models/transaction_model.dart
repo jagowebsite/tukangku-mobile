@@ -1,21 +1,40 @@
 import 'package:tukangku/models/employee_model.dart';
+import 'package:tukangku/models/payment_model.dart';
 import 'package:tukangku/models/service_model.dart';
+import 'package:tukangku/models/user_model.dart';
 
 class TransactionModel {
-  final int? id;
-  final String? invoiceId, statusOrder;
-  final TransactionDetail? transactionDetail;
+  final int? id, totalAllPrice;
+  final String? invoiceId, statusOrder, createdAt;
+  final List<TransactionDetail>? transactionDetail;
+  final List<PaymentModel>? payment;
+  final User? user;
 
   TransactionModel(
-      {this.id, this.invoiceId, this.statusOrder, this.transactionDetail});
+      {this.id,
+      this.totalAllPrice,
+      this.invoiceId,
+      this.statusOrder,
+      this.transactionDetail,
+      this.payment,
+      this.createdAt,
+      this.user});
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
     return TransactionModel(
       id: json['id'],
+      totalAllPrice: json['total_all_price'],
       invoiceId: json['invoice_id'],
+      createdAt: json['created_at'],
+      user: json['user'] != null ? User.fromJson(json['user']) : null,
       statusOrder: json['status_order'],
-      transactionDetail: json['transaction_detail'] != null
-          ? TransactionDetail.fromJson(json['transaction_detail'])
+      transactionDetail: json["transaction_detail"] != null
+          ? List<TransactionDetail>.from(json["transaction_detail"]
+              .map((e) => TransactionDetail.fromJson(e)))
+          : null,
+      payment: json["payment"] != null
+          ? List<PaymentModel>.from(
+              json["payment"].map((e) => PaymentModel.fromJson(e)))
           : null,
     );
   }

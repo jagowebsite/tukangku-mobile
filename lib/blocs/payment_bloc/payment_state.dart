@@ -47,3 +47,27 @@ class UpdatePaymentError extends PaymentState {
   final String message;
   UpdatePaymentError(this.message);
 }
+
+class ConfirmPaymentLoading extends PaymentState {}
+
+class ConfirmPaymentSuccess extends PaymentState {
+  final String message;
+  ConfirmPaymentSuccess(this.message);
+}
+
+class ConfirmPaymentError extends PaymentState {
+  final String message;
+  ConfirmPaymentError(this.message);
+}
+
+class CancelPaymentLoading extends PaymentState {}
+
+class CancelPaymentSuccess extends PaymentState {
+  final String message;
+  CancelPaymentSuccess(this.message);
+}
+
+class CancelPaymentError extends PaymentState {
+  final String message;
+  CancelPaymentError(this.message);
+}

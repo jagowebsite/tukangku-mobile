@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/payment_bloc/payment_bloc.dart';
+import 'package:tukangku/screens/account/master/payment/master_payment_detail.dart';
+import 'package:tukangku/utils/currency_format.dart';
 
 class MasterPayment extends StatefulWidget {
   const MasterPayment({Key? key}) : super(key: key);
@@ -91,10 +93,16 @@ class _MasterPaymentState extends State<MasterPayment> {
                     itemBuilder: (context, index) {
                       if (index < state.listPayments.length) {
                         return ListTile(
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return MasterPaymentDetail(
+                                  paymentModel: state.listPayments[index]);
+                            })).then(onGoBack);
+                          },
                           title: Container(
                             child: Text(
-                              'TF26384529 - Haikal Rahmad Dermawan',
+                              '${state.listPayments[index].paymentCode} - ${state.listPayments[index].accountName}',
                               style: TextStyle(
                                 fontSize: 16,
                               ),
@@ -104,24 +112,33 @@ class _MasterPaymentState extends State<MasterPayment> {
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Row(
-                                children: [
-                                  Text('Rp 100.000'),
-                                  Text(
-                                    ' - Lunas',
-                                  ),
-                                ],
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(state.listPayments[index].createdAt ?? ''),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(currencyId
+                                  .format(
+                                      state.listPayments[index].totalPayment)
+                                  .toString()),
+                              SizedBox(
+                                height: 5,
                               ),
                               Text(
-                                'Terkonfirmasi',
+                                state.listPayments[index].status!.toUpperCase(),
                                 style: TextStyle(
-                                    color: Colors.green.shade700,
+                                    color: state.listPayments[index].status! ==
+                                            'success'
+                                        ? Colors.green.shade700
+                                        : Colors.orange.shade700,
                                     fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
-                          trailing:
-                              Icon(Icons.chevron_right, color: Colors.black87),
+                          // trailing:
+                          //     Icon(Icons.chevron_right, color: Colors.black87),
                         );
                       } else {
                         return Center(
@@ -136,7 +153,7 @@ class _MasterPaymentState extends State<MasterPayment> {
                     },
                     separatorBuilder: (context, index) {
                       return Divider(
-                        thickness: 0.3,
+                        thickness: 0.5,
                       );
                     },
                   );

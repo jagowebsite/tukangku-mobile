@@ -44,8 +44,8 @@ class PaymentRepository {
 
       // Request input data
       request.fields['user_id'] = paymentModel.user!.id.toString();
-      request.fields['transaction_id'] =
-          paymentModel.transactionModel!.id.toString();
+      // request.fields['transaction_id'] =
+      //     paymentModel.transactionModel!.id.toString();
       request.fields['type'] = paymentModel.type!;
       request.fields['type_transfer'] = paymentModel.typeTransfer!;
       request.fields['bank_number'] = paymentModel.bankNumber!;
@@ -105,8 +105,8 @@ class PaymentRepository {
 
       // Request input data
       request.fields['user_id'] = paymentModel.user!.id.toString();
-      request.fields['transaction_id'] =
-          paymentModel.transactionModel!.id.toString();
+      // request.fields['transaction_id'] =
+      //     paymentModel.transactionModel!.id.toString();
       request.fields['type'] = paymentModel.type!;
       request.fields['type_transfer'] = paymentModel.typeTransfer!;
       request.fields['bank_number'] = paymentModel.bankNumber!;
@@ -159,7 +159,7 @@ class PaymentRepository {
   Future<ResponseModel?> confirmPayment(String _token, int id) async {
     try {
       final response = await http
-          .patch(Uri.parse(_baseUrl + '/payment/confirm/$id'), headers: {
+          .post(Uri.parse(_baseUrl + '/payment/confirm/$id'), headers: {
         'Authorization': 'Bearer $_token',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
@@ -180,7 +180,7 @@ class PaymentRepository {
   Future<ResponseModel?> cancelPayment(String _token, int id) async {
     try {
       final response = await http
-          .patch(Uri.parse(_baseUrl + '/payment/cancel/$id'), headers: {
+          .post(Uri.parse(_baseUrl + '/payment/cancel/$id'), headers: {
         'Authorization': 'Bearer $_token',
         'Accept': 'application/json',
         'Content-Type': 'application/json',
