@@ -16,6 +16,7 @@ import 'package:tukangku/blocs/role_access_bloc/role_access_bloc.dart';
 import 'package:tukangku/blocs/role_permission_bloc/role_permission_bloc.dart';
 import 'package:tukangku/blocs/service_bloc/service_bloc.dart';
 import 'package:tukangku/blocs/transaction_bloc/transaction_bloc.dart';
+import 'package:tukangku/blocs/transaction_detail_bloc/transaction_detail_bloc.dart';
 import 'package:tukangku/blocs/user_data_bloc/user_data_bloc.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner_create.dart';
@@ -105,6 +106,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<TransactionBloc>(
           create: (BuildContext context) => TransactionBloc(),
+        ),
+        BlocProvider<TransactionDetailBloc>(
+          create: (BuildContext context) => TransactionDetailBloc(),
         ),
       ],
       child: MaterialApp(
@@ -213,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Container(
                             margin: EdgeInsets.symmetric(horizontal: 15),
                             child: Text(
-                              'Selamat Datang di Tukangku',
+                              'Selamat Datang di Tukangkita',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 23,

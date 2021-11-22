@@ -23,3 +23,27 @@ class TransactionError extends TransactionState {
   final String message;
   TransactionError(this.message);
 }
+
+class ConfirmTransactionLoading extends TransactionState {}
+
+class ConfirmTransactionSuccess extends TransactionState {
+  final String message;
+  ConfirmTransactionSuccess(this.message);
+}
+
+class ConfirmTransactionError extends TransactionState {
+  final String message;
+  ConfirmTransactionError(this.message);
+}
+
+class CancelTransactionLoading extends TransactionState {}
+
+class CancelTransactionSuccess extends TransactionState {
+  final String message;
+  CancelTransactionSuccess(this.message);
+}
+
+class CancelTransactionError extends TransactionState {
+  final String message;
+  CancelTransactionError(this.message);
+}

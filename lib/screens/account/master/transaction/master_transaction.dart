@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/transaction_bloc/transaction_bloc.dart';
 import 'package:tukangku/models/transaction_model.dart';
 import 'package:tukangku/screens/account/master/transaction/master_transaction_detail.dart';
+import 'package:tukangku/screens/widgets/custom_cached_image.dart';
 import 'package:tukangku/utils/currency_format.dart';
 
 class MasterTransaction extends StatefulWidget {
@@ -108,7 +109,19 @@ class _MasterTransactionState extends State<MasterTransaction> {
                               })).then(onGoBack);
                             },
                             isThreeLine: true,
-                            leading: Icon(Icons.receipt),
+                            leading: Container(
+                              width: 60,
+                              height: 60,
+                              child: ClipRRect(
+                                  child: CustomCachedImage.build(
+                                context,
+                                imgUrl: state
+                                    .listTransactions[index]
+                                    .transactionDetail![0]
+                                    .serviceModel!
+                                    .images![0],
+                              )),
+                            ),
                             title: Container(
                               child: Text(
                                 '${state.listTransactions[index].invoiceId} - ${state.listTransactions[index].user!.name}',
@@ -137,15 +150,18 @@ class _MasterTransactionState extends State<MasterTransaction> {
                                     state.listTransactions[index].statusOrder ??
                                         ''),
                                 state.listTransactions[index].statusOrder! ==
-                                        'success'
+                                        'done'
                                     ? Icon(Icons.check_circle_outline,
                                         color: Colors.green.shade600)
                                     : state.listTransactions[index]
-                                                .statusOrder! ==
-                                            'pending'
+                                                    .statusOrder! ==
+                                                'pending' ||
+                                            state.listTransactions[index]
+                                                    .statusOrder! ==
+                                                'process'
                                         ? Icon(Icons.timer,
                                             color: Colors.orange.shade600)
-                                        : Icon(Icons.close,
+                                        : Icon(Icons.cancel,
                                             color: Colors.grey.shade600),
                               ],
                             ),

@@ -23,7 +23,7 @@ class BannerBloc extends Bloc<BannerEvent, BannerState> {
   Future _getBanner(GetBanner event, Emitter<BannerState> emit) async {
     try {
       if (event.isInit) {
-        print('Get init Banner ...');
+        print('Get init transaction detail ...');
         page = 1;
         emit(GetBannerLoading());
         List<BannerModel>? data =
@@ -37,7 +37,7 @@ class BannerBloc extends Bloc<BannerEvent, BannerState> {
           emit(BannerData(listBanners, false));
         }
       } else {
-        print('Get more banner ...');
+        print('Get more transaction detail ...');
         page++;
         List<BannerModel>? data =
             await _bannerRepo.getBanners(page: page, limit: event.limit);

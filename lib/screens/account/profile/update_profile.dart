@@ -128,12 +128,14 @@ class _UpdateProfilState extends State<UpdateProfil> {
             if (state is UpdateProfileSuccess) {
               CustomSnackbar.showSnackbar(
                   context, state.message, SnackbarType.success);
+              authBloc.add(GetAuthData());
             } else if (state is UpdateProfileError) {
               CustomSnackbar.showSnackbar(
                   context, state.message, SnackbarType.error);
             } else if (state is UpdatePhotoSuccess) {
               CustomSnackbar.showSnackbar(
                   context, state.message, SnackbarType.success);
+              authBloc.add(GetAuthData());
             } else if (state is UpdatePhotoError) {
               CustomSnackbar.showSnackbar(
                   context, state.message, SnackbarType.error);
@@ -144,7 +146,7 @@ class _UpdateProfilState extends State<UpdateProfil> {
             } else if (state is UpdateKTPError) {
               CustomSnackbar.showSnackbar(
                   context, state.message, SnackbarType.error);
-              authBloc.add(GetAuthData());
+              // authBloc.add(GetAuthData());
             }
           },
         ),
@@ -219,8 +221,22 @@ class _UpdateProfilState extends State<UpdateProfil> {
                   ),
                   Center(
                     child: Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 10,
+                        padding: EdgeInsets.only(top: 10, bottom: 5),
+                        child: BlocBuilder<AuthBloc, AuthState>(
+                          builder: (context, state) {
+                            return Text(
+                                state is Authorized
+                                    ? (state.user.name ?? 'Tukangkita!')
+                                    : 'Tukangkita!',
+                                style: TextStyle(
+                                    fontSize: 16, fontWeight: FontWeight.bold));
+                          },
+                        )),
+                  ),
+                  Center(
+                    child: Container(
+                        padding: EdgeInsets.only(
+                          bottom: 10,
                         ),
                         child: BlocBuilder<AuthBloc, AuthState>(
                           builder: (context, state) {
@@ -233,6 +249,9 @@ class _UpdateProfilState extends State<UpdateProfil> {
                   SizedBox(
                     height: 25,
                   ),
+                  Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: Text('Profile Lengkap Anda')),
                   InputText(
                     controller: nameController,
                     hintText: 'Nama Lengkap',
@@ -281,7 +300,7 @@ class _UpdateProfilState extends State<UpdateProfil> {
                       color: Colors.white,
                       child: Container(
                           width: MediaQuery.of(context).size.width,
-                          height: 50,
+                          height: 40,
                           decoration: BoxDecoration(
                             color: Colors.orangeAccent.shade700,
                           ),
@@ -289,7 +308,7 @@ class _UpdateProfilState extends State<UpdateProfil> {
                             child: Text('Update Profil',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 18,
+                                  fontSize: 16,
                                 )),
                           )),
                     ),
@@ -297,6 +316,9 @@ class _UpdateProfilState extends State<UpdateProfil> {
                   SizedBox(
                     height: 20,
                   ),
+                  Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: Text('Foto KTP Anda')),
                   GestureDetector(
                     onTap: () => pickImage(),
                     child: Container(
@@ -328,7 +350,7 @@ class _UpdateProfilState extends State<UpdateProfil> {
                       color: Colors.white,
                       child: Container(
                           width: MediaQuery.of(context).size.width,
-                          height: 50,
+                          height: 40,
                           decoration: BoxDecoration(
                             color: Colors.orangeAccent.shade700,
                           ),
@@ -336,11 +358,18 @@ class _UpdateProfilState extends State<UpdateProfil> {
                             child: Text('Upload KTP',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 18,
+                                  fontSize: 16,
                                 )),
                           )),
                     ),
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                      margin: EdgeInsets.only(bottom: 10),
+                      child: Text(
+                          '* Pastikan data yang anda masukkan sudah benar')),
                   SizedBox(
                     height: 100,
                   )

@@ -9,3 +9,13 @@ class GetTransaction extends TransactionEvent {
   final bool isInit;
   GetTransaction(this.limit, this.isInit);
 }
+
+class ConfirmTransaction extends TransactionEvent {
+  final int id;
+  ConfirmTransaction(this.id);
+}
+
+class CancelTransaction extends TransactionEvent {
+  final int id;
+  CancelTransaction(this.id);
+}

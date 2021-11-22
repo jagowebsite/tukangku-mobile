@@ -32,6 +32,26 @@ class TransactionRepository {
     }
   }
 
+  Future<TransactionModel?> getTransactionDetail(
+      {String? token, int? id}) async {
+    try {
+      final response = await http.get(
+          Uri.parse(_baseUrl + '/transaction/detail/' + id.toString()),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Accept': 'application/json'
+          });
+      // print(response.body);
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body)['data'];
+        TransactionModel transactionModel = TransactionModel.fromJson(jsonData);
+        return transactionModel;
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   Future<ResponseModel?> confirmTransactionDetail(
       String _token, TransactionDetail transactionDetail) async {
     try {
@@ -65,7 +85,7 @@ class TransactionRepository {
 
   Future<ResponseModel?> cancelTransactionDetail(String _token, int id) async {
     try {
-      final response = await http.delete(
+      final response = await http.post(
           Uri.parse(_baseUrl + '/transaction/detail/cancel/${id.toString()}'),
           headers: {
             'Authorization': 'Bearer $_token',
@@ -87,7 +107,7 @@ class TransactionRepository {
 
   Future<ResponseModel?> confirmTransaction(String _token, int id) async {
     try {
-      final response = await http.delete(
+      final response = await http.post(
           Uri.parse(_baseUrl + '/transaction/confirm/${id.toString()}'),
           headers: {
             'Authorization': 'Bearer $_token',
@@ -109,7 +129,7 @@ class TransactionRepository {
 
   Future<ResponseModel?> cancelTransaction(String _token, int id) async {
     try {
-      final response = await http.delete(
+      final response = await http.post(
           Uri.parse(_baseUrl + '/transaction/cancel/${id.toString()}'),
           headers: {
             'Authorization': 'Bearer $_token',

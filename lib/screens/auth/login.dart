@@ -13,9 +13,9 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   TextEditingController usernameController =
-      TextEditingController(text: 'user@tukangku.co.id');
+      TextEditingController(text: 'admin@tukangku.co.id');
   TextEditingController passwordController =
-      TextEditingController(text: 'user');
+      TextEditingController(text: 'admin');
 
   late AuthBloc authBloc;
 
@@ -140,7 +140,7 @@ class _LoginState extends State<Login> {
               style: TextStyle(color: Color(0xffe46b10), fontSize: 30),
             ),
             TextSpan(
-              text: 'ku',
+              text: 'kita',
               style: TextStyle(color: Colors.black, fontSize: 30),
             ),
           ]),

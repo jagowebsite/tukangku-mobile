@@ -525,25 +525,31 @@ class _MasterUserEditState extends State<MasterUserEdit> {
                           SizedBox(
                             height: 50,
                           ),
+                          Divider(),
                           Container(
                             width: size.width,
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black54,
-                                  blurRadius: 7,
-                                  offset: Offset(0, 5),
-                                )
-                              ],
+                              // boxShadow: [
+                              //   BoxShadow(
+                              //     color: Colors.black54,
+                              //     blurRadius: 7,
+                              //     offset: Offset(0, 5),
+                              //   )
+                              // ],
                             ),
-                            child: Container(
-                              color: Colors.red.shade700,
-                              child: TextButton(
-                                onPressed: () => deleteUserData(),
-                                child: Text('Hapus User',
-                                    style: TextStyle(color: Colors.white)),
-                              ),
+                            child: Row(
+                              children: [
+                                Icon(Icons.delete),
+                                Container(
+                                  // color: Colors.red.shade700,
+                                  child: TextButton(
+                                    onPressed: () => deleteUserData(),
+                                    child: Text('Hapus User',
+                                        style: TextStyle(color: Colors.red)),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],

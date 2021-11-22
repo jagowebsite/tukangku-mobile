@@ -254,7 +254,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
             child: Align(
                 alignment: Alignment.bottomCenter,
                 child: GestureDetector(
-                  onTap: () => Navigator.of(context).pushNamed('/payment'),
+                  onTap: () => Navigator.of(context).pushNamed('/cart'),
                   child: Container(
                       color: Colors.white,
                       child: Container(
@@ -276,11 +276,11 @@ class _ServiceDetailState extends State<ServiceDetail> {
                                 SizedBox(
                                   width: 5,
                                 ),
-                                Text('Pesan Sekarang',
+                                Text('Tambah ke Keranjang',
                                     style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600)),
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold)),
                               ],
                             ),
                           ))),

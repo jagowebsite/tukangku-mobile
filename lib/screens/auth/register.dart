@@ -104,7 +104,7 @@ class _RegisterState extends State<Register> {
                       ),
                     ),
                     Text(
-                      'Tukangku Sekarang',
+                      'Tukangkita Sekarang',
                       style: TextStyle(
                         color: Color(0xffe46b10),
                         fontSize: 30,

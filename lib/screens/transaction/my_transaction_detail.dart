@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tukangku/blocs/transaction_detail_bloc/transaction_detail_bloc.dart';
 import 'package:tukangku/models/transaction_model.dart';
 import 'package:tukangku/utils/currency_format.dart';
 
 class MyTransactionDetail extends StatefulWidget {
+  // final TransactionModel transactionModel;
   const MyTransactionDetail({Key? key}) : super(key: key);
 
   @override
@@ -10,6 +13,16 @@ class MyTransactionDetail extends StatefulWidget {
 }
 
 class _MyTransactionDetailState extends State<MyTransactionDetail> {
+  late TransactionDetailBloc transactionDetailBloc;
+
+  @override
+  void initState() {
+    transactionDetailBloc = BlocProvider.of<TransactionDetailBloc>(context);
+    // transactionDetailBloc
+    //     .add(GetTransactionDetail(widget.transactionModel.id!));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -63,10 +76,117 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                     //           'Bebersih - Layanan Rumah'),
                     //       ),
                     ListTile(
-                      title: Text('Bebersih - Layanan Rumah'),
+                      title:
+                          Text('Bebersih - Membersihkan Lantai Rumah (Ngepel)'),
+                      subtitle: Text('Bebersih'),
                     ),
                     ListTile(
-                      title: Text('Bebersih - Layanan Rumah'),
+                      title: Text('Service AC - 	Service AC Cepat 100% Puas'),
+                      subtitle: Text('Service AC'),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Container(
+                width: size.width,
+                padding: EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 3,
+                          offset: Offset(0, 1))
+                    ]),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Summary',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(child: Text('Status')),
+                        Text(
+                          'Selesai',
+                          style: TextStyle(color: Colors.green),
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(child: Text('Invoice')),
+                        Text('IIKDJHJA3484')
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(child: Text('Tanggal')),
+                        Text('2021-01-23')
+                      ],
+                    ),
+                    Divider(
+                      thickness: 0.4,
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    // for (TransactionDetail transactionDetail in [])
+                    //   Row(
+                    //     children: [
+                    //       Expanded(
+                    //           child: Text(
+                    //               (transactionDetail.serviceModel!.name ?? '') +
+                    //                   '@${transactionDetail.quantity}')),
+                    //       Text(currencyId.format(transactionDetail.totalPrice))
+                    //     ],
+                    //   ),
+                    Row(
+                      children: [
+                        Expanded(
+                            child: Text(('Bebersih - Layanan Rumah') + '@3')),
+                        Text(currencyId.format(10000))
+                      ],
+                    ),
+                    Divider(
+                      thickness: 0.4,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                            child: Text(
+                          'Total',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )),
+                        Text(
+                          currencyId.format(100000).toString(),
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
+
+                    Center(
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            backgroundColor: Colors.grey.shade600),
+                        onPressed: () {},
+                        child: Text('Cetak Invoice',
+                            style: TextStyle(color: Colors.white)),
+                      ),
                     ),
                   ],
                 ),
@@ -147,115 +267,22 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                           Icons.check_circle,
                           color: Colors.green.shade600,
                         )),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Container(
-                width: size.width,
-                padding: EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 3,
-                          offset: Offset(0, 1))
-                    ]),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Summary',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(child: Text('Invoice')),
-                        Text('IIKDJHJA3484')
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(child: Text('Tanggal')),
-                        Text('2021-01-23')
-                      ],
-                    ),
-                    Divider(
-                      thickness: 0.4,
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    // for (TransactionDetail transactionDetail in [])
-                    //   Row(
-                    //     children: [
-                    //       Expanded(
-                    //           child: Text(
-                    //               (transactionDetail.serviceModel!.name ?? '') +
-                    //                   '@${transactionDetail.quantity}')),
-                    //       Text(currencyId.format(transactionDetail.totalPrice))
-                    //     ],
-                    //   ),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: Text(('Bebersih - Layanan Rumah') + '@3')),
-                        Text(currencyId.format(10000))
-                      ],
-                    ),
-                    Divider(
-                      thickness: 0.4,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                            child: Text(
-                          'Total',
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )),
-                        Text(
-                          currencyId.format(100000).toString(),
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        )
-                      ],
+                    Divider(),
+                    Center(
+                      child: TextButton(
+                        style: TextButton.styleFrom(
+                            backgroundColor: Colors.grey.shade600),
+                        onPressed: () =>
+                            Navigator.of(context).pushNamed('/payment'),
+                        child: Text('Tambah Pembayaran',
+                            style: TextStyle(color: Colors.white)),
+                      ),
                     ),
                   ],
                 ),
               ),
               SizedBox(
                 height: 15,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                          backgroundColor: Colors.red.shade600),
-                      onPressed: () {},
-                      child: Text('Batalkan',
-                          style: TextStyle(color: Colors.white)),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Expanded(
-                    child: TextButton(
-                      style: TextButton.styleFrom(
-                          backgroundColor: Colors.green.shade600),
-                      onPressed: () {},
-                      child: Text('Konfirmasi',
-                          style: TextStyle(color: Colors.white)),
-                    ),
-                  ),
-                ],
               ),
             ],
           ),
