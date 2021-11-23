@@ -1,11 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:readmore/readmore.dart';
+import 'package:tukangku/hive/cart/cart_hive.dart';
 import 'package:tukangku/models/service_model.dart';
 import 'package:tukangku/utils/currency_format.dart';
+import 'package:tukangku/utils/custom_snackbar.dart';
 
 class ServiceDetail extends StatefulWidget {
   final ServiceModel serviceModel;
@@ -17,9 +20,58 @@ class ServiceDetail extends StatefulWidget {
 
 class _ServiceDetailState extends State<ServiceDetail> {
   final CarouselController _controller = CarouselController();
+  late Box cartBox;
 
   // Index untuk indicator carousel
   int _currentCarrousel = 0;
+
+  Future addData(int id) async {
+    // var cartBox = await Hive.openBox<CartHive>('cart');
+    // id = 3;
+    bool isNew = true;
+    for (var i = 0; i < cartBox.length; i++) {
+      CartHive cartHive = cartBox.getAt(i);
+      if (cartHive.serviceId == id) {
+        isNew = false;
+        print('iam update');
+        CartHive updateCartHive = CartHive()
+          ..description = cartHive.description
+          ..quantity = (cartHive.quantity + 1)
+          ..serviceId = cartHive.serviceId;
+        cartBox.put(cartBox.keyAt(i), updateCartHive);
+      }
+    }
+
+    if (isNew) {
+      CartHive cartHive = CartHive()
+        ..quantity = 1
+        ..description = 'Percobaan bos'
+        ..serviceId = id;
+      cartBox.add(cartHive);
+    }
+
+    CustomSnackbar.showSnackbar(
+        context, 'Berhasil ditambahkan ke keranjang', SnackbarType.success);
+  }
+
+  List<CartHive>? listCarts;
+
+  Future getData() async {
+    // cartBox.put(2, cartHive2);
+    // print(cartBox.keyAt(i));
+    listCarts = cartBox.values.toList().cast<CartHive>();
+  }
+
+  Future initHive() async {
+    cartBox = Hive.box<CartHive>('cart');
+    getData();
+  }
+
+  @override
+  void initState() {
+    initHive();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -254,7 +306,8 @@ class _ServiceDetailState extends State<ServiceDetail> {
             child: Align(
                 alignment: Alignment.bottomCenter,
                 child: GestureDetector(
-                  onTap: () => Navigator.of(context).pushNamed('/cart'),
+                  // onTap: () => Navigator.of(context).pushNamed('/cart'),
+                  onTap: () => addData(4),
                   child: Container(
                       color: Colors.white,
                       child: Container(

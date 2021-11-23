@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
 import 'package:tukangku/blocs/banner_bloc/banner_bloc.dart';
 import 'package:tukangku/blocs/category_service_bloc/category_service_bloc.dart';
@@ -18,6 +20,7 @@ import 'package:tukangku/blocs/service_bloc/service_bloc.dart';
 import 'package:tukangku/blocs/transaction_bloc/transaction_bloc.dart';
 import 'package:tukangku/blocs/transaction_detail_bloc/transaction_detail_bloc.dart';
 import 'package:tukangku/blocs/user_data_bloc/user_data_bloc.dart';
+import 'package:tukangku/hive/cart/cart_hive.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner_create.dart';
 import 'package:tukangku/screens/account/master/category/master_category_service.dart';
@@ -30,7 +33,6 @@ import 'package:tukangku/screens/account/master/payment/master_payment.dart';
 import 'package:tukangku/screens/account/master/service/master_service.dart';
 import 'package:tukangku/screens/account/master/service/master_service_create.dart';
 import 'package:tukangku/screens/account/master/transaction/master_transaction.dart';
-import 'package:tukangku/screens/account/master/transaction/master_transaction_detail.dart';
 import 'package:tukangku/screens/account/master/user/master_user.dart';
 import 'package:tukangku/screens/account/master/user/master_user_create.dart';
 import 'package:tukangku/screens/account/master/user/master_user_log.dart';
@@ -52,8 +54,15 @@ import 'package:tukangku/screens/transaction/payment.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:tukangku/screens/widgets/image_cropper.dart';
 
-void main() async {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: "assets/env/.env_production");
+
+  // Hive Setup
+  await Hive.initFlutter();
+  Hive.registerAdapter(CartHiveAdapter());
+  await Hive.openBox<CartHive>('cart');
+
   runApp(MyApp());
 }
 

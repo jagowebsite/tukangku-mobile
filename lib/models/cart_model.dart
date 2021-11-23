@@ -3,12 +3,15 @@ import 'package:tukangku/models/service_model.dart';
 class CartModel {
   ServiceModel? serviceModel;
   int? quantity, totalPrice;
+  String? description;
 
-  CartModel({this.quantity, this.serviceModel, this.totalPrice});
+  CartModel(
+      {this.quantity, this.serviceModel, this.totalPrice, this.description});
 
   factory CartModel.fromJson(Map<String, dynamic> json) {
     return CartModel(
         quantity: json['quantity'],
+        description: json['description'],
         serviceModel: json['service'] != null
             ? ServiceModel.fromJson(json['service'])
             : null,
@@ -18,6 +21,7 @@ class CartModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['quantity'] = this.quantity;
+    data['description'] = this.description;
     data['total_price'] = this.totalPrice;
     data['service'] = this.serviceModel!.toJson();
     return data;

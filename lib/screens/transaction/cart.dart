@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:tukangku/hive/cart/cart_hive.dart';
 import 'package:tukangku/models/cart_model.dart';
 import 'package:tukangku/models/service_model.dart';
 import 'package:tukangku/utils/currency_format.dart';
@@ -13,18 +15,47 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
   int totalAllPrice = 0;
+  late Box cartBox;
+
+  List<CartHive>? listCarts;
+
+  Future getData() async {
+    // cartBox.put(2, cartHive2);
+    // print(cartBox.keyAt(i));
+    listCarts = cartBox.values.toList().cast<CartHive>();
+    if (listCarts!.length != 0) {
+      cartModels = [];
+      for (var i = 0; i < listCarts!.length; i++) {
+        cartModels.add(CartModel(
+            quantity: listCarts![i].quantity,
+            totalPrice: 15000 * listCarts![i].quantity,
+            description: listCarts![i].description,
+            serviceModel: ServiceModel(
+                id: listCarts![i].serviceId,
+                name: 'Service Kulkas No $i',
+                typeQuantity: 'Jam',
+                price: 15000)));
+      }
+      setState(() {});
+    }
+  }
+
+  Future initHive() async {
+    cartBox = Hive.box<CartHive>('cart');
+    getData();
+  }
 
   List<CartModel> cartModels = [
-    CartModel(
-        quantity: 1,
-        serviceModel: ServiceModel(
-            id: 1, name: 'Service Banana', typeQuantity: 'Jam', price: 15000),
-        totalPrice: 15000),
-    CartModel(
-        quantity: 1,
-        serviceModel: ServiceModel(
-            id: 2, name: 'Service Apple', typeQuantity: 'Jam', price: 14000),
-        totalPrice: 14000),
+    // CartModel(
+    //     quantity: 1,
+    //     serviceModel: ServiceModel(
+    //         id: 1, name: 'Service Banana', typeQuantity: 'Jam', price: 15000),
+    //     totalPrice: 15000),
+    // CartModel(
+    //     quantity: 1,
+    //     serviceModel: ServiceModel(
+    //         id: 2, name: 'Service Apple', typeQuantity: 'Jam', price: 14000),
+    //     totalPrice: 14000),
   ];
 
   countTotalPrice() {
@@ -43,8 +74,25 @@ class _CartState extends State<Cart> {
     setState(() {});
   }
 
+  addQuantity(CartModel cartModel, int index) {
+    CartHive cartHive = CartHive()
+      ..description = cartModel.description!
+      ..quantity = (cartModel.quantity! + 1)
+      ..serviceId = cartModel.serviceModel!.id!;
+    cartBox.put(cartBox.keyAt(index), cartHive);
+  }
+
+  minusQuantity(CartModel cartModel, int index) {
+    CartHive cartHive = CartHive()
+      ..description = cartModel.description!
+      ..quantity = (cartModel.quantity! - 1)
+      ..serviceId = cartModel.serviceModel!.id!;
+    cartBox.put(cartBox.keyAt(index), cartHive);
+  }
+
   @override
   void initState() {
+    initHive();
     countTotalPrice();
     super.initState();
   }
@@ -74,13 +122,14 @@ class _CartState extends State<Cart> {
         children: [
           ListView.builder(
               physics: AlwaysScrollableScrollPhysics(),
-              padding: EdgeInsets.symmetric(vertical: 10),
+              padding: EdgeInsets.only(top: 10, bottom: 60),
               // shrinkWrap: true,
               itemCount: cartModels.length,
               itemBuilder: (context, index) {
                 return CartItem(
                   cartModel: cartModels[index],
                   addFunction: () {
+                    addQuantity(cartModels[index], index);
                     cartModels[index].quantity =
                         cartModels[index].quantity! + 1;
                     countTotalPrice();
@@ -88,12 +137,14 @@ class _CartState extends State<Cart> {
                   },
                   minusFunction: () {
                     if (cartModels[index].quantity! > 0) {
+                      minusQuantity(cartModels[index], index);
                       cartModels[index].quantity =
                           cartModels[index].quantity! - 1;
                       countTotalPrice();
                       setState(() {});
                     }
                     if (cartModels[index].quantity! <= 0) {
+                      cartBox.delete(cartBox.keyAt(index));
                       removeCart(cartModels[index]);
                     }
                   },
@@ -143,8 +194,8 @@ class _CartState extends State<Cart> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          cartModels[0].quantity = cartModels[0].quantity! + 1;
-                          print(cartModels[0].quantity);
+                          // cartModels[0].quantity = cartModels[0].quantity! + 1;
+                          // print(cartModels[0].quantity);
                         },
                         child: Container(
                           color: Colors.orangeAccent.shade700,
