@@ -73,3 +73,14 @@ class TransactionDetail {
     );
   }
 }
+
+class CreateTransaction {
+  int? serviceId, quantity, price, totalPrice;
+  String? description;
+  CreateTransaction(
+      {this.serviceId,
+      this.quantity,
+      this.price,
+      this.totalPrice,
+      this.description});
+}

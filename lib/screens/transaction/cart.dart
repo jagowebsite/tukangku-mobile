@@ -3,8 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:tukangku/hive/cart/cart_hive.dart';
 import 'package:tukangku/models/cart_model.dart';
+import 'package:tukangku/models/response_model.dart';
 import 'package:tukangku/models/service_model.dart';
+import 'package:tukangku/models/transaction_model.dart';
+import 'package:tukangku/repositories/auth_repository.dart';
+import 'package:tukangku/repositories/service_repository.dart';
+import 'package:tukangku/repositories/transaction_repository.dart';
 import 'package:tukangku/utils/currency_format.dart';
+import 'package:tukangku/utils/custom_snackbar.dart';
 
 class Cart extends StatefulWidget {
   const Cart({Key? key}) : super(key: key);
@@ -14,49 +20,99 @@ class Cart extends StatefulWidget {
 }
 
 class _CartState extends State<Cart> {
+  ServiceRepository _serviceRepo = ServiceRepository();
+  AuthRepository _authRepo = AuthRepository();
+  TransactionRepository _transactionRepo = TransactionRepository();
   int totalAllPrice = 0;
   late Box cartBox;
+  bool isLoad = false;
 
   List<CartHive>? listCarts;
 
+  Future<ServiceModel?> getServiceDetail(int id) async {
+    String? _token = await _authRepo.hasToken();
+    ServiceModel? serviceModel =
+        await _serviceRepo.getServiceDetail(token: _token!, id: id);
+    return serviceModel;
+  }
+
   Future getData() async {
-    // cartBox.put(2, cartHive2);
-    // print(cartBox.keyAt(i));
     listCarts = cartBox.values.toList().cast<CartHive>();
     if (listCarts!.length != 0) {
       cartModels = [];
       for (var i = 0; i < listCarts!.length; i++) {
-        cartModels.add(CartModel(
-            quantity: listCarts![i].quantity,
-            totalPrice: 15000 * listCarts![i].quantity,
-            description: listCarts![i].description,
-            serviceModel: ServiceModel(
-                id: listCarts![i].serviceId,
-                name: 'Service Kulkas No $i',
-                typeQuantity: 'Jam',
-                price: 15000)));
+        ServiceModel? serviceModel =
+            await getServiceDetail(listCarts![i].serviceId);
+        if (serviceModel != null) {
+          cartModels.add(CartModel(
+              quantity: listCarts![i].quantity,
+              totalPrice: serviceModel.price! * listCarts![i].quantity,
+              description: listCarts![i].description,
+              serviceModel: ServiceModel(
+                  id: listCarts![i].serviceId,
+                  name: serviceModel.name,
+                  images: serviceModel.images,
+                  typeQuantity: serviceModel.typeQuantity,
+                  price: 15000)));
+        }
       }
       setState(() {});
     }
   }
 
-  Future initHive() async {
-    cartBox = Hive.box<CartHive>('cart');
-    getData();
+  Future checkOut() async {
+    if (cartBox.length != 0) {
+      setState(() {
+        isLoad = true;
+      });
+      List<CreateTransaction> createTransactions = [];
+      for (var i = 0; i < cartModels.length; i++) {
+        createTransactions.add(CreateTransaction(
+            serviceId: cartModels[i].serviceModel!.id,
+            quantity: cartModels[i].quantity,
+            price: cartModels[i].serviceModel!.price,
+            totalPrice:
+                cartModels[i].quantity! * cartModels[i].serviceModel!.price!,
+            description: cartModels[i].description));
+      }
+
+      String? _token = await _authRepo.hasToken();
+      ResponseModel? response =
+          await _transactionRepo.createTransaction(_token!, createTransactions);
+      if (response != null) {
+        if (response.status == 'success') {
+          cartBox.clear();
+          cartModels = [];
+          CustomSnackbar.showSnackbar(
+              context, response.message!, SnackbarType.success);
+        } else {
+          CustomSnackbar.showSnackbar(
+              context, response.message!, SnackbarType.error);
+        }
+      } else {
+        CustomSnackbar.showSnackbar(
+            context,
+            'Pesanan gagal dilakukan, silahkan coba kembali',
+            SnackbarType.error);
+      }
+      setState(() {
+        isLoad = false;
+      });
+    } else {
+      CustomSnackbar.showSnackbar(
+          context,
+          'Silahkan pilih layanan yang ingin dipesan terlebih dahulu',
+          SnackbarType.warning);
+    }
   }
 
-  List<CartModel> cartModels = [
-    // CartModel(
-    //     quantity: 1,
-    //     serviceModel: ServiceModel(
-    //         id: 1, name: 'Service Banana', typeQuantity: 'Jam', price: 15000),
-    //     totalPrice: 15000),
-    // CartModel(
-    //     quantity: 1,
-    //     serviceModel: ServiceModel(
-    //         id: 2, name: 'Service Apple', typeQuantity: 'Jam', price: 14000),
-    //     totalPrice: 14000),
-  ];
+  Future initHive() async {
+    cartBox = Hive.box<CartHive>('cart');
+    await getData();
+    countTotalPrice();
+  }
+
+  List<CartModel> cartModels = [];
 
   countTotalPrice() {
     int totalPrice = 0;
@@ -93,7 +149,6 @@ class _CartState extends State<Cart> {
   @override
   void initState() {
     initHive();
-    countTotalPrice();
     super.initState();
   }
 
@@ -193,10 +248,7 @@ class _CartState extends State<Cart> {
                     ),
                     Expanded(
                       child: GestureDetector(
-                        onTap: () {
-                          // cartModels[0].quantity = cartModels[0].quantity! + 1;
-                          // print(cartModels[0].quantity);
-                        },
+                        onTap: () => checkOut(),
                         child: Container(
                           color: Colors.orangeAccent.shade700,
                           child: Center(
@@ -214,7 +266,21 @@ class _CartState extends State<Cart> {
                 ),
               ),
             ),
-          )
+          ),
+          isLoad
+              ? Container(
+                  width: size.width,
+                  height: size.height,
+                  color: Colors.white.withOpacity(0.4),
+                  child: Center(
+                      child: Container(
+                    width: 30,
+                    height: 30,
+                    child: CircularProgressIndicator(
+                        color: Colors.orange.shade600, strokeWidth: 3),
+                  )),
+                )
+              : Container()
         ],
       ),
     );
@@ -251,8 +317,7 @@ class _CartItemState extends State<CartItem> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(5),
                 child: CachedNetworkImage(
-                  imageUrl:
-                      'https://psdfreebies.com/wp-content/uploads/2019/01/Travel-Service-Banner-Ads-Templates-PSD.jpg',
+                  imageUrl: widget.cartModel.serviceModel!.images![0],
                   fit: BoxFit.cover,
                 ),
               ),

@@ -30,4 +30,23 @@ class ServiceRepository {
       print(e.toString());
     }
   }
+
+  Future<ServiceModel?> getServiceDetail({String? token, int? id}) async {
+    try {
+      final response = await http.get(
+          Uri.parse(_baseUrl + '/service/show/' + id.toString()),
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Accept': 'application/json'
+          });
+      // print(response.body);
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body)['data'];
+        ServiceModel transactionModel = ServiceModel.fromJson(jsonData);
+        return transactionModel;
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 }

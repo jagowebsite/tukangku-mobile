@@ -1,10 +1,14 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
 import 'package:tukangku/blocs/home_bloc/home_bloc.dart';
+import 'package:tukangku/hive/cart/cart_hive.dart';
 import 'package:tukangku/models/banner_model.dart';
 import 'package:tukangku/models/category_service_model.dart';
 import 'package:tukangku/repositories/banner_repository.dart';
@@ -24,6 +28,7 @@ class _DashboardState extends State<Dashboard> {
   BannerRepository _bannerRepo = BannerRepository();
   CategoryServiceRepository _categoryServiceRepo = CategoryServiceRepository();
   late AuthBloc authBloc;
+  late Box cartBox;
 
   ScrollController _scrollController = ScrollController();
 
@@ -45,6 +50,13 @@ class _DashboardState extends State<Dashboard> {
 
   Future getCategoryService() async {
     listCategoryService = await _categoryServiceRepo.getCategoryServices();
+    setState(() {});
+  }
+
+  /// Merefresh data ketika kembali ke page ini (current page)
+  /// Mencegah perbedaan state dalam satu bloc
+  FutureOr onGoBack(dynamic value) {
+    print('iam on goback...');
     setState(() {});
   }
 
@@ -86,6 +98,7 @@ class _DashboardState extends State<Dashboard> {
   void initState() {
     homeBloc = BlocProvider.of<HomeBloc>(context);
     authBloc = BlocProvider.of<AuthBloc>(context);
+    cartBox = Hive.box<CartHive>('cart');
     getInitData();
     _scrollController.addListener(onScroll);
     super.initState();
@@ -136,7 +149,8 @@ class _DashboardState extends State<Dashboard> {
           ),
           actions: [
             IconButton(
-              onPressed: () => Navigator.of(context).pushNamed('/cart'),
+              onPressed: () =>
+                  Navigator.of(context).pushNamed('/cart').then(onGoBack),
               icon: Stack(
                 children: [
                   Container(
@@ -150,11 +164,13 @@ class _DashboardState extends State<Dashboard> {
                   Positioned(
                     top: 0,
                     right: 0,
-                    child: Icon(
-                      Icons.circle,
-                      color: Colors.orangeAccent.shade700,
-                      size: 15,
-                    ),
+                    child: cartBox.length != 0
+                        ? Icon(
+                            Icons.circle,
+                            color: Colors.orangeAccent.shade700,
+                            size: 15,
+                          )
+                        : Container(),
                   ),
                 ],
               ),
@@ -200,7 +216,9 @@ class _DashboardState extends State<Dashboard> {
                 SliverList(
                     delegate: SliverChildListDelegate([
                   GestureDetector(
-                    onTap: () => Navigator.of(context).pushNamed('/search'),
+                    onTap: () => Navigator.of(context)
+                        .pushNamed('/search')
+                        .then(onGoBack),
                     child: Container(
                         margin: EdgeInsets.only(top: 20, left: 15, right: 15),
                         height: 40,

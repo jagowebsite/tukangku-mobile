@@ -307,7 +307,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                 alignment: Alignment.bottomCenter,
                 child: GestureDetector(
                   // onTap: () => Navigator.of(context).pushNamed('/cart'),
-                  onTap: () => addData(4),
+                  onTap: () => addData(widget.serviceModel.id!),
                   child: Container(
                       color: Colors.white,
                       child: Container(

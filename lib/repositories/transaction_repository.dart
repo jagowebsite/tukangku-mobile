@@ -52,6 +52,43 @@ class TransactionRepository {
     }
   }
 
+  Future<ResponseModel?> createTransaction(
+      String _token, List<CreateTransaction> createTransactions) async {
+    try {
+      List<dynamic> transactionDetails = [];
+      for (var i = 0; i < createTransactions.length; i++) {
+        transactionDetails.add({
+          'service_id': createTransactions[i].serviceId,
+          'quantity': createTransactions[i].quantity,
+          'price': createTransactions[i].price,
+          'total_price': createTransactions[i].totalPrice,
+          'description': createTransactions[i].description,
+        });
+      }
+
+      final response =
+          await http.post(Uri.parse(_baseUrl + '/transaction/create'),
+              headers: {
+                'Authorization': 'Bearer $_token',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+              },
+              body: json.encode({
+                'transaction_detail': transactionDetails,
+              }));
+      print(response.body);
+      // Error handling
+      if (response.statusCode == 201) {
+        var jsonResponse = json.decode(response.body);
+        return ResponseModel.toJson(jsonResponse);
+      } else {
+        throw Exception(ErrorMessage.statusCode(response.statusCode));
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   Future<ResponseModel?> confirmTransactionDetail(
       String _token, TransactionDetail transactionDetail) async {
     try {
