@@ -41,7 +41,7 @@ class TransactionRepository {
             'Authorization': 'Bearer $token',
             'Accept': 'application/json'
           });
-      // print(response.body);
+      print(response.body);
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body)['data'];
         TransactionModel transactionModel = TransactionModel.fromJson(jsonData);

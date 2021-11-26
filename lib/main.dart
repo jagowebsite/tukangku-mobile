@@ -19,6 +19,7 @@ import 'package:tukangku/blocs/role_permission_bloc/role_permission_bloc.dart';
 import 'package:tukangku/blocs/service_bloc/service_bloc.dart';
 import 'package:tukangku/blocs/transaction_bloc/transaction_bloc.dart';
 import 'package:tukangku/blocs/transaction_detail_bloc/transaction_detail_bloc.dart';
+import 'package:tukangku/blocs/transaction_user_bloc/transaction_user_bloc.dart';
 import 'package:tukangku/blocs/user_data_bloc/user_data_bloc.dart';
 import 'package:tukangku/hive/cart/cart_hive.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner.dart';
@@ -115,6 +116,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<TransactionBloc>(
           create: (BuildContext context) => TransactionBloc(),
+        ),
+        BlocProvider<TransactionUserBloc>(
+          create: (BuildContext context) => TransactionUserBloc(),
         ),
         BlocProvider<TransactionDetailBloc>(
           create: (BuildContext context) => TransactionDetailBloc(),

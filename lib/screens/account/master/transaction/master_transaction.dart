@@ -6,7 +6,6 @@ import 'package:tukangku/blocs/transaction_bloc/transaction_bloc.dart';
 import 'package:tukangku/models/transaction_model.dart';
 import 'package:tukangku/screens/account/master/transaction/master_transaction_detail.dart';
 import 'package:tukangku/screens/widgets/custom_cached_image.dart';
-import 'package:tukangku/utils/currency_format.dart';
 
 class MasterTransaction extends StatefulWidget {
   const MasterTransaction({Key? key}) : super(key: key);
@@ -55,12 +54,6 @@ class _MasterTransactionState extends State<MasterTransaction> {
     _scrollController.addListener(onScroll);
     super.initState();
   }
-
-  // List<String> permissions = [
-  //   'IV8934729343',
-  //   'IV8934729343',
-  //   'IV8934729343',
-  // ];
 
   @override
   Widget build(BuildContext context) {

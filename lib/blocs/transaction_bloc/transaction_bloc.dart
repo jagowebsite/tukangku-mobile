@@ -38,7 +38,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
           emit(TransactionData(listTransactions, false));
         }
       } else {
-        print('Get more banner ...');
+        print('Get more transaction ...');
         page++;
         List<TransactionModel>? data = await _transactionRepo
             .getTransactions(_token!, page: page, limit: event.limit);
