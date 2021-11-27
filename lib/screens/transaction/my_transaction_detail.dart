@@ -6,6 +6,7 @@ import 'package:tukangku/blocs/transaction_user_bloc/transaction_user_bloc.dart'
 import 'package:tukangku/models/payment_model.dart';
 import 'package:tukangku/models/transaction_model.dart';
 import 'package:tukangku/screens/transaction/payment.dart';
+import 'package:tukangku/screens/widgets/custom_cached_image.dart';
 import 'package:tukangku/utils/currency_format.dart';
 
 class MyTransactionDetail extends StatefulWidget {
@@ -244,7 +245,8 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                               Container(
                                 margin: EdgeInsets.only(bottom: 10),
                                 child: ListTile(
-                                    title: Text(paymentModel.paymentCode ?? ''),
+                                    title:
+                                        Text(paymentModel.imagesPayment ?? ''),
                                     subtitle: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -264,13 +266,24 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                                         child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(10),
-                                          child: Image.network(paymentModel
-                                                          .imagesPayment !=
-                                                      null ||
-                                                  paymentModel.imagesPayment !=
-                                                      ''
-                                              ? paymentModel.imagesPayment!
-                                              : 'https://picsum.photos/64'),
+                                          // child: Image.network(paymentModel
+                                          //                 .imagesPayment !=
+                                          //             null ||
+                                          //         paymentModel.imagesPayment !=
+                                          //             ''
+                                          //     ? paymentModel.imagesPayment!
+                                          //     : 'https://picsum.photos/64'),
+                                          child: CustomCachedImage.build(
+                                            context,
+                                            imgUrl: paymentModel
+                                                            .imagesPayment !=
+                                                        null &&
+                                                    paymentModel
+                                                            .imagesPayment !=
+                                                        ''
+                                                ? paymentModel.imagesPayment!
+                                                : 'https://picsum.photos/64',
+                                          ),
                                         ),
                                       ),
                                     ),

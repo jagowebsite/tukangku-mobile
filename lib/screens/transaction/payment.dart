@@ -1,13 +1,14 @@
 import 'dart:io';
 
-import 'package:camera/camera.dart';
+// import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:tukangku/models/transaction_model.dart';
-import 'package:tukangku/screens/widgets/camera_screen.dart';
+import 'package:tukangku/utils/currency_format.dart';
+// import 'package:tukangku/screens/widgets/camera_screen.dart';
 
 // Jenis pembayaran (dp | lunas)
 enum PaymentFlow { dp, paid }
@@ -26,6 +27,13 @@ class _PaymentState extends State<Payment> {
   Position? position;
   File? imagePaymentFile;
   File? imageUserFile;
+
+  TextEditingController bankNameController = TextEditingController();
+  TextEditingController noRekController = TextEditingController();
+  TextEditingController rekNameController = TextEditingController();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  TextEditingController nominalDPController = TextEditingController();
 
   PaymentFlow paymentFlow = PaymentFlow.paid;
 
@@ -81,6 +89,16 @@ class _PaymentState extends State<Payment> {
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
       imagePaymentFile = File(image.path);
+      setState(() {});
+    }
+  }
+
+  Future pickImageUser() async {
+    final ImagePicker _picker = ImagePicker();
+    // Pick an image
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      imageUserFile = File(image.path);
       setState(() {});
     }
   }
@@ -227,6 +245,26 @@ class _PaymentState extends State<Payment> {
                             ),
                           ],
                         ),
+                        paymentFlow == PaymentFlow.dp
+                            ? Text('Nominal DP (RP)')
+                            : Container(),
+                        paymentFlow == PaymentFlow.dp
+                            ? Container(
+                                padding: EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Colors.grey.shade100),
+                                child: TextField(
+                                  onChanged: (value) {
+                                    setState(() {});
+                                  },
+                                  controller: nominalDPController,
+                                  decoration: InputDecoration(
+                                    border: InputBorder.none,
+                                  ),
+                                ),
+                              )
+                            : Container(),
                       ],
                     ),
                   ),
@@ -256,6 +294,7 @@ class _PaymentState extends State<Payment> {
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.grey.shade100),
                           child: TextField(
+                            controller: bankNameController,
                             decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: 'Contoh: BCA, BRI, dll.'),
@@ -271,6 +310,7 @@ class _PaymentState extends State<Payment> {
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.grey.shade100),
                           child: TextField(
+                            controller: noRekController,
                             decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: 'Nomor Rekening Bank'),
@@ -286,6 +326,7 @@ class _PaymentState extends State<Payment> {
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.grey.shade100),
                           child: TextField(
+                            controller: rekNameController,
                             decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: 'Masukkan nama rekening kamu'),
@@ -359,20 +400,21 @@ class _PaymentState extends State<Payment> {
                         ),
                         GestureDetector(
                           onTap: () async {
-                            await availableCameras().then((value) async {
-                              imageUserFile = await Navigator.push<File>(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) => CameraScreen(
-                                            cameras: value,
-                                          )));
-                            });
+                            await pickImageUser();
+                            // await availableCameras().then((value) async {
+                            //   imageUserFile = await Navigator.push<File>(
+                            //       context,
+                            //       MaterialPageRoute(
+                            //           builder: (_) => CameraScreen(
+                            //                 cameras: value,
+                            //               )));
+                            // });
 
                             setState(() {});
                           },
                           child: Container(
                               width: size.width,
-                              height: 50,
+                              height: 100,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(
@@ -418,6 +460,7 @@ class _PaymentState extends State<Payment> {
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.grey.shade100),
                           child: TextField(
+                            controller: addressController,
                             minLines: 3,
                             maxLines: 10,
                             decoration: InputDecoration(
@@ -520,6 +563,7 @@ class _PaymentState extends State<Payment> {
                               borderRadius: BorderRadius.circular(10),
                               color: Colors.grey.shade100),
                           child: TextField(
+                            controller: descriptionController,
                             minLines: 3,
                             maxLines: 10,
                             decoration: InputDecoration(
@@ -565,7 +609,13 @@ class _PaymentState extends State<Payment> {
                           width: 5,
                         ),
                         Text(
-                          'Rp 300.000',
+                          currencyId
+                              .format(paymentFlow == PaymentFlow.dp
+                                  ? int.parse(nominalDPController.text != ''
+                                      ? nominalDPController.text
+                                      : '0')
+                                  : widget.transactionModel.totalAllPrice)
+                              .toString(),
                           style: TextStyle(
                               color: Colors.orangeAccent.shade700,
                               fontWeight: FontWeight.bold),
