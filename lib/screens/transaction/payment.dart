@@ -1,10 +1,20 @@
+import 'dart:io';
+
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:tukangku/models/transaction_model.dart';
+import 'package:tukangku/screens/widgets/camera_screen.dart';
+
+// Jenis pembayaran (dp | lunas)
+enum PaymentFlow { dp, paid }
 
 class Payment extends StatefulWidget {
-  const Payment({Key? key}) : super(key: key);
+  final TransactionModel transactionModel;
+  const Payment({Key? key, required this.transactionModel}) : super(key: key);
 
   @override
   _PaymentState createState() => _PaymentState();
@@ -14,6 +24,10 @@ class _PaymentState extends State<Payment> {
   double latitude = -7.2849593;
   double longitude = 112.6921382;
   Position? position;
+  File? imagePaymentFile;
+  File? imageUserFile;
+
+  PaymentFlow paymentFlow = PaymentFlow.paid;
 
   // Data for dropdown type
   List<String> typeList = ['Cash', 'Transfer'];
@@ -59,6 +73,16 @@ class _PaymentState extends State<Payment> {
     latitude = position!.latitude;
     longitude = position!.longitude;
     setState(() {});
+  }
+
+  Future pickImagePayment() async {
+    final ImagePicker _picker = ImagePicker();
+    // Pick an image
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      imagePaymentFile = File(image.path);
+      setState(() {});
+    }
   }
 
   @override
@@ -157,13 +181,22 @@ class _PaymentState extends State<Payment> {
                                 children: [
                                   Expanded(
                                     child: TextButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        setState(() {
+                                          paymentFlow = PaymentFlow.dp;
+                                        });
+                                      },
                                       style: TextButton.styleFrom(
                                           backgroundColor:
-                                              Colors.grey.shade100),
+                                              paymentFlow == PaymentFlow.dp
+                                                  ? Colors.orangeAccent.shade700
+                                                  : Colors.grey.shade100),
                                       child: Text('DP',
-                                          style:
-                                              TextStyle(color: Colors.black87)),
+                                          style: TextStyle(
+                                              color:
+                                                  paymentFlow == PaymentFlow.dp
+                                                      ? Colors.white
+                                                      : Colors.black87)),
                                     ),
                                   ),
                                   SizedBox(
@@ -171,13 +204,22 @@ class _PaymentState extends State<Payment> {
                                   ),
                                   Expanded(
                                     child: TextButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        setState(() {
+                                          paymentFlow = PaymentFlow.paid;
+                                        });
+                                      },
                                       style: TextButton.styleFrom(
                                           backgroundColor:
-                                              Colors.orangeAccent.shade700),
+                                              paymentFlow == PaymentFlow.paid
+                                                  ? Colors.orangeAccent.shade700
+                                                  : Colors.grey.shade100),
                                       child: Text('Lunas',
-                                          style:
-                                              TextStyle(color: Colors.white)),
+                                          style: TextStyle(
+                                              color: paymentFlow ==
+                                                      PaymentFlow.paid
+                                                  ? Colors.white
+                                                  : Colors.black87)),
                                     ),
                                   ),
                                 ],
@@ -271,20 +313,28 @@ class _PaymentState extends State<Payment> {
                         SizedBox(
                           height: 10,
                         ),
-                        Container(
-                            width: size.width,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: Colors.orangeAccent.shade700,
-                                width: 1,
+                        GestureDetector(
+                          onTap: () => pickImagePayment(),
+                          child: Container(
+                              width: size.width,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: Colors.orangeAccent.shade700,
+                                  width: 1,
+                                ),
                               ),
-                            ),
-                            child: Center(
-                                child: Text('+ Pilih Foto',
-                                    style: TextStyle(
-                                        color: Colors.orangeAccent.shade700)))),
+                              child: Center(
+                                  child: imagePaymentFile == null
+                                      ? Text('+ Pilih Foto',
+                                          style: TextStyle(
+                                              color:
+                                                  Colors.orangeAccent.shade700))
+                                      : Container(
+                                          child: Image.file(imagePaymentFile!),
+                                        ))),
+                        ),
                       ],
                     ),
                   ),
@@ -307,20 +357,39 @@ class _PaymentState extends State<Payment> {
                         SizedBox(
                           height: 10,
                         ),
-                        Container(
-                            width: size.width,
-                            height: 50,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: Colors.orangeAccent.shade700,
-                                width: 1,
+                        GestureDetector(
+                          onTap: () async {
+                            await availableCameras().then((value) async {
+                              imageUserFile = await Navigator.push<File>(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => CameraScreen(
+                                            cameras: value,
+                                          )));
+                            });
+
+                            setState(() {});
+                          },
+                          child: Container(
+                              width: size.width,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: Colors.orangeAccent.shade700,
+                                  width: 1,
+                                ),
                               ),
-                            ),
-                            child: Center(
-                                child: Text('+ Upload Foto',
-                                    style: TextStyle(
-                                        color: Colors.orangeAccent.shade700)))),
+                              child: Center(
+                                  child: imageUserFile == null
+                                      ? Text('+ Pilih Foto',
+                                          style: TextStyle(
+                                              color:
+                                                  Colors.orangeAccent.shade700))
+                                      : Container(
+                                          child: Image.file(imageUserFile!),
+                                        ))),
+                        ),
                       ],
                     ),
                   ),

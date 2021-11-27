@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/transaction_user_bloc/transaction_user_bloc.dart';
 import 'package:tukangku/models/payment_model.dart';
 import 'package:tukangku/models/transaction_model.dart';
+import 'package:tukangku/screens/transaction/payment.dart';
 import 'package:tukangku/utils/currency_format.dart';
 
 class MyTransactionDetail extends StatefulWidget {
@@ -62,14 +63,13 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                 ))),
         backgroundColor: Colors.white,
         body: RefreshIndicator(
-            backgroundColor: Colors.white,
-            color: Colors.orangeAccent.shade700,
-            displacement: 20,
-            onRefresh: () => _refresh(),
+          backgroundColor: Colors.white,
+          color: Colors.orangeAccent.shade700,
+          displacement: 20,
+          onRefresh: () => _refresh(),
           child: BlocBuilder<TransactionUserBloc, TransactionUserState>(
             builder: (context, state) {
-              if(state is TransactionDetailUserData){
-
+              if (state is TransactionDetailUserData) {
                 return SingleChildScrollView(
                   physics: AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.all(15),
@@ -101,20 +101,10 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                             for (TransactionDetail transactionDetail
                                 in state.transactionModel.transactionDetail!)
                               ListTile(
-                                  title: Text(
-                                      '${transactionDetail.serviceModel!.categoryService!.name} - ${transactionDetail.serviceModel!.name}'),
-                              subtitle: Text(transactionDetail.description!),
-                                  ),
-                            // ListTile(
-                            //   title: Text(
-                            //       'Bebersih - Membersihkan Lantai Rumah (Ngepel)'),
-                            //   subtitle: Text('Bebersih'),
-                            // ),
-                            // ListTile(
-                            //   title:
-                            //       Text('Service AC - 	Service AC Cepat 100% Puas'),
-                            //   subtitle: Text('Service AC'),
-                            // ),
+                                title: Text(
+                                    '${transactionDetail.serviceModel!.categoryService!.name} - ${transactionDetail.serviceModel!.name}'),
+                                subtitle: Text(transactionDetail.description!),
+                              ),
                           ],
                         ),
                       ),
@@ -176,14 +166,17 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                             SizedBox(
                               height: 15,
                             ),
-                            for (TransactionDetail transactionDetail in state.transactionModel.transactionDetail!)
+                            for (TransactionDetail transactionDetail
+                                in state.transactionModel.transactionDetail!)
                               Row(
                                 children: [
                                   Expanded(
-                                      child: Text(
-                                          (transactionDetail.serviceModel!.name ?? '') +
-                                              '@${transactionDetail.quantity}')),
-                                  Text(currencyId.format(transactionDetail.totalPrice))
+                                      child: Text((transactionDetail
+                                                  .serviceModel!.name ??
+                                              '') +
+                                          '@${transactionDetail.quantity}')),
+                                  Text(currencyId
+                                      .format(transactionDetail.totalPrice))
                                 ],
                               ),
                             Divider(
@@ -197,21 +190,27 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 )),
                                 Text(
-                                  currencyId.format(state.transactionModel.totalAllPrice).toString(),
+                                  currencyId
+                                      .format(
+                                          state.transactionModel.totalAllPrice)
+                                      .toString(),
                                   style: TextStyle(fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
-
-                            state.transactionModel.statusOrder == 'success' ? Center(
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                    backgroundColor: Colors.grey.shade600),
-                                onPressed: () {},
-                                child: Text('Cetak Invoice',
-                                    style: TextStyle(color: Colors.white)),
-                              ),
-                            ) : Container(),
+                            state.transactionModel.statusOrder == 'success'
+                                ? Center(
+                                    child: TextButton(
+                                      style: TextButton.styleFrom(
+                                          backgroundColor:
+                                              Colors.grey.shade600),
+                                      onPressed: () {},
+                                      child: Text('Cetak Invoice',
+                                          style:
+                                              TextStyle(color: Colors.white)),
+                                    ),
+                                  )
+                                : Container(),
                           ],
                         ),
                       ),
@@ -240,33 +239,52 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                             SizedBox(
                               height: 15,
                             ),
-                            for(PaymentModel paymentModel in state.transactionModel.payment!)
+                            for (PaymentModel paymentModel
+                                in state.transactionModel.payment!)
                               Container(
-                                margin: EdgeInsets.only(bottom:10),
+                                margin: EdgeInsets.only(bottom: 10),
                                 child: ListTile(
                                     title: Text(paymentModel.paymentCode ?? ''),
                                     subtitle: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(paymentModel.createdAt ?? ''),
                                         Text(paymentModel.status ?? '',
-                                            style: TextStyle(color: Colors.orange)),
+                                            style: TextStyle(
+                                                color: Colors.orange)),
                                       ],
                                     ),
                                     // isThreeLine: true,
                                     leading: Container(
                                       child: Container(
-                                        width: MediaQuery.of(context).size.width * 0.15,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.15,
                                         child: ClipRRect(
-                                          borderRadius: BorderRadius.circular(10),
-                                          child:
-                                              Image.network('https://picsum.photos/64'),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: Image.network(paymentModel
+                                                          .imagesPayment !=
+                                                      null ||
+                                                  paymentModel.imagesPayment !=
+                                                      ''
+                                              ? paymentModel.imagesPayment!
+                                              : 'https://picsum.photos/64'),
                                         ),
                                       ),
                                     ),
                                     trailing: Icon(
-                                      paymentModel.status! == 'success' ? Icons.check_circle : Icons.timer,
-                                      color: Colors.green.shade600,
+                                      paymentModel.status! == 'success'
+                                          ? Icons.check_circle
+                                          : paymentModel.status! == 'pending'
+                                              ? Icons.timer
+                                              : Icons.cancel,
+                                      color: paymentModel.status! == 'success'
+                                          ? Colors.green.shade600
+                                          : paymentModel.status! == 'pending'
+                                              ? Colors.orange.shade600
+                                              : Colors.red.shade600,
                                     )),
                               ),
                             Divider(),
@@ -274,8 +292,14 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                               child: TextButton(
                                 style: TextButton.styleFrom(
                                     backgroundColor: Colors.grey.shade600),
-                                onPressed: () =>
-                                    Navigator.of(context).pushNamed('/payment'),
+                                onPressed: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return Payment(
+                                        transactionModel:
+                                            state.transactionModel);
+                                  })).then(onGoBack);
+                                },
                                 child: Text('Tambah Pembayaran',
                                     style: TextStyle(color: Colors.white)),
                               ),
@@ -289,14 +313,14 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                     ],
                   ),
                 );
-              }else{
+              } else {
                 return Center(
-                            child: Container(
-                          width: 30,
-                          height: 30,
-                          child: CircularProgressIndicator(
-                              color: Colors.orange.shade600, strokeWidth: 3),
-                        ));
+                    child: Container(
+                  width: 30,
+                  height: 30,
+                  child: CircularProgressIndicator(
+                      color: Colors.orange.shade600, strokeWidth: 3),
+                ));
               }
             },
           ),

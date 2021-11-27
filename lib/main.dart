@@ -164,7 +164,6 @@ class MyApp extends StatelessWidget {
           '/master-transaction': (context) => MasterTransaction(),
           '/master-payment': (context) => MasterPayment(),
           '/master-gps-log': (context) => MasterGPSLog(),
-          '/payment': (context) => Payment(),
           '/map-coordinate': (context) => MapCoordinate(),
           '/image-cropper': (context) => ImageCropper(),
         },
