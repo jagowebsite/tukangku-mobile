@@ -21,7 +21,7 @@ class PaymentModel {
       createdAt,
       address;
   final int? totalPayment, id;
-  final File? imageUserFie, imagePaymentFile;
+  final File? imageUserFile, imagePaymentFile;
 
   PaymentModel(
       {this.user,
@@ -39,7 +39,7 @@ class PaymentModel {
       this.longitude,
       this.status,
       this.imagePaymentFile,
-      this.imageUserFie,
+      this.imageUserFile,
       this.description,
       this.address,
       this.createdAt,

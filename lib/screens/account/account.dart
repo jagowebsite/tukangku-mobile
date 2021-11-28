@@ -374,6 +374,74 @@ class _AccountState extends State<Account> {
                     SizedBox(
                       height: 10,
                     ),
+                    Container(
+                      color: Colors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(
+                              'Laporan',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          ListTile(
+                            minVerticalPadding: 0,
+                            onTap: () => Navigator.of(context)
+                                .pushNamed('/report-service'),
+                            title: Text('Laporan Jasa'),
+                            trailing: Icon(Icons.chevron_right),
+                          ),
+                          Divider(
+                            thickness: 0.5,
+                          ),
+                          ListTile(
+                            onTap: () =>
+                                Navigator.of(context).pushNamed('/report-all'),
+                            title: Text('Laporan Seluruh Penjual'),
+                            trailing: Icon(Icons.chevron_right),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      color: Colors.white,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Text(
+                              'History',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          ListTile(
+                            minVerticalPadding: 0,
+                            onTap: () => Navigator.of(context)
+                                .pushNamed('/history-employee'),
+                            title: Text('History Pekerjaan Tukang'),
+                            trailing: Icon(Icons.chevron_right),
+                          ),
+                          Divider(
+                            thickness: 0.5,
+                          ),
+                          ListTile(
+                            onTap: () => Navigator.of(context)
+                                .pushNamed('/history-consumen'),
+                            title: Text('History Orderan Konsumen'),
+                            trailing: Icon(Icons.chevron_right),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
                     GestureDetector(
                       onTap: () => logout(),
                       child: Container(

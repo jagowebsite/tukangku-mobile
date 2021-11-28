@@ -39,13 +39,13 @@ class PaymentRepository {
     try {
       // Create multipart request
       // Digunakan untuk mengirim request berupa file
-      http.MultipartRequest request =
-          http.MultipartRequest('POST', Uri.parse(_baseUrl + '/banner/create'));
+      http.MultipartRequest request = http.MultipartRequest(
+          'POST', Uri.parse(_baseUrl + '/payment/create'));
 
       // Request input data
-      request.fields['user_id'] = paymentModel.user!.id.toString();
-      // request.fields['transaction_id'] =
-      //     paymentModel.transactionModel!.id.toString();
+      // request.fields['user_id'] = paymentModel.user!.id.toString();
+      request.fields['transaction_id'] =
+          paymentModel.transactionModel!.id.toString();
       request.fields['type'] = paymentModel.type!;
       request.fields['type_transfer'] = paymentModel.typeTransfer!;
       request.fields['bank_number'] = paymentModel.bankNumber!;
@@ -58,18 +58,18 @@ class PaymentRepository {
       request.fields['address'] = paymentModel.address!;
 
       // Convert file type to byte data
-      final byteUser = await paymentModel.imageUserFie!.readAsBytes();
+      final byteUser = await paymentModel.imageUserFile!.readAsBytes();
       ByteData byteDataUser = byteUser.buffer.asByteData();
       List<int> byteImageUser = byteDataUser.buffer.asUint8List();
 
-      final bytePayment = await paymentModel.imageUserFie!.readAsBytes();
+      final bytePayment = await paymentModel.imagePaymentFile!.readAsBytes();
       ByteData byteDataPayment = bytePayment.buffer.asByteData();
       List<int> byteImagePayment = byteDataPayment.buffer.asUint8List();
 
       // Set request value
       request.files.add(http.MultipartFile.fromBytes(
           'images_user', byteImageUser,
-          filename: basename(paymentModel.imageUserFie!.path)));
+          filename: basename(paymentModel.imageUserFile!.path)));
       request.files.add(http.MultipartFile.fromBytes(
           'images_payment', byteImagePayment,
           filename: basename(paymentModel.imagePaymentFile!.path)));
@@ -119,18 +119,18 @@ class PaymentRepository {
       request.fields['address'] = paymentModel.address!;
 
       // Convert file type to byte data
-      final byteUser = await paymentModel.imageUserFie!.readAsBytes();
+      final byteUser = await paymentModel.imageUserFile!.readAsBytes();
       ByteData byteDataUser = byteUser.buffer.asByteData();
       List<int> byteImageUser = byteDataUser.buffer.asUint8List();
 
-      final bytePayment = await paymentModel.imageUserFie!.readAsBytes();
+      final bytePayment = await paymentModel.imageUserFile!.readAsBytes();
       ByteData byteDataPayment = bytePayment.buffer.asByteData();
       List<int> byteImagePayment = byteDataPayment.buffer.asUint8List();
 
       // Set request value
       request.files.add(http.MultipartFile.fromBytes(
           'images_user', byteImageUser,
-          filename: basename(paymentModel.imageUserFie!.path)));
+          filename: basename(paymentModel.imageUserFile!.path)));
       request.files.add(http.MultipartFile.fromBytes(
           'images_payment', byteImagePayment,
           filename: basename(paymentModel.imagePaymentFile!.path)));

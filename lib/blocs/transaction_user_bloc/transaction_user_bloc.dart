@@ -6,13 +6,13 @@ import 'package:tukangku/repositories/transaction_repository.dart';
 part 'transaction_user_event.dart';
 part 'transaction_user_state.dart';
 
-class TransactionUserBloc extends Bloc<TransactionUserEvent, TransactionUserState> {
-  
+class TransactionUserBloc
+    extends Bloc<TransactionUserEvent, TransactionUserState> {
   AuthRepository _authRepo = AuthRepository();
   TransactionRepository _transactionRepo = TransactionRepository();
   List<TransactionModel> listTransactions = [];
   int page = 1;
-  
+
   TransactionUserBloc() : super(TransactionUserInitial()) {
     on<GetTransactionUser>(_getTransactionUser);
     on<GetTransactionDetailUser>(_getTransactionDetailUser);
@@ -27,7 +27,7 @@ class TransactionUserBloc extends Bloc<TransactionUserEvent, TransactionUserStat
         page = 1;
         emit(GetTransactionUserLoading());
         List<TransactionModel>? data = await _transactionRepo
-            .getTransactions(_token!, page: page, limit: event.limit);
+            .getMyTransactions(_token!, page: page, limit: event.limit);
         if (data != null) {
           listTransactions = data;
           data.length < event.limit
@@ -40,7 +40,7 @@ class TransactionUserBloc extends Bloc<TransactionUserEvent, TransactionUserStat
         print('Get more transaction user ...');
         page++;
         List<TransactionModel>? data = await _transactionRepo
-            .getTransactions(_token!, page: page, limit: event.limit);
+            .getMyTransactions(_token!, page: page, limit: event.limit);
         if (data != null) {
           listTransactions.addAll(data);
           data.length < event.limit
@@ -55,8 +55,8 @@ class TransactionUserBloc extends Bloc<TransactionUserEvent, TransactionUserStat
     }
   }
 
-  Future _getTransactionDetailUser(
-      GetTransactionDetailUser event, Emitter<TransactionUserState> emit) async {
+  Future _getTransactionDetailUser(GetTransactionDetailUser event,
+      Emitter<TransactionUserState> emit) async {
     try {
       print('Get init transaction detail ...');
       emit(GetTransactionDetailUserLoading());
@@ -69,7 +69,8 @@ class TransactionUserBloc extends Bloc<TransactionUserEvent, TransactionUserStat
         emit(TransactionDetailUserError('Data tidak ditemukan'));
       }
     } catch (e) {
-      emit(TransactionDetailUserError('Terjadi kesalahan, silahkan coba kembali'));
+      emit(TransactionDetailUserError(
+          'Terjadi kesalahan, silahkan coba kembali'));
     }
   }
 }

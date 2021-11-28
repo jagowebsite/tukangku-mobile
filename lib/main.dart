@@ -9,11 +9,13 @@ import 'package:tukangku/blocs/banner_bloc/banner_bloc.dart';
 import 'package:tukangku/blocs/category_service_bloc/category_service_bloc.dart';
 import 'package:tukangku/blocs/design_bloc/design_bloc.dart';
 import 'package:tukangku/blocs/employee_bloc/employee_bloc.dart';
+import 'package:tukangku/blocs/history_bloc/history_bloc.dart';
 import 'package:tukangku/blocs/home_bloc/home_bloc.dart';
 import 'package:tukangku/blocs/log_bloc/log_bloc.dart';
 import 'package:tukangku/blocs/master_service_bloc/master_service_bloc.dart';
 import 'package:tukangku/blocs/payment_bloc/payment_bloc.dart';
 import 'package:tukangku/blocs/profile_bloc/profile_bloc.dart';
+import 'package:tukangku/blocs/report_bloc/report_bloc.dart';
 import 'package:tukangku/blocs/role_access_bloc/role_access_bloc.dart';
 import 'package:tukangku/blocs/role_permission_bloc/role_permission_bloc.dart';
 import 'package:tukangku/blocs/service_bloc/service_bloc.dart';
@@ -30,7 +32,11 @@ import 'package:tukangku/screens/account/master/consumen/master_consumen.dart';
 import 'package:tukangku/screens/account/master/employee/master_employee.dart';
 import 'package:tukangku/screens/account/master/employee/master_employee_create.dart';
 import 'package:tukangku/screens/account/master/gps_log/master_gps_log.dart';
+import 'package:tukangku/screens/account/master/history/history_consumen.dart';
+import 'package:tukangku/screens/account/master/history/history_employee.dart';
 import 'package:tukangku/screens/account/master/payment/master_payment.dart';
+import 'package:tukangku/screens/account/master/reports/report_all.dart';
+import 'package:tukangku/screens/account/master/reports/report_service.dart';
 import 'package:tukangku/screens/account/master/service/master_service.dart';
 import 'package:tukangku/screens/account/master/service/master_service_create.dart';
 import 'package:tukangku/screens/account/master/transaction/master_transaction.dart';
@@ -123,6 +129,12 @@ class MyApp extends StatelessWidget {
         BlocProvider<TransactionDetailBloc>(
           create: (BuildContext context) => TransactionDetailBloc(),
         ),
+        BlocProvider<ReportBloc>(
+          create: (BuildContext context) => ReportBloc(),
+        ),
+        BlocProvider<HistoryBloc>(
+          create: (BuildContext context) => HistoryBloc(),
+        ),
       ],
       child: MaterialApp(
         title: 'Tukangku',
@@ -164,8 +176,11 @@ class MyApp extends StatelessWidget {
           '/master-transaction': (context) => MasterTransaction(),
           '/master-payment': (context) => MasterPayment(),
           '/master-gps-log': (context) => MasterGPSLog(),
-          '/map-coordinate': (context) => MapCoordinate(),
           '/image-cropper': (context) => ImageCropper(),
+          '/report-service': (context) => ReportService(),
+          '/report-all': (context) => ReportAll(),
+          '/history-employee': (context) => HistoryEmployee(),
+          '/history-consumen': (context) => HistoryConsumen(),
         },
       ),
     );

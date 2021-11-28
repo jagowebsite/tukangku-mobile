@@ -2,20 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:tukangku/models/location_model.dart';
 
 class MapCoordinate extends StatefulWidget {
-  const MapCoordinate({Key? key}) : super(key: key);
+  final LocationModel locationModel;
+  const MapCoordinate({Key? key, required this.locationModel})
+      : super(key: key);
 
   @override
   _MapCoordinateState createState() => _MapCoordinateState();
 }
 
 class _MapCoordinateState extends State<MapCoordinate> {
-  double latitude = -7.2849593;
-  double longitude = 112.6921382;
+  MapController mapController = MapController();
+  LocationModel locationModel = LocationModel();
   Position? position;
 
-  Future _determinePosition() async {
+  Future _determinePosition({bool isCurrent = false}) async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -50,16 +53,19 @@ class _MapCoordinateState extends State<MapCoordinate> {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     position = await Geolocator.getCurrentPosition();
-    // print(position!.latitude);
-    // print(position!.longitude);
-    latitude = position!.latitude;
-    longitude = position!.longitude;
+
+    if (isCurrent) {
+      locationModel.latitude = position!.latitude;
+      locationModel.longitude = position!.longitude;
+    }
+
     setState(() {});
   }
 
   @override
   void initState() {
     _determinePosition();
+    locationModel = widget.locationModel;
     super.initState();
   }
 
@@ -80,7 +86,12 @@ class _MapCoordinateState extends State<MapCoordinate> {
             icon: Icon(Icons.arrow_back, color: Colors.black87)),
         actions: [
           IconButton(
-              onPressed: () => _determinePosition(),
+              onPressed: () async {
+                await _determinePosition(isCurrent: true);
+                mapController.move(
+                    LatLng(locationModel.latitude, locationModel.longitude),
+                    15.0);
+              },
               icon: Icon(Icons.place, color: Colors.black87))
         ],
       ),
@@ -88,15 +99,16 @@ class _MapCoordinateState extends State<MapCoordinate> {
         children: [
           position != null
               ? FlutterMap(
+                  mapController: mapController,
                   options: MapOptions(
-                      center: LatLng(latitude, longitude),
+                      center: LatLng(
+                          locationModel.latitude, locationModel.longitude),
                       zoom: 15.0,
                       onTap: (position, latlng) {
                         setState(() {
-                          latitude = latlng.latitude;
-                          longitude = latlng.longitude;
+                          locationModel.latitude = latlng.latitude;
+                          locationModel.longitude = latlng.longitude;
                         });
-                        print(latlng.latitude);
                       }),
                   layers: [
                     TileLayerOptions(
@@ -112,12 +124,33 @@ class _MapCoordinateState extends State<MapCoordinate> {
                         Marker(
                           width: 80.0,
                           height: 80.0,
-                          point: LatLng(latitude, longitude),
+                          point: LatLng(
+                              locationModel.latitude, locationModel.longitude),
                           builder: (ctx) => Container(
-                              child: Icon(
-                            Icons.place,
-                            color: Colors.red.shade700,
-                            size: 45,
+                              child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.place,
+                                color: Colors.red.shade700,
+                                size: 45,
+                              ),
+                              Container(
+                                width: 27,
+                                height: 5,
+                                decoration: BoxDecoration(
+                                    borderRadius: new BorderRadius.all(
+                                        Radius.elliptical(100, 50)),
+                                    // borderRadius: BorderRadius.circular(50),
+                                    boxShadow: [
+                                      BoxShadow(
+                                          color: Colors.black.withOpacity(0.5),
+                                          offset: Offset(0, 0),
+                                          blurRadius: 3,
+                                          spreadRadius: 0)
+                                    ]),
+                              )
+                            ],
                           )),
                         ),
                       ],
@@ -138,7 +171,7 @@ class _MapCoordinateState extends State<MapCoordinate> {
                   style: TextButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 10),
                       backgroundColor: Colors.green.shade600),
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () => Navigator.pop(context, locationModel),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

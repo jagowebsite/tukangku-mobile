@@ -138,8 +138,16 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                               children: [
                                 Expanded(child: Text('Status')),
                                 Text(
-                                  state.transactionModel.statusOrder ?? '',
-                                  style: TextStyle(color: Colors.green),
+                                  state.transactionModel.statusOrder!
+                                      .toUpperCase(),
+                                  style: state.transactionModel.statusOrder ==
+                                          'done'
+                                      ? TextStyle(color: Colors.green)
+                                      : state.transactionModel.statusOrder ==
+                                              'cancel'
+                                          ? TextStyle(
+                                              color: Colors.red.shade700)
+                                          : TextStyle(color: Colors.orange),
                                 )
                               ],
                             ),
@@ -245,8 +253,7 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                               Container(
                                 margin: EdgeInsets.only(bottom: 10),
                                 child: ListTile(
-                                    title:
-                                        Text(paymentModel.imagesPayment ?? ''),
+                                    title: Text(paymentModel.paymentCode ?? ''),
                                     subtitle: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,

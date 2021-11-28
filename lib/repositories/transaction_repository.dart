@@ -32,6 +32,29 @@ class TransactionRepository {
     }
   }
 
+  Future<List<TransactionModel>?> getMyTransactions(String _token,
+      {int page = 1, int limit = 10}) async {
+    try {
+      final response = await http.get(
+        Uri.parse(_baseUrl + '/my-transactions?page=$page&limit=$limit'),
+        headers: {
+          'Authorization': 'Bearer $_token',
+          'Accept': 'application/json',
+        },
+      );
+      // print(response.body);
+
+      if (response.statusCode == 200) {
+        Iterable iterable = json.decode(response.body)['data'];
+        List<TransactionModel> listTransactions =
+            iterable.map((e) => TransactionModel.fromJson(e)).toList();
+        return listTransactions;
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   Future<TransactionModel?> getTransactionDetail(
       {String? token, int? id}) async {
     try {
@@ -41,7 +64,7 @@ class TransactionRepository {
             'Authorization': 'Bearer $token',
             'Accept': 'application/json'
           });
-      print(response.body);
+      // print(response.body);
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body)['data'];
         TransactionModel transactionModel = TransactionModel.fromJson(jsonData);
