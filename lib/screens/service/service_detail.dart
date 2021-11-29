@@ -7,6 +7,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:readmore/readmore.dart';
 import 'package:tukangku/hive/cart/cart_hive.dart';
 import 'package:tukangku/models/service_model.dart';
+import 'package:tukangku/screens/widgets/bottom_sheet_modal.dart';
 import 'package:tukangku/utils/currency_format.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
 
@@ -21,6 +22,7 @@ class ServiceDetail extends StatefulWidget {
 class _ServiceDetailState extends State<ServiceDetail> {
   final CarouselController _controller = CarouselController();
   late Box cartBox;
+  int totalService = 0;
 
   // Index untuk indicator carousel
   int _currentCarrousel = 0;
@@ -52,6 +54,118 @@ class _ServiceDetailState extends State<ServiceDetail> {
 
     CustomSnackbar.showSnackbar(
         context, 'Berhasil ditambahkan ke keranjang', SnackbarType.success);
+  }
+
+  Future addToCart(int id) async {
+    BottomSheetModal.show(context,
+        padding: EdgeInsets.all(10),
+        height: 300,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Silahkan masukkan jumlah layanan yang ingin dipesan'),
+              SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Expanded(child: Text('Jumlah Layanan')),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    children: [
+                      GestureDetector(
+                        onTap: (){
+                          if(totalService > 0){
+                            totalService = totalService - 1;
+                            setState(() {
+                              
+                            });
+                          }
+                        },
+                        child: Container(
+                          width: 30,
+                          height: 30,
+                          padding: EdgeInsets.all(5),
+                          color: Colors.grey.shade200,
+                          child: Center(child: Text('-')),
+                        ),
+                      ),
+                      Container(
+                        width: 50,
+                        height: 30,
+                        padding: EdgeInsets.all(5),
+                        color: Colors.grey.shade100,
+                        child: Center(child: Text(totalService.toString())),
+                      ),
+                      GestureDetector(
+                        onTap: (){
+                          totalService = totalService + 1;
+                          setState(() {
+                            
+                          });
+                        },
+                        child: Container(
+                          width: 30,
+                          height: 30,
+                          padding: EdgeInsets.all(5),
+                          color: Colors.grey.shade200,
+                          child: Center(child: Text('+')),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text('Deskripsi (opsional)'),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.grey.shade100),
+                child: TextField(
+                  // controller: descriptionController,
+                  minLines: 3,
+                  maxLines: 10,
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Masukkan deskripsi tambahan disini...'),
+                ),
+              ),
+              SizedBox(height: 15,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(primary: Colors.white),
+                    child: const Text(
+                      'Close',
+                      style: TextStyle(color: Colors.black87),
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  SizedBox(width: 10),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.orangeAccent.shade700),
+                    child: const Text('Konfirmasi',
+                        style: TextStyle(color: Colors.white)),
+                    onPressed: () {
+                      addData(id);
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ]);
   }
 
   List<CartHive>? listCarts;
@@ -307,7 +421,8 @@ class _ServiceDetailState extends State<ServiceDetail> {
                 alignment: Alignment.bottomCenter,
                 child: GestureDetector(
                   // onTap: () => Navigator.of(context).pushNamed('/cart'),
-                  onTap: () => addData(widget.serviceModel.id!),
+                  // onTap: () => addData(widget.serviceModel.id!),
+                  onTap: () => addToCart(widget.serviceModel.id!),
                   child: Container(
                       color: Colors.white,
                       child: Container(

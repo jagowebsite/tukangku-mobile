@@ -126,19 +126,31 @@ class _MasterPaymentState extends State<MasterPayment> {
                               SizedBox(
                                 height: 5,
                               ),
-                              Text(
-                                state.listPayments[index].status!.toUpperCase(),
-                                style: TextStyle(
-                                    color: state.listPayments[index].status! ==
-                                            'success'
-                                        ? Colors.green.shade700
-                                        : Colors.orange.shade700,
-                                    fontWeight: FontWeight.bold),
-                              ),
+                              
                             ],
                           ),
-                          // trailing:
-                          //     Icon(Icons.chevron_right, color: Colors.black87),
+                          trailing: Column(
+                              children: [
+                                Text(
+                                    state.listPayments[index].status ??
+                                        ''),
+                                state.listPayments[index].status! ==
+                                        'done' || state.listPayments[index].status! ==
+                                        'success'
+                                    ? Icon(Icons.check_circle_outline,
+                                        color: Colors.green.shade600)
+                                    : state.listPayments[index]
+                                                    .status! ==
+                                                'pending' ||
+                                            state.listPayments[index]
+                                                    .status! ==
+                                                'process'
+                                        ? Icon(Icons.timer,
+                                            color: Colors.orange.shade600)
+                                        : Icon(Icons.cancel,
+                                            color: Colors.grey.shade600),
+                              ],
+                            ),
                         );
                       } else {
                         return Center(

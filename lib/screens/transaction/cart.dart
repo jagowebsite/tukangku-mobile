@@ -9,6 +9,7 @@ import 'package:tukangku/models/transaction_model.dart';
 import 'package:tukangku/repositories/auth_repository.dart';
 import 'package:tukangku/repositories/service_repository.dart';
 import 'package:tukangku/repositories/transaction_repository.dart';
+import 'package:tukangku/screens/widgets/custom_cached_image.dart';
 import 'package:tukangku/utils/currency_format.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
 
@@ -312,16 +313,25 @@ class _CartItemState extends State<CartItem> {
         children: [
           Expanded(
             flex: 1,
-            child: Container(
+            child: widget.cartModel.serviceModel != null && widget.cartModel.serviceModel!.images != null && widget.cartModel.serviceModel!.images!.length != 0 ? Container(
               height: size.height * 0.1,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(5),
-                child: CachedNetworkImage(
-                  imageUrl: widget.cartModel.serviceModel!.images![0],
-                  fit: BoxFit.cover,
-                ),
+                // child: CachedNetworkImage(
+                //   imageUrl: widget.cartModel.serviceModel!.images![0] != '' ? widget.cartModel.serviceModel!.images![0] : 'https://picsum.photos/64',
+                //   fit: BoxFit.cover,
+                // ),
+                child: Container(
+                              width: 60,
+                              height: 60,
+                              child: ClipRRect(
+                                  child: CustomCachedImage.build(
+                                context,
+                                imgUrl: widget.cartModel.serviceModel!.images![0] != '' ? widget.cartModel.serviceModel!.images![0] : 'https://picsum.photos/64',
+                              )),
+                            ),
               ),
-            ),
+            ) : Container(),
           ),
           Expanded(
             flex: 3,
@@ -334,7 +344,7 @@ class _CartItemState extends State<CartItem> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Text(
-                      'Bebersih',
+                      widget.cartModel.description ?? '',
                       style: TextStyle(color: Colors.grey),
                     ),
                   ),

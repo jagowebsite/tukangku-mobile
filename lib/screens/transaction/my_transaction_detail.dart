@@ -6,6 +6,7 @@ import 'package:tukangku/blocs/transaction_user_bloc/transaction_user_bloc.dart'
 import 'package:tukangku/models/payment_model.dart';
 import 'package:tukangku/models/transaction_model.dart';
 import 'package:tukangku/screens/transaction/payment.dart';
+import 'package:tukangku/screens/transaction/payment_detail.dart';
 import 'package:tukangku/screens/widgets/custom_cached_image.dart';
 import 'package:tukangku/utils/currency_format.dart';
 
@@ -253,6 +254,13 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                               Container(
                                 margin: EdgeInsets.only(bottom: 10),
                                 child: ListTile(
+                                  onTap: (){
+                                    Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) {
+                                return PaymentDetail(
+                                    paymentModel: paymentModel);
+                              })).then(onGoBack);
+                                  },
                                     title: Text(paymentModel.paymentCode ?? ''),
                                     subtitle: Column(
                                       crossAxisAlignment:
