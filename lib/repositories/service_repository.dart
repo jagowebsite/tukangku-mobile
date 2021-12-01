@@ -15,13 +15,15 @@ class ServiceRepository {
     try {
       if (filterService != null) {
         q = filterService.q ?? '';
-        categoryId = filterService.categoryService != null ? filterService.categoryService!.id : null;
+        categoryId = filterService.categoryService != null
+            ? filterService.categoryService!.id
+            : null;
       }
-      
-      final response = await http
-          .get(Uri.parse(_baseUrl + '/services?q=$q&page=$page&limit=$limit&category_id=${(categoryId ?? "")}'));
 
-      // print(response.body);
+      final response = await http.get(Uri.parse(_baseUrl +
+          '/services?q=$q&page=$page&limit=$limit&category_id=${(categoryId ?? "")}'));
+
+      print(response.body);
 
       if (response.statusCode == 200) {
         Iterable iterable = json.decode(response.body)['data'];

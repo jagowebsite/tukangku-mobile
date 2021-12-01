@@ -18,6 +18,7 @@ import 'package:tukangku/screens/service/services.dart';
 import 'package:tukangku/screens/widgets/custom_cached_image.dart';
 import 'package:tukangku/screens/widgets/service_item.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -95,6 +96,10 @@ class _DashboardState extends State<Dashboard> {
     authBloc.add(GetAuthData());
     homeBloc.add(GetServiceHome(8, true));
   }
+
+  void _launchURL(_url) async => await canLaunch(_url)
+      ? await launch(_url)
+      : throw 'Could not launch $_url';
 
   @override
   void initState() {
@@ -203,13 +208,19 @@ class _DashboardState extends State<Dashboard> {
                               enlargeCenterPage: true,
                             ),
                             items: listBanner!
-                                .map((item) => Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(20)),
-                                    child: CustomCachedImage.build(context,
-                                        imgUrl: item.images ??
-                                            'https://medi-call.id/img/content/slider/Banner%20HCC%203%20Medi-Call-01.jpg')))
+                                .map((item) => GestureDetector(
+                                      onTap: () {
+                                        _launchURL(item.urlAsset);
+                                      },
+                                      child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(20)),
+                                          child: CustomCachedImage.build(
+                                              context,
+                                              imgUrl: item.images ??
+                                                  'https://medi-call.id/img/content/slider/Banner%20HCC%203%20Medi-Call-01.jpg')),
+                                    ))
                                 .toList(),
                           ),
                         )

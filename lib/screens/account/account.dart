@@ -205,8 +205,9 @@ class _AccountState extends State<Account> {
                     BlocBuilder<AuthBloc, AuthState>(
                       builder: (context, state) {
                         if (state is Authorized) {
-                          if (state.user.roleAccessModel!.name ==
-                              'superadmin') {
+                          if (state.user.roleAccessModel != null &&
+                              state.user.roleAccessModel!.name ==
+                                  'superadmin') {
                             return Column(
                               children: [
                                 Container(

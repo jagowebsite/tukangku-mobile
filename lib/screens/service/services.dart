@@ -138,69 +138,55 @@ class _ServicesState extends State<Services> {
           color: Colors.orangeAccent.shade700,
           displacement: 20,
           onRefresh: () => _refresh(),
-          child: Wrap(
-            children: [
-              categoryService != null
-                  ? Container(
-                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey)),
-                      child: Text(categoryService!.name!))
-                  : Container(),
-              BlocBuilder<ServiceBloc, ServiceState>(
-                builder: (context, state) {
-                  if (state is ServiceData) {
-                    return GridView.count(
-                      controller: _scrollController,
-                      physics: AlwaysScrollableScrollPhysics(),
-                      padding: EdgeInsets.all(10),
-                      shrinkWrap: true,
-                      childAspectRatio: 1 / 1.3,
-                      crossAxisCount: 2,
-                      children: List.generate(
-                          state.hasReachMax
-                              ? state.listServices.length
-                              : state.listServices.length % 2 == 0
-                                  ? state.listServices.length + 2
-                                  : state.listServices.length + 1, (index) {
-                        if (index < state.listServices.length) {
-                          return ServiceItem(
-                              serviceModel: state.listServices[index]);
-                        } else {
-                          return Card(
-                            elevation: 0,
-                            child: Shimmer.fromColors(
-                              baseColor: Colors.grey.shade300,
-                              highlightColor: Colors.grey.shade100,
-                              child: Container(
-                                height: 30,
-                                width: 30,
-                                decoration: BoxDecoration(
-                                    color: Colors.red,
-                                    borderRadius: BorderRadius.circular(10)),
-                              ),
-                            ),
-                          );
-                        }
-                      }),
-                    );
-                  } else {
-                    return Center(
-                      child: SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: CircularProgressIndicator(
-                            color: Colors.orangeAccent,
-                            strokeWidth: 3,
-                          )),
-                    );
-                  }
-                },
-              ),
-            ],
+          child: BlocBuilder<ServiceBloc, ServiceState>(
+            builder: (context, state) {
+              if (state is ServiceData) {
+                return GridView.count(
+                  controller: _scrollController,
+                  physics: AlwaysScrollableScrollPhysics(),
+                  padding: EdgeInsets.all(10),
+                  shrinkWrap: true,
+                  childAspectRatio: 1 / 1.3,
+                  crossAxisCount: 2,
+                  children: List.generate(
+                      state.hasReachMax
+                          ? state.listServices.length
+                          : state.listServices.length % 2 == 0
+                              ? state.listServices.length + 2
+                              : state.listServices.length + 1, (index) {
+                    if (index < state.listServices.length) {
+                      return ServiceItem(
+                          serviceModel: state.listServices[index]);
+                    } else {
+                      return Card(
+                        elevation: 0,
+                        child: Shimmer.fromColors(
+                          baseColor: Colors.grey.shade300,
+                          highlightColor: Colors.grey.shade100,
+                          child: Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                                color: Colors.red,
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
+                        ),
+                      );
+                    }
+                  }),
+                );
+              } else {
+                return Center(
+                  child: SizedBox(
+                      width: 30,
+                      height: 30,
+                      child: CircularProgressIndicator(
+                        color: Colors.orangeAccent,
+                        strokeWidth: 3,
+                      )),
+                );
+              }
+            },
           ),
         ),
       ),

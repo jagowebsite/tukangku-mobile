@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/log_bloc/log_bloc.dart';
+import 'package:tukangku/models/location_model.dart';
+import 'package:tukangku/repositories/location_repository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MasterGPSLog extends StatefulWidget {
@@ -16,6 +18,7 @@ class _MasterGPSLogState extends State<MasterGPSLog> {
   late LogBloc logBloc;
 
   ScrollController _scrollController = ScrollController();
+  LocationRepository _locationRepo = LocationRepository();
 
   /// Set default hasReachMax value false
   /// Variabel ini digunakan untuk menangani agaer scrollController tidak-
@@ -36,6 +39,14 @@ class _MasterGPSLogState extends State<MasterGPSLog> {
     await Future.delayed(Duration(seconds: 1));
     logBloc.add(GetGPSLog(10, true));
     print('Refresing...');
+  }
+
+  Future<LocationInfoModel?> getLocation(LocationModel locationModel) async {
+    LocationInfoModel? locationInfoModel =
+        await _locationRepo.getLocationDetail(locationModel);
+    if (locationInfoModel != null) {
+      return locationInfoModel;
+    }
   }
 
   void _launchURL(_url) async => await canLaunch(_url)
@@ -90,6 +101,8 @@ class _MasterGPSLogState extends State<MasterGPSLog> {
             child: BlocBuilder<LogBloc, LogState>(
               builder: (context, state) {
                 if (state is GPSLogData) {
+                  // LocationInfoModel? locInfo = getLocation(state.listGPSLogs[index].)
+
                   return ListView.separated(
                     controller: _scrollController,
                     itemCount: state.hasReachMax
