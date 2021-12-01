@@ -11,12 +11,15 @@ class ServiceRepository {
   Future<List<ServiceModel>?> getServices(
       {FilterServiceModel? filterService, int page = 1, int limit = 10}) async {
     String q = '';
+    int? categoryId;
     try {
       if (filterService != null) {
         q = filterService.q ?? '';
+        categoryId = filterService.categoryService != null ? filterService.categoryService!.id : null;
       }
+      
       final response = await http
-          .get(Uri.parse(_baseUrl + '/services?q=$q&page=$page&limit=$limit'));
+          .get(Uri.parse(_baseUrl + '/services?q=$q&page=$page&limit=$limit&category_id=${(categoryId ?? "")}'));
 
       // print(response.body);
 

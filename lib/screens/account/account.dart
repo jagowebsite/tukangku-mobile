@@ -202,242 +202,274 @@ class _AccountState extends State<Account> {
                     SizedBox(
                       height: 10,
                     ),
-                    Container(
-                      color: Colors.white,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Text(
-                              'Data Master',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          ListTile(
-                            minVerticalPadding: 0,
-                            onTap: () => Navigator.of(context)
-                                .pushNamed('/master-service'),
-                            title: Text('Data Jasa'),
-                            trailing: Icon(Icons.chevron_right),
-                          ),
-                          Divider(
-                            thickness: 0.5,
-                          ),
-                          ListTile(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed('/master-service-category'),
-                            title: Text('Data Kategori Jasa'),
-                            trailing: Icon(Icons.chevron_right),
-                          ),
-                          Divider(
-                            thickness: 0.5,
-                          ),
-                          ListTile(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed('/master-employee'),
-                            title: Text('Data Tukang'),
-                            trailing: Icon(Icons.chevron_right),
-                          ),
-                          Divider(
-                            thickness: 0.5,
-                          ),
-                          ListTile(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed('/master-banner'),
-                            title: Text('Data Banner'),
-                            trailing: Icon(Icons.chevron_right),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      color: Colors.white,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Text(
-                              'Pendaftaran Konsumen',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          ListTile(
-                            minVerticalPadding: 0,
-                            onTap: () => Navigator.of(context)
-                                .pushNamed('/master-consumen'),
-                            title: Text('Data Pendaftaran Konsumen'),
-                            trailing: Icon(Icons.chevron_right),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      color: Colors.white,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Text(
-                              'Data Management User',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          ListTile(
-                            minVerticalPadding: 0,
-                            onTap: () =>
-                                Navigator.of(context).pushNamed('/master-user'),
-                            title: Text('Data User'),
-                            trailing: Icon(Icons.chevron_right),
-                          ),
-                          Divider(
-                            thickness: 0.5,
-                          ),
-                          ListTile(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed('/master-user-log'),
-                            title: Text('User Log'),
-                            trailing: Icon(Icons.chevron_right),
-                          ),
-                          Divider(
-                            thickness: 0.5,
-                          ),
-                          ListTile(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed('/master-user-role'),
-                            title: Text('Role Akses'),
-                            trailing: Icon(Icons.chevron_right),
-                          ),
-                          Divider(
-                            thickness: 0.5,
-                          ),
-                          ListTile(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed('/master-user-permission'),
-                            title: Text('Permission'),
-                            trailing: Icon(Icons.chevron_right),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      color: Colors.white,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Text(
-                              'Pembeli / Konsumen',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          ListTile(
-                            minVerticalPadding: 0,
-                            onTap: () => Navigator.of(context)
-                                .pushNamed('/master-transaction'),
-                            title: Text('View User Pembeli'),
-                            trailing: Icon(Icons.chevron_right),
-                          ),
-                          Divider(
-                            thickness: 0.5,
-                          ),
-                          ListTile(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed('/master-payment'),
-                            title: Text('Transaksi Pembeli'),
-                            trailing: Icon(Icons.chevron_right),
-                          ),
-                          Divider(
-                            thickness: 0.5,
-                          ),
-                          ListTile(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed('/master-gps-log'),
-                            title: Text('Log GPS Pembeli'),
-                            trailing: Icon(Icons.chevron_right),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      color: Colors.white,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Text(
-                              'Laporan',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          ListTile(
-                            minVerticalPadding: 0,
-                            onTap: () => Navigator.of(context)
-                                .pushNamed('/report-service'),
-                            title: Text('Laporan Jasa'),
-                            trailing: Icon(Icons.chevron_right),
-                          ),
-                          Divider(
-                            thickness: 0.5,
-                          ),
-                          ListTile(
-                            onTap: () =>
-                                Navigator.of(context).pushNamed('/report-all'),
-                            title: Text('Laporan Seluruh Penjual'),
-                            trailing: Icon(Icons.chevron_right),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Container(
-                      color: Colors.white,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Text(
-                              'History',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          ListTile(
-                            minVerticalPadding: 0,
-                            onTap: () => Navigator.of(context)
-                                .pushNamed('/history-employee'),
-                            title: Text('History Pekerjaan Tukang'),
-                            trailing: Icon(Icons.chevron_right),
-                          ),
-                          Divider(
-                            thickness: 0.5,
-                          ),
-                          ListTile(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed('/history-consumen'),
-                            title: Text('History Orderan Konsumen'),
-                            trailing: Icon(Icons.chevron_right),
-                          ),
-                        ],
-                      ),
+                    BlocBuilder<AuthBloc, AuthState>(
+                      builder: (context, state) {
+                        if (state is Authorized) {
+                          if (state.user.roleAccessModel!.name ==
+                              'superadmin') {
+                            return Column(
+                              children: [
+                                Container(
+                                  color: Colors.white,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: Text(
+                                          'Data Master',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        minVerticalPadding: 0,
+                                        onTap: () => Navigator.of(context)
+                                            .pushNamed('/master-service'),
+                                        title: Text('Data Jasa'),
+                                        trailing: Icon(Icons.chevron_right),
+                                      ),
+                                      Divider(
+                                        thickness: 0.5,
+                                      ),
+                                      ListTile(
+                                        onTap: () => Navigator.of(context)
+                                            .pushNamed(
+                                                '/master-service-category'),
+                                        title: Text('Data Kategori Jasa'),
+                                        trailing: Icon(Icons.chevron_right),
+                                      ),
+                                      Divider(
+                                        thickness: 0.5,
+                                      ),
+                                      ListTile(
+                                        onTap: () => Navigator.of(context)
+                                            .pushNamed('/master-employee'),
+                                        title: Text('Data Tukang'),
+                                        trailing: Icon(Icons.chevron_right),
+                                      ),
+                                      Divider(
+                                        thickness: 0.5,
+                                      ),
+                                      ListTile(
+                                        onTap: () => Navigator.of(context)
+                                            .pushNamed('/master-banner'),
+                                        title: Text('Data Banner'),
+                                        trailing: Icon(Icons.chevron_right),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  color: Colors.white,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: Text(
+                                          'Pendaftaran Konsumen',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        minVerticalPadding: 0,
+                                        onTap: () => Navigator.of(context)
+                                            .pushNamed('/master-consumen'),
+                                        title:
+                                            Text('Data Pendaftaran Konsumen'),
+                                        trailing: Icon(Icons.chevron_right),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  color: Colors.white,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: Text(
+                                          'Data Management User',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        minVerticalPadding: 0,
+                                        onTap: () => Navigator.of(context)
+                                            .pushNamed('/master-user'),
+                                        title: Text('Data User'),
+                                        trailing: Icon(Icons.chevron_right),
+                                      ),
+                                      Divider(
+                                        thickness: 0.5,
+                                      ),
+                                      ListTile(
+                                        onTap: () => Navigator.of(context)
+                                            .pushNamed('/master-user-log'),
+                                        title: Text('User Log'),
+                                        trailing: Icon(Icons.chevron_right),
+                                      ),
+                                      Divider(
+                                        thickness: 0.5,
+                                      ),
+                                      ListTile(
+                                        onTap: () => Navigator.of(context)
+                                            .pushNamed('/master-user-role'),
+                                        title: Text('Role Akses'),
+                                        trailing: Icon(Icons.chevron_right),
+                                      ),
+                                      Divider(
+                                        thickness: 0.5,
+                                      ),
+                                      ListTile(
+                                        onTap: () => Navigator.of(context)
+                                            .pushNamed(
+                                                '/master-user-permission'),
+                                        title: Text('Permission'),
+                                        trailing: Icon(Icons.chevron_right),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  color: Colors.white,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: Text(
+                                          'Pembeli / Konsumen',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        minVerticalPadding: 0,
+                                        onTap: () => Navigator.of(context)
+                                            .pushNamed('/master-transaction'),
+                                        title: Text('View User Pembeli'),
+                                        trailing: Icon(Icons.chevron_right),
+                                      ),
+                                      Divider(
+                                        thickness: 0.5,
+                                      ),
+                                      ListTile(
+                                        onTap: () => Navigator.of(context)
+                                            .pushNamed('/master-payment'),
+                                        title: Text('Transaksi Pembeli'),
+                                        trailing: Icon(Icons.chevron_right),
+                                      ),
+                                      Divider(
+                                        thickness: 0.5,
+                                      ),
+                                      ListTile(
+                                        onTap: () => Navigator.of(context)
+                                            .pushNamed('/master-gps-log'),
+                                        title: Text('Log GPS Pembeli'),
+                                        trailing: Icon(Icons.chevron_right),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  color: Colors.white,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: Text(
+                                          'Laporan',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        minVerticalPadding: 0,
+                                        onTap: () => Navigator.of(context)
+                                            .pushNamed('/report-service'),
+                                        title: Text('Laporan Jasa'),
+                                        trailing: Icon(Icons.chevron_right),
+                                      ),
+                                      Divider(
+                                        thickness: 0.5,
+                                      ),
+                                      ListTile(
+                                        onTap: () => Navigator.of(context)
+                                            .pushNamed('/report-all'),
+                                        title: Text('Laporan Seluruh Penjual'),
+                                        trailing: Icon(Icons.chevron_right),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Container(
+                                  color: Colors.white,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: Text(
+                                          'History',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                      ListTile(
+                                        minVerticalPadding: 0,
+                                        onTap: () => Navigator.of(context)
+                                            .pushNamed('/history-employee'),
+                                        title: Text('History Pekerjaan Tukang'),
+                                        trailing: Icon(Icons.chevron_right),
+                                      ),
+                                      Divider(
+                                        thickness: 0.5,
+                                      ),
+                                      ListTile(
+                                        onTap: () => Navigator.of(context)
+                                            .pushNamed('/history-consumen'),
+                                        title: Text('History Orderan Konsumen'),
+                                        trailing: Icon(Icons.chevron_right),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            );
+                          } else {
+                            return Container();
+                          }
+                        } else {
+                          return Container();
+                        }
+                      },
                     ),
                     SizedBox(
                       height: 10,

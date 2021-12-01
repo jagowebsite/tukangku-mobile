@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tukangku/blocs/design_bloc/design_bloc.dart';
+import 'package:tukangku/models/category_service_model.dart';
+import 'package:tukangku/models/filter_service_model.dart';
 import 'package:tukangku/screens/widgets/service_item.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
 
@@ -15,6 +17,8 @@ class Design extends StatefulWidget {
 class _DesignState extends State<Design> {
   late DesignBloc _designBloc;
   ScrollController _scrollController = ScrollController();
+
+  TextEditingController searchController = TextEditingController();
 
   /// Set default hasReachMax value false
   /// Variabel ini digunakan untuk menangani agaer scrollController tidak-
@@ -33,6 +37,9 @@ class _DesignState extends State<Design> {
 
   Future<void> _refresh() async {
     await Future.delayed(Duration(seconds: 1));
+    searchController.text = '';
+    _designBloc.filterService =
+        FilterServiceModel(q: '', categoryService: CategoryServiceModel(id: 1));
     _designBloc.add(GetServiceDesign(10, true));
     print('Refresing...');
   }
@@ -40,6 +47,8 @@ class _DesignState extends State<Design> {
   @override
   void initState() {
     _designBloc = BlocProvider.of<DesignBloc>(context);
+    _designBloc.filterService = FilterServiceModel(
+        q: searchController.text, categoryService: CategoryServiceModel(id: 1));
     _designBloc.add(GetServiceDesign(10, true));
 
     _scrollController.addListener(onScroll);
@@ -75,39 +84,42 @@ class _DesignState extends State<Design> {
               SizedBox(
                 height: 10,
               ),
-              GestureDetector(
-                onTap: () => Navigator.of(context).pushNamed('/search'),
-                child: Container(
-                    height: 40,
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade100,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Row(children: [
-                      Expanded(
-                        child: TextField(
-                          textAlignVertical: TextAlignVertical.bottom,
-                          maxLines: 1,
-                          decoration: InputDecoration(
-                              isDense: true,
-                              enabled: false,
-                              contentPadding:
-                                  EdgeInsets.only(top: 6, bottom: 11),
-                              hintText:
-                                  'Cari desain yang kamu butuhkan sekarang',
-                              hintStyle: TextStyle(
-                                  color: Colors.grey.shade400, fontSize: 14),
-                              border: OutlineInputBorder(
-                                borderSide: BorderSide.none,
-                              ),
-                              prefixIcon: Icon(
-                                Icons.search,
-                                size: 25,
-                                color: Colors.grey,
-                              )),
-                        ),
+              Container(
+                  height: 40,
+                  decoration: BoxDecoration(
+                      color: Colors.grey.shade100,
+                      borderRadius: BorderRadius.circular(10)),
+                  child: Row(children: [
+                    Expanded(
+                      child: TextField(
+                        controller: searchController,
+                        textInputAction: TextInputAction.search,
+                        onSubmitted: (value) {
+                          _designBloc.filterService = FilterServiceModel(
+                              q: value,
+                              categoryService: CategoryServiceModel(id: 1));
+
+                          _designBloc.add(GetServiceDesign(10, true));
+                        },
+                        textAlignVertical: TextAlignVertical.bottom,
+                        maxLines: 1,
+                        decoration: InputDecoration(
+                            isDense: true,
+                            contentPadding: EdgeInsets.only(top: 6, bottom: 11),
+                            hintText: 'Cari desain yang kamu butuhkan sekarang',
+                            hintStyle: TextStyle(
+                                color: Colors.grey.shade400, fontSize: 14),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.search,
+                              size: 25,
+                              color: Colors.grey,
+                            )),
                       ),
-                    ])),
-              ),
+                    ),
+                  ])),
             ],
           ),
           automaticallyImplyLeading: false,
@@ -160,7 +172,13 @@ class _DesignState extends State<Design> {
                     }),
                   );
                 } else {
-                  return Container();
+                  return Center(
+                    child: SizedBox(
+                      width: 30, 
+                      height: 30,
+                      child: CircularProgressIndicator(color: Colors.orangeAccent,)
+                    ),
+                  );
                 }
               },
             ),

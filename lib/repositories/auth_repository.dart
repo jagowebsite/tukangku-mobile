@@ -47,6 +47,8 @@ class AuthRepository {
         'password': registerModel.password,
         'password_confirmation': registerModel.confirmPassword
       });
+      print(response.body);
+      print(response.statusCode);
 
       // Error handling
       if (response.statusCode == 200) {
@@ -134,7 +136,7 @@ class AuthRepository {
         'email': email,
       });
 
-      // print(response.body);
+      print(response.body);
 
       // Error handling
       if (response.statusCode == 200) {
@@ -144,6 +146,7 @@ class AuthRepository {
         throw Exception('Koneksi dengan server bermasalah');
       }
     } catch (e) {
+      print(e.toString());
       throw Exception('Koneksi dengan server bermasalah');
     }
   }

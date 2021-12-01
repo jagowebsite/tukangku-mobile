@@ -11,8 +11,10 @@ import 'package:tukangku/blocs/home_bloc/home_bloc.dart';
 import 'package:tukangku/hive/cart/cart_hive.dart';
 import 'package:tukangku/models/banner_model.dart';
 import 'package:tukangku/models/category_service_model.dart';
+import 'package:tukangku/models/filter_service_model.dart';
 import 'package:tukangku/repositories/banner_repository.dart';
 import 'package:tukangku/repositories/category_service_repository.dart';
+import 'package:tukangku/screens/service/services.dart';
 import 'package:tukangku/screens/widgets/custom_cached_image.dart';
 import 'package:tukangku/screens/widgets/service_item.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
@@ -275,30 +277,43 @@ class _DashboardState extends State<Dashboard> {
                               scrollDirection: Axis.horizontal,
                               itemCount: listCategoryService!.length,
                               itemBuilder: (context, index) {
-                                return Container(
-                                  margin: EdgeInsets.only(right: 15),
-                                  width: 60,
-                                  child: Column(
-                                    children: [
-                                      ClipOval(
-                                        child: Container(
-                                          height: 40,
-                                          child: CachedNetworkImage(
-                                            imageUrl:
-                                                listCategoryService![index]
-                                                    .images!,
-                                            fit: BoxFit.cover,
+                                return GestureDetector(
+                                  onTap: () {
+                                    FilterServiceModel filterServiceModel =
+                                        FilterServiceModel(
+                                            categoryService:
+                                                listCategoryService![index]);
+                                    Navigator.push(context,
+                                        MaterialPageRoute(builder: (context) {
+                                      return Services(
+                                          filterService: filterServiceModel);
+                                    }));
+                                  },
+                                  child: Container(
+                                    margin: EdgeInsets.only(right: 15),
+                                    width: 60,
+                                    child: Column(
+                                      children: [
+                                        ClipOval(
+                                          child: Container(
+                                            height: 40,
+                                            child: CachedNetworkImage(
+                                              imageUrl:
+                                                  listCategoryService![index]
+                                                      .images!,
+                                              fit: BoxFit.cover,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        listCategoryService![index].name!,
-                                        overflow: TextOverflow.ellipsis,
-                                      )
-                                    ],
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                          listCategoryService![index].name!,
+                                          overflow: TextOverflow.ellipsis,
+                                        )
+                                      ],
+                                    ),
                                   ),
                                 );
                               }),

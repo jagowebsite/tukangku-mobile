@@ -13,25 +13,29 @@ class BottomSheetModal {
     return showModalBottomSheet<void>(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          height: height ?? 100,
-          color: color ?? Colors.white,
-          padding: padding ?? EdgeInsets.all(10),
-          child: Column(
-              crossAxisAlignment:
-                  crossAxisAlignment ?? CrossAxisAlignment.center,
-              mainAxisAlignment: mainAxisAlignment ?? MainAxisAlignment.center,
-              mainAxisSize: mainAxisSize ?? MainAxisSize.min,
-              children: children ?? []
-              // children: <Widget>[
-              //   const Text('Modal BottomSheet'),
-              //   ElevatedButton(
-              //     child: const Text('Close BottomSheet'),
-              //     onPressed: () => Navigator.pop(context),
-              //   )
-              // ],
-              ),
-        );
+        return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+          return Container(
+            height: height ?? 100,
+            color: color ?? Colors.white,
+            padding: padding ?? EdgeInsets.all(10),
+            child: Column(
+                crossAxisAlignment:
+                    crossAxisAlignment ?? CrossAxisAlignment.center,
+                mainAxisAlignment:
+                    mainAxisAlignment ?? MainAxisAlignment.center,
+                mainAxisSize: mainAxisSize ?? MainAxisSize.min,
+                children: children ?? []
+                // children: <Widget>[
+                //   const Text('Modal BottomSheet'),
+                //   ElevatedButton(
+                //     child: const Text('Close BottomSheet'),
+                //     onPressed: () => Navigator.pop(context),
+                //   )
+                // ],
+                ),
+          );
+        });
       },
     );
   }

@@ -21,7 +21,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   TextEditingController usernameController = TextEditingController();
 
   Future resendVerifyEmail() async {
-    EasyLoading.show(status: 'loading...');
+    EasyLoading.show(status: 'loading...', dismissOnTap: true);
     ResponseModel? responseModel =
         await _authRepo.resendVerifyEmail(usernameController.text);
     EasyLoading.dismiss();

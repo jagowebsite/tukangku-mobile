@@ -9,6 +9,9 @@ import 'package:tukangku/screens/transaction/payment.dart';
 import 'package:tukangku/screens/transaction/payment_detail.dart';
 import 'package:tukangku/screens/widgets/custom_cached_image.dart';
 import 'package:tukangku/utils/currency_format.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MyTransactionDetail extends StatefulWidget {
   final TransactionModel transactionModel;
@@ -21,6 +24,7 @@ class MyTransactionDetail extends StatefulWidget {
 
 class _MyTransactionDetailState extends State<MyTransactionDetail> {
   late TransactionUserBloc transactionUserBloc;
+  String baseUrl = dotenv.env['API_URL'].toString();
 
   Future<void> _refresh() async {
     await Future.delayed(Duration(seconds: 1));
@@ -36,6 +40,10 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
     transactionUserBloc
         .add(GetTransactionDetailUser(widget.transactionModel.id!));
   }
+
+  void _launchURL(_url) async => await canLaunch(_url)
+      ? await launch(_url)
+      : throw 'Could not launch $_url';
 
   @override
   void initState() {
@@ -105,7 +113,8 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                               ListTile(
                                 title: Text(
                                     '${transactionDetail.serviceModel!.categoryService!.name} - ${transactionDetail.serviceModel!.name}'),
-                                subtitle: Text(transactionDetail.description!),
+                                subtitle: Text(transactionDetail.description ??
+                                    '(Tanpa keterangan)'),
                               ),
                           ],
                         ),
@@ -208,19 +217,15 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                                 )
                               ],
                             ),
-                            state.transactionModel.statusOrder == 'success'
-                                ? Center(
-                                    child: TextButton(
-                                      style: TextButton.styleFrom(
-                                          backgroundColor:
-                                              Colors.grey.shade600),
-                                      onPressed: () {},
-                                      child: Text('Cetak Invoice',
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                    ),
-                                  )
-                                : Container(),
+                            Center(
+                              child: TextButton(
+                                style: TextButton.styleFrom(
+                                    backgroundColor: Colors.grey.shade600),
+                                onPressed: () => _launchURL('$baseUrl/transaction/get-invoice/${state.transactionModel.id}'),
+                                child: Text('Cetak Invoice',
+                                    style: TextStyle(color: Colors.white)),
+                              ),
+                            )
                           ],
                         ),
                       ),
@@ -254,13 +259,13 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                               Container(
                                 margin: EdgeInsets.only(bottom: 10),
                                 child: ListTile(
-                                  onTap: (){
-                                    Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) {
-                                return PaymentDetail(
-                                    paymentModel: paymentModel);
-                              })).then(onGoBack);
-                                  },
+                                    onTap: () {
+                                      Navigator.push(context,
+                                          MaterialPageRoute(builder: (context) {
+                                        return PaymentDetail(
+                                            paymentModel: paymentModel);
+                                      })).then(onGoBack);
+                                    },
                                     title: Text(paymentModel.paymentCode ?? ''),
                                     subtitle: Column(
                                       crossAxisAlignment:

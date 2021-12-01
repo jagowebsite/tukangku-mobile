@@ -344,7 +344,7 @@ class _CartItemState extends State<CartItem> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Text(
-                      widget.cartModel.description ?? '',
+                      widget.cartModel.description != null && widget.cartModel.description != '' ? widget.cartModel.description! : '(Tanpa keterangan)',
                       style: TextStyle(color: Colors.grey),
                     ),
                   ),

@@ -18,7 +18,7 @@ class _NavbarState extends State<Navbar> {
 
   static const List<Widget> _widgetOptions = <Widget>[
     Dashboard(),
-    Chat(),
+    // Chat(),
     Design(),
     Account(),
   ];
@@ -66,10 +66,10 @@ class _NavbarState extends State<Navbar> {
               icon: Icon(Icons.home),
               label: 'Home',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.chat),
-              label: 'Chat',
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.chat),
+            //   label: 'Chat',
+            // ),
             BottomNavigationBarItem(
               icon: Icon(Icons.grid_view),
               label: 'Desain',

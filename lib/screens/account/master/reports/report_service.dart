@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/report_bloc/report_bloc.dart';
 import 'package:tukangku/screens/widgets/custom_cached_image.dart';
 import 'package:tukangku/utils/currency_format.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class ReportService extends StatefulWidget {
   const ReportService({Key? key}) : super(key: key);
@@ -16,6 +18,7 @@ class ReportService extends StatefulWidget {
 class _ReportServiceState extends State<ReportService> {
   late ReportBloc reportBloc;
   ScrollController _scrollController = ScrollController();
+  String baseUrl = dotenv.env['API_URL'].toString();
 
   /// Set default hasReachMax value false
   /// Variabel ini digunakan untuk menangani agaer scrollController tidak-
@@ -81,8 +84,13 @@ class _ReportServiceState extends State<ReportService> {
       });
   }
 
+  void _launchURL(_url) async => await canLaunch(_url)
+      ? await launch(_url)
+      : throw 'Could not launch $_url';
+
   Future downloadExcel() async {
     print('Downloading report...');
+    _launchURL('$baseUrl/report/export/service?start_date=${fromDateController.text}&end_date=${toDateController.text}');
   }
 
   @override

@@ -99,6 +99,7 @@ class _SearchState extends State<Search> {
                             onTap: () {
                               FilterServiceModel filterServiceModel =
                                   FilterServiceModel(
+                                    q: searchController.text,
                                       categoryService:
                                           listCategoryService![index]);
                               Navigator.push(context,

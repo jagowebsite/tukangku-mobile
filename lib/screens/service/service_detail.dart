@@ -21,6 +21,7 @@ class ServiceDetail extends StatefulWidget {
 
 class _ServiceDetailState extends State<ServiceDetail> {
   final CarouselController _controller = CarouselController();
+  TextEditingController descriptionController = TextEditingController();
   late Box cartBox;
   int totalService = 0;
 
@@ -35,9 +36,9 @@ class _ServiceDetailState extends State<ServiceDetail> {
       CartHive cartHive = cartBox.getAt(i);
       if (cartHive.serviceId == id) {
         isNew = false;
-        print('iam update');
+        
         CartHive updateCartHive = CartHive()
-          ..description = cartHive.description
+          ..description = descriptionController.text
           ..quantity = (cartHive.quantity + 1)
           ..serviceId = cartHive.serviceId;
         cartBox.put(cartBox.keyAt(i), updateCartHive);
@@ -47,7 +48,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
     if (isNew) {
       CartHive cartHive = CartHive()
         ..quantity = 1
-        ..description = 'Percobaan bos'
+        ..description = descriptionController.text
         ..serviceId = id;
       cartBox.add(cartHive);
     }
@@ -59,70 +60,70 @@ class _ServiceDetailState extends State<ServiceDetail> {
   Future addToCart(int id) async {
     BottomSheetModal.show(context,
         padding: EdgeInsets.all(10),
-        height: 300,
+        height: 200,
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Silahkan masukkan jumlah layanan yang ingin dipesan'),
+              // Text('Silahkan masukkan jumlah layanan yang ingin dipesan'),
               SizedBox(
                 height: 10,
               ),
-              Row(
-                children: [
-                  Expanded(child: Text('Jumlah Layanan')),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    children: [
-                      GestureDetector(
-                        onTap: (){
-                          if(totalService > 0){
-                            totalService = totalService - 1;
-                            setState(() {
+              // Row(
+              //   children: [
+              //     Expanded(child: Text('Jumlah Layanan')),
+              //     SizedBox(
+              //       height: 10,
+              //     ),
+              //     Row(
+              //       children: [
+              //         GestureDetector(
+              //           onTap: (){
+              //             if(totalService > 0){
+              //               totalService = totalService - 1;
+              //               setState(() {
                               
-                            });
-                          }
-                        },
-                        child: Container(
-                          width: 30,
-                          height: 30,
-                          padding: EdgeInsets.all(5),
-                          color: Colors.grey.shade200,
-                          child: Center(child: Text('-')),
-                        ),
-                      ),
-                      Container(
-                        width: 50,
-                        height: 30,
-                        padding: EdgeInsets.all(5),
-                        color: Colors.grey.shade100,
-                        child: Center(child: Text(totalService.toString())),
-                      ),
-                      GestureDetector(
-                        onTap: (){
-                          totalService = totalService + 1;
-                          setState(() {
+              //               });
+              //             }
+              //           },
+              //           child: Container(
+              //             width: 30,
+              //             height: 30,
+              //             padding: EdgeInsets.all(5),
+              //             color: Colors.grey.shade200,
+              //             child: Center(child: Text('-')),
+              //           ),
+              //         ),
+              //         Container(
+              //           width: 50,
+              //           height: 30,
+              //           padding: EdgeInsets.all(5),
+              //           color: Colors.grey.shade100,
+              //           child: Center(child: Text(totalService.toString())),
+              //         ),
+              //         GestureDetector(
+              //           onTap: (){
+              //             totalService = totalService + 1;
+              //             setState(() {
                             
-                          });
-                        },
-                        child: Container(
-                          width: 30,
-                          height: 30,
-                          padding: EdgeInsets.all(5),
-                          color: Colors.grey.shade200,
-                          child: Center(child: Text('+')),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
+              //             });
+              //           },
+              //           child: Container(
+              //             width: 30,
+              //             height: 30,
+              //             padding: EdgeInsets.all(5),
+              //             color: Colors.grey.shade200,
+              //             child: Center(child: Text('+')),
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ],
+              // ),
+              // SizedBox(
+              //   height: 10,
+              // ),
               Text('Deskripsi (opsional)'),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 10),
@@ -130,7 +131,8 @@ class _ServiceDetailState extends State<ServiceDetail> {
                     borderRadius: BorderRadius.circular(10),
                     color: Colors.grey.shade100),
                 child: TextField(
-                  // controller: descriptionController,
+                  controller: descriptionController,
+                  textInputAction: TextInputAction.done,
                   minLines: 3,
                   maxLines: 10,
                   decoration: InputDecoration(
@@ -145,7 +147,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(primary: Colors.white),
                     child: const Text(
-                      'Close',
+                      'Batal',
                       style: TextStyle(color: Colors.black87),
                     ),
                     onPressed: () => Navigator.pop(context),
@@ -154,7 +156,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         primary: Colors.orangeAccent.shade700),
-                    child: const Text('Konfirmasi',
+                    child: const Text('Tambah ke Keranjang',
                         style: TextStyle(color: Colors.white)),
                     onPressed: () {
                       addData(id);

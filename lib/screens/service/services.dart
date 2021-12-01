@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:tukangku/blocs/service_bloc/service_bloc.dart';
+import 'package:tukangku/models/category_service_model.dart';
 import 'package:tukangku/models/filter_service_model.dart';
 import 'package:tukangku/screens/widgets/service_item.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
@@ -18,6 +19,7 @@ class _ServicesState extends State<Services> {
   TextEditingController searchController = TextEditingController();
   late ServiceBloc serviceBloc;
   ScrollController _scrollController = ScrollController();
+  CategoryServiceModel? categoryService;
 
   /// Set default hasReachMax value false
   /// Variabel ini digunakan untuk menangani agaer scrollController tidak-
@@ -39,13 +41,20 @@ class _ServicesState extends State<Services> {
     searchController.text = '';
     serviceBloc.filterService = null;
     serviceBloc.add(GetService(10, true));
+
+    setState(() {
+      categoryService = null;
+    });
     print('Refresing...');
   }
 
   @override
   void initState() {
+    categoryService = widget.filterService.categoryService;
     serviceBloc = BlocProvider.of<ServiceBloc>(context);
-    serviceBloc.filterService = FilterServiceModel(q: widget.filterService.q);
+    serviceBloc.filterService = FilterServiceModel(
+        q: widget.filterService.q,
+        categoryService: widget.filterService.categoryService);
     serviceBloc.add(GetService(10, true));
 
     searchController.text = widget.filterService.q ?? '';
@@ -87,8 +96,11 @@ class _ServicesState extends State<Services> {
                     textAlignVertical: TextAlignVertical.bottom,
                     maxLines: 1,
                     textInputAction: TextInputAction.search,
-                    onSubmitted: (value) =>
-                        Navigator.of(context).pushNamed('/services'),
+                    onSubmitted: (value) {
+                      serviceBloc.filterService =
+                          FilterServiceModel(q: searchController.text);
+                      serviceBloc.add(GetService(10, true));
+                    },
                     decoration: InputDecoration(
                         isDense: true,
                         contentPadding:
@@ -107,18 +119,18 @@ class _ServicesState extends State<Services> {
                   ),
                 ),
               ])),
-          actions: [
-            IconButton(
-              constraints: BoxConstraints(),
-              padding: EdgeInsets.zero,
-              onPressed: () => Navigator.of(context).pushNamed('/filter'),
-              color: Colors.black87,
-              icon: Icon(Icons.filter_alt),
-            ),
-            SizedBox(
-              width: 5,
-            )
-          ],
+          // actions: [
+          //   IconButton(
+          //     constraints: BoxConstraints(),
+          //     padding: EdgeInsets.zero,
+          //     onPressed: () => Navigator.of(context).pushNamed('/filter'),
+          //     color: Colors.black87,
+          //     icon: Icon(Icons.filter_alt),
+          //   ),
+          //   SizedBox(
+          //     width: 5,
+          //   )
+          // ],
         ),
         backgroundColor: Colors.white,
         body: RefreshIndicator(
@@ -126,47 +138,69 @@ class _ServicesState extends State<Services> {
           color: Colors.orangeAccent.shade700,
           displacement: 20,
           onRefresh: () => _refresh(),
-          child: BlocBuilder<ServiceBloc, ServiceState>(
-            builder: (context, state) {
-              if (state is ServiceData) {
-                return GridView.count(
-                  controller: _scrollController,
-                  physics: AlwaysScrollableScrollPhysics(),
-                  padding: EdgeInsets.all(10),
-                  shrinkWrap: true,
-                  childAspectRatio: 1 / 1.3,
-                  crossAxisCount: 2,
-                  children: List.generate(
-                      state.hasReachMax
-                          ? state.listServices.length
-                          : state.listServices.length % 2 == 0
-                              ? state.listServices.length + 2
-                              : state.listServices.length + 1, (index) {
-                    if (index < state.listServices.length) {
-                      return ServiceItem(
-                          serviceModel: state.listServices[index]);
-                    } else {
-                      return Card(
-                        elevation: 0,
-                        child: Shimmer.fromColors(
-                          baseColor: Colors.grey.shade300,
-                          highlightColor: Colors.grey.shade100,
-                          child: Container(
-                            height: 30,
-                            width: 30,
-                            decoration: BoxDecoration(
-                                color: Colors.red,
-                                borderRadius: BorderRadius.circular(10)),
-                          ),
-                        ),
-                      );
-                    }
-                  }),
-                );
-              } else {
-                return Container();
-              }
-            },
+          child: Wrap(
+            children: [
+              categoryService != null
+                  ? Container(
+                      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey)),
+                      child: Text(categoryService!.name!))
+                  : Container(),
+              BlocBuilder<ServiceBloc, ServiceState>(
+                builder: (context, state) {
+                  if (state is ServiceData) {
+                    return GridView.count(
+                      controller: _scrollController,
+                      physics: AlwaysScrollableScrollPhysics(),
+                      padding: EdgeInsets.all(10),
+                      shrinkWrap: true,
+                      childAspectRatio: 1 / 1.3,
+                      crossAxisCount: 2,
+                      children: List.generate(
+                          state.hasReachMax
+                              ? state.listServices.length
+                              : state.listServices.length % 2 == 0
+                                  ? state.listServices.length + 2
+                                  : state.listServices.length + 1, (index) {
+                        if (index < state.listServices.length) {
+                          return ServiceItem(
+                              serviceModel: state.listServices[index]);
+                        } else {
+                          return Card(
+                            elevation: 0,
+                            child: Shimmer.fromColors(
+                              baseColor: Colors.grey.shade300,
+                              highlightColor: Colors.grey.shade100,
+                              child: Container(
+                                height: 30,
+                                width: 30,
+                                decoration: BoxDecoration(
+                                    color: Colors.red,
+                                    borderRadius: BorderRadius.circular(10)),
+                              ),
+                            ),
+                          );
+                        }
+                      }),
+                    );
+                  } else {
+                    return Center(
+                      child: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: CircularProgressIndicator(
+                            color: Colors.orangeAccent,
+                            strokeWidth: 3,
+                          )),
+                    );
+                  }
+                },
+              ),
+            ],
           ),
         ),
       ),
