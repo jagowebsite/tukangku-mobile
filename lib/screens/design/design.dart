@@ -31,6 +31,9 @@ class _DesignState extends State<Design> {
 
     if (currentScroll == maxScroll && !_hasReachMax) {
       print('iam scrolling');
+
+      _designBloc.filterService = FilterServiceModel(
+          q: '', categoryService: CategoryServiceModel(id: 7));
       _designBloc.add(GetServiceDesign(10, false));
     }
   }
@@ -39,7 +42,7 @@ class _DesignState extends State<Design> {
     await Future.delayed(Duration(seconds: 1));
     searchController.text = '';
     _designBloc.filterService =
-        FilterServiceModel(q: '', categoryService: CategoryServiceModel(id: 1));
+        FilterServiceModel(q: '', categoryService: CategoryServiceModel(id: 7));
     _designBloc.add(GetServiceDesign(10, true));
     print('Refresing...');
   }
@@ -48,7 +51,7 @@ class _DesignState extends State<Design> {
   void initState() {
     _designBloc = BlocProvider.of<DesignBloc>(context);
     _designBloc.filterService = FilterServiceModel(
-        q: searchController.text, categoryService: CategoryServiceModel(id: 1));
+        q: searchController.text, categoryService: CategoryServiceModel(id: 7));
     _designBloc.add(GetServiceDesign(10, true));
 
     _scrollController.addListener(onScroll);
@@ -174,10 +177,11 @@ class _DesignState extends State<Design> {
                 } else {
                   return Center(
                     child: SizedBox(
-                      width: 30, 
-                      height: 30,
-                      child: CircularProgressIndicator(color: Colors.orangeAccent,)
-                    ),
+                        width: 30,
+                        height: 30,
+                        child: CircularProgressIndicator(
+                          color: Colors.orangeAccent,
+                        )),
                   );
                 }
               },

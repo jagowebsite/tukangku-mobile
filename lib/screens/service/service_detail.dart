@@ -8,6 +8,7 @@ import 'package:readmore/readmore.dart';
 import 'package:tukangku/hive/cart/cart_hive.dart';
 import 'package:tukangku/models/service_model.dart';
 import 'package:tukangku/screens/widgets/bottom_sheet_modal.dart';
+import 'package:tukangku/screens/widgets/image_viewer.dart';
 import 'package:tukangku/utils/currency_format.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
 
@@ -36,7 +37,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
       CartHive cartHive = cartBox.getAt(i);
       if (cartHive.serviceId == id) {
         isNew = false;
-        
+
         CartHive updateCartHive = CartHive()
           ..description = descriptionController.text
           ..quantity = (cartHive.quantity + 1)
@@ -83,7 +84,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
               //             if(totalService > 0){
               //               totalService = totalService - 1;
               //               setState(() {
-                              
+
               //               });
               //             }
               //           },
@@ -106,7 +107,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
               //           onTap: (){
               //             totalService = totalService + 1;
               //             setState(() {
-                            
+
               //             });
               //           },
               //           child: Container(
@@ -140,7 +141,9 @@ class _ServiceDetailState extends State<ServiceDetail> {
                       hintText: 'Masukkan deskripsi tambahan disini...'),
                 ),
               ),
-              SizedBox(height: 15,),
+              SizedBox(
+                height: 15,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -318,43 +321,54 @@ class _ServiceDetailState extends State<ServiceDetail> {
                           // enlargeCenterPage: true,
                           ),
                       items: (widget.serviceModel.images ?? [])
-                          .map((item) => Container(
-                                width: size.width,
-                                child: CachedNetworkImage(
-                                  imageUrl: item,
-                                  fit: BoxFit.cover,
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        image: imageProvider,
-                                        fit: BoxFit.cover,
+                          .map((item) => GestureDetector(
+                                onTap: () {
+                                  Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) {
+                                    return ImageViewer(
+                                      imageURL: item,
+                                    );
+                                  }));
+                                },
+                                child: Container(
+                                  width: size.width,
+                                  child: CachedNetworkImage(
+                                    imageUrl: item,
+                                    fit: BoxFit.cover,
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: imageProvider,
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  placeholder: (context, url) =>
-                                      Shimmer.fromColors(
-                                          baseColor: Colors.grey.shade300,
+                                    placeholder: (context, url) =>
+                                        Shimmer.fromColors(
+                                            baseColor: Colors.grey.shade300,
+                                            highlightColor:
+                                                Colors.grey.shade100,
+                                            child: Container(
+                                                decoration: BoxDecoration(
+                                                    color: Colors.grey.shade100,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10)),
+                                                width: double.infinity,
+                                                height: double.infinity,
+                                                child: Icon(Icons.image,
+                                                    size: 100))),
+                                    errorWidget: (context, url, error) =>
+                                        Container(
+                                      color: Colors.grey.shade100,
+                                      width: double.infinity,
+                                      height: double.infinity,
+                                      child: Shimmer.fromColors(
+                                          baseColor: Colors.grey.shade200,
                                           highlightColor: Colors.grey.shade100,
-                                          child: Container(
-                                              decoration: BoxDecoration(
-                                                  color: Colors.grey.shade100,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              width: double.infinity,
-                                              height: double.infinity,
-                                              child: Icon(Icons.image,
-                                                  size: 100))),
-                                  errorWidget: (context, url, error) =>
-                                      Container(
-                                    color: Colors.grey.shade100,
-                                    width: double.infinity,
-                                    height: double.infinity,
-                                    child: Shimmer.fromColors(
-                                        baseColor: Colors.grey.shade200,
-                                        highlightColor: Colors.grey.shade100,
-                                        child: Icon(Icons.error)),
+                                          child: Icon(Icons.error)),
+                                    ),
                                   ),
                                 ),
                               ))

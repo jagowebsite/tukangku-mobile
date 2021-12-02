@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
@@ -13,9 +15,9 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   TextEditingController usernameController =
-      TextEditingController(text: 'admin@tukangku.co.id');
+      TextEditingController();
   TextEditingController passwordController =
-      TextEditingController(text: 'admin');
+      TextEditingController();
 
   late AuthBloc authBloc;
 
@@ -96,7 +98,7 @@ class _LoginState extends State<Login> {
 
   Widget _createAccountLabel() {
     return InkWell(
-      onTap: () => Navigator.of(context).pushNamed('/register'),
+      onTap: () => Navigator.of(context).pushNamed('/register').then(onGoBack),
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 10),
         padding: EdgeInsets.all(15),
@@ -187,6 +189,13 @@ class _LoginState extends State<Login> {
                 filled: true)),
       ],
     );
+  }
+
+  /// Merefresh data ketika kembali ke page ini (current page)
+  /// Mencegah perbedaan state dalam satu bloc
+  FutureOr onGoBack(dynamic value) {
+    print('iam on goback...');
+    authBloc.add(GetAuthData());
   }
 
   @override

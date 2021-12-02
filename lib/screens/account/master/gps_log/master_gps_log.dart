@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/log_bloc/log_bloc.dart';
 import 'package:tukangku/models/location_model.dart';
+import 'package:tukangku/models/log_model.dart';
 import 'package:tukangku/repositories/location_repository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -41,12 +42,24 @@ class _MasterGPSLogState extends State<MasterGPSLog> {
     print('Refresing...');
   }
 
-  Future<LocationInfoModel?> getLocation(LocationModel locationModel) async {
-    LocationInfoModel? locationInfoModel =
-        await _locationRepo.getLocationDetail(locationModel);
-    if (locationInfoModel != null) {
-      return locationInfoModel;
+  List<LocationInfoModel?> listGpsData = [];
+
+  Future<LocationInfoModel?> getLocation(
+      List<GPSLogModel> listGPSLogModel) async {
+    listGpsData = [];
+    for (var i = 0; i < listGPSLogModel.length; i++) {
+      LocationModel locationModel = LocationModel(
+          latitude: double.parse(listGPSLogModel[i].latitude!),
+          longitude: double.parse(listGPSLogModel[i].longitude!));
+      LocationInfoModel? locationInfoModel =
+          await _locationRepo.getLocationDetail(locationModel);
+      if (locationInfoModel != null) {
+        listGpsData.add(locationInfoModel);
+      } else {
+        listGpsData.add(null);
+      }
     }
+    setState(() {});
   }
 
   void _launchURL(_url) async => await canLaunch(_url)
@@ -75,6 +88,7 @@ class _MasterGPSLogState extends State<MasterGPSLog> {
       listener: (context, state) {
         if (state is GPSLogData) {
           _hasReachMax = state.hasReachMax;
+          getLocation(state.listGPSLogs);
         }
       },
       child: Scaffold(
@@ -128,6 +142,9 @@ class _MasterGPSLogState extends State<MasterGPSLog> {
                               Text(state.listGPSLogs[index].latitude ?? ''),
                               Text(
                                 state.listGPSLogs[index].longitude ?? '',
+                              ),
+                              Text(
+                                listGpsData.length != 0 && listGpsData[index] != null ? listGpsData[index]!.displayName! : '',
                               ),
                               Text(
                                 'Invoice : ' +
