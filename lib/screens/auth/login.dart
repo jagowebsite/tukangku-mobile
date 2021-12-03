@@ -223,7 +223,7 @@ class _LoginState extends State<Login> {
             return VerifyEmailScreen(
               loginModel: state.loginModel,
             );
-          }));
+          })).then(onGoBack);
         } else if (state is LoginSuccess || state is Authorized) {
           // Navigator.of(context).popAndPushNamed('/navbar');
           Navigator.pushAndRemoveUntil<void>(

@@ -106,7 +106,7 @@ class _PaymentState extends State<Payment> {
   Future pickImageUser() async {
     final ImagePicker _picker = ImagePicker();
     // Pick an image
-    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera, preferredCameraDevice: CameraDevice.front);
     if (image != null) {
       imageUserFile = File(image.path);
       setState(() {});

@@ -294,7 +294,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   child: Container(
                                     padding: EdgeInsets.symmetric(vertical: 8),
                                     child: Text(
-                                      'Sign up',
+                                      'Register',
                                       style: TextStyle(
                                           color: Colors.orangeAccent.shade700),
                                     ),
@@ -312,7 +312,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               Container(
                                 margin: EdgeInsets.symmetric(horizontal: 15),
                                 child: Text(
-                                  'By using our mobile app, you agree with our Terms of Use and Privacy Policy',
+                                  'By Tukangkita',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: Colors.black87, fontSize: 12),

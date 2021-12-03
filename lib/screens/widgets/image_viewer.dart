@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tukangku/screens/widgets/custom_cached_image.dart';
+import 'package:photo_view/photo_view.dart';
+// import 'package:tukangku/screens/widgets/custom_cached_image.dart';
 
 class ImageViewer extends StatefulWidget {
   final String imageURL;
@@ -19,13 +20,17 @@ class _ImageViewerState extends State<ImageViewer> {
         Container(
           width: size.width,
           height: size.height,
-          child: ClipRRect(
-              child: CustomCachedImage.build(
-            context,
-            imgUrl: widget.imageURL != ''
-                ? widget.imageURL
-                : 'https://picsum.photos/64',
-          )),
+          color: Colors.black,
+          // child: ClipRRect(
+          //     child: CustomCachedImage.build(
+          //   context,
+          //   imgUrl: widget.imageURL != ''
+          //       ? widget.imageURL
+          //       : 'https://picsum.photos/64',
+          // )),
+          child: PhotoView(
+            imageProvider: NetworkImage(widget.imageURL),
+          ),
         ),
         Positioned(
           child: Align(

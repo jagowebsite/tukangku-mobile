@@ -206,7 +206,7 @@ class _MasterCategoryServiceEditState extends State<MasterCategoryServiceEdit> {
                             onTap: () => pickImage(),
                             child: Container(
                                 width: size.width,
-                                height: 50,
+                                height: 100,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
