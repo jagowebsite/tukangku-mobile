@@ -1,6 +1,7 @@
 import 'dart:io';
 
 // import 'package:camera/camera.dart';
+// import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -12,6 +13,8 @@ import 'package:tukangku/models/location_model.dart';
 import 'package:tukangku/models/payment_model.dart';
 import 'package:tukangku/models/transaction_model.dart';
 import 'package:tukangku/screens/others/map_coordinate.dart';
+// import 'package:tukangku/screens/widgets/camera_screen2.dart';
+// import 'package:tukangku/screens/widgets/camera_screen.dart';
 import 'package:tukangku/utils/currency_format.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
 // import 'package:tukangku/screens/widgets/camera_screen.dart';
@@ -72,14 +75,17 @@ class _PaymentState extends State<Payment> {
         // Android's shouldShowRequestPermissionRationale
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
+        // return Future.error('Location permissions are denied');
+        Navigator.pop(context);
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      // return Future.error(
+      //     'Location permissions are permanently denied, we cannot request permissions.');
+
+      Navigator.pop(context);
     }
 
     // When we reach here, permissions are granted and we can
@@ -106,7 +112,8 @@ class _PaymentState extends State<Payment> {
   Future pickImageUser() async {
     final ImagePicker _picker = ImagePicker();
     // Pick an image
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera, preferredCameraDevice: CameraDevice.front);
+    final XFile? image = await _picker.pickImage(
+        source: ImageSource.camera, preferredCameraDevice: CameraDevice.front);
     if (image != null) {
       imageUserFile = File(image.path);
       setState(() {});
@@ -488,6 +495,11 @@ class _PaymentState extends State<Payment> {
                                   //                 cameras: value,
                                   //               )));
                                   // });
+
+                                  // Navigator.push(context,
+                                  //     MaterialPageRoute(builder: (context) {
+                                  //   return CameraScreen2();
+                                  // }));
 
                                   setState(() {});
                                 },

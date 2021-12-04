@@ -40,7 +40,7 @@
 //   @override
 //   void initState() {
 //     cameraController =
-//         CameraController(widget.cameras[1], ResolutionPreset.medium);
+//         CameraController(widget.cameras[0], ResolutionPreset.medium);
 //     initializeCamera();
 //     super.initState();
 //   }
@@ -54,6 +54,7 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     Size size = MediaQuery.of(context).size;
+//     // return Scaffold();
 //     return FutureBuilder(
 //         future: initializeCamera(),
 //         builder: (_, snapshot) =>
@@ -89,12 +90,14 @@
 //                       ),
 //                     ],
 //                   )
-//                 : Container(
-//                     width: 25,
-//                     height: 25,
-//                     child: CircularProgressIndicator(
-//                       color: Colors.orangeAccent.shade700,
-//                       strokeWidth: 3,
-//                     )));
+//                 : Center(
+//                   child: Container(
+//                       width: 25,
+//                       height: 25,
+//                       child: CircularProgressIndicator(
+//                         color: Colors.orangeAccent.shade700,
+//                         strokeWidth: 3,
+//                       )),
+//                 ));
 //   }
 // }
