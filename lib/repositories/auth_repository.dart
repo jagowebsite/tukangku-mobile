@@ -117,6 +117,8 @@ class AuthRepository {
           Uri.parse(_baseUrl + '/auth/reset-password'),
           body: {'email': email});
 
+      print(response.body);
+
       // Error handling
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);

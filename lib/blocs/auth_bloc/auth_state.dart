@@ -88,7 +88,16 @@ class VerifyEmail extends AuthState {
   final LoginModel loginModel;
 
   VerifyEmail(this.loginModel);
+}
 
-  @override
-  List<Object> get props => [loginModel];
+class ForgotPasswordLoading extends AuthState {}
+
+class ForgotPasswordSuccess extends AuthState {
+  final String message;
+  ForgotPasswordSuccess(this.message);
+}
+
+class ForgotPasswordError extends AuthState {
+  final String message;
+  ForgotPasswordError(this.message);
 }

@@ -39,7 +39,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(VerifyEmail(event.loginModel));
         }
       } else {
-        emit(LoginError('Login Error'));
+        emit(LoginError('Login Error, silahkan periksa kembali koneksi internet anda'));
       }
     } catch (e) {
       emit(LoginError(e.toString()));
@@ -61,10 +61,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       } else {
         print('Register failed');
-        emit(RegisterError('Register Error'));
+        emit(RegisterError('Register Error, silahkan periksa koneksi internet anda'));
       }
     } catch (e) {
-      emit(RegisterError('Register Error'));
+      emit(RegisterError('Register Error, silahkan periksa koneksi internet anda'));
     }
   }
 
@@ -104,13 +104,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               ? emit(LogoutSuccess(responseModel.message!))
               : emit(LogoutError(responseModel.message!));
         } else {
-          LogoutError('Terjadi kesalahan, silahkan coba kembali.');
+          LogoutError('Terjadi kesalahan koneksi, silahkan coba kembali.');
         }
       } else {
-        LogoutError('Terjadi kesalahan, silahkan coba kembali.');
+        LogoutError('Terjadi kesalahan koneksi, silahkan coba kembali.');
       }
     } catch (e) {
       print(e.toString());
+      LogoutError('Terjadi kesalahan koneksi, silahkan coba kembali.');
     }
   }
 }

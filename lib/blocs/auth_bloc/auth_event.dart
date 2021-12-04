@@ -26,6 +26,15 @@ class RegisterProcess extends AuthEvent {
   List<Object> get props => [registerModel];
 }
 
+// class ForgotPassword extends AuthEvent {
+//   final String email;
+
+//   ForgotPassword(this.email);
+
+//   @override
+//   List<Object> get props => [email];
+// }
+
 class GetAuthData extends AuthEvent {}
 
 class Logout extends AuthEvent {}

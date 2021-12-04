@@ -14,10 +14,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController usernameController =
-      TextEditingController();
-  TextEditingController passwordController =
-      TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   late AuthBloc authBloc;
 
@@ -115,6 +113,37 @@ class _LoginState extends State<Login> {
             ),
             Text(
               'Register',
+              style: TextStyle(
+                  color: Color(0xfff79c4f),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _forgotPasswordLabel() {
+    return InkWell(
+      onTap: () =>
+          Navigator.of(context).pushNamed('/forgot-password').then(onGoBack),
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 10),
+        padding: EdgeInsets.all(15),
+        alignment: Alignment.bottomCenter,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Forgot password?',
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+            ),
+            SizedBox(
+              width: 10,
+            ),
+            Text(
+              'Click here',
               style: TextStyle(
                   color: Color(0xfff79c4f),
                   fontSize: 14,
@@ -254,32 +283,40 @@ class _LoginState extends State<Login> {
             children: [
               Container(
                 height: height,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        // SizedBox(height: height * .2),
-                        _title(),
-                        Text('Proffesional Homecare'),
-                        SizedBox(
-                          height: 20,
+                child: Stack(
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 20),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            _title(),
+                            Text('Proffesional Homecare'),
+                            SizedBox(
+                              height: 20,
+                            ),
+                            _emailPasswordWidget(),
+                            SizedBox(
+                              height: 25,
+                            ),
+                            _submitButton(),
+                            SizedBox(
+                              height: 30,
+                            ),
+                            _divider(),
+                            _createAccountLabel(),
+                          ],
                         ),
-                        _emailPasswordWidget(),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        _submitButton(),
-                        SizedBox(
-                          height: 30,
-                        ),
-                        _divider(),
-                        _createAccountLabel(),
-                      ],
+                      ),
                     ),
-                  ),
+                    Positioned(
+                        child: Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Container(
+                                height: 70, child: _forgotPasswordLabel())))
+                  ],
                 ),
               ),
               BlocBuilder<AuthBloc, AuthState>(

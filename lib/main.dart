@@ -49,15 +49,14 @@ import 'package:tukangku/screens/account/master/user_role/roles/master_user_role
 import 'package:tukangku/screens/account/master/user_role/roles/master_user_role_create.dart';
 import 'package:tukangku/screens/account/profile/update_password.dart';
 import 'package:tukangku/screens/account/profile/update_profile.dart';
+import 'package:tukangku/screens/auth/forgot_password.dart';
 import 'package:tukangku/screens/auth/login.dart';
 import 'package:tukangku/screens/auth/register.dart';
 import 'package:tukangku/screens/navbar.dart';
 import 'package:tukangku/screens/others/filter.dart';
-import 'package:tukangku/screens/others/map_coordinate.dart';
 import 'package:tukangku/screens/others/search.dart';
 import 'package:tukangku/screens/transaction/cart.dart';
 import 'package:tukangku/screens/transaction/my_transaction.dart';
-import 'package:tukangku/screens/transaction/payment.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:tukangku/screens/widgets/image_cropper.dart';
 
@@ -148,6 +147,7 @@ class MyApp extends StatelessWidget {
           '/': (context) => MyHomePage(),
           '/login': (context) => Login(),
           '/register': (context) => Register(),
+          '/forgot-password': (context) => ForgotPassword(),
           '/navbar': (context) => Navbar(),
           '/search': (context) => Search(),
           '/filter': (context) => Filter(),
