@@ -193,7 +193,7 @@ class _AccountState extends State<Account> {
                           ListTile(
                             onTap: () => Navigator.of(context)
                                 .pushNamed('/my-transaction'),
-                            title: Text('Semua Transaksi'),
+                            title: Text('Semua Transaksiku'),
                             trailing: Icon(Icons.chevron_right),
                           ),
                         ],

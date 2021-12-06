@@ -89,12 +89,22 @@ class _UpdateProfilState extends State<UpdateProfil> {
   }
 
   Future updateProfile() async {
-    User user = User(
-        name: nameController.text,
-        dateOfBirth: dateBirthController.text,
-        number: telpController.text,
-        address: addressController.text);
-    profileBloc.add(UpdateProfile(user));
+    if (nameController.text == '' ||
+        dateBirthController.text == '' ||
+        telpController.text == '' ||
+        addressController.text == '') {
+      CustomSnackbar.showSnackbar(
+          context,
+          'Input data profil tidak boleh ada yang kosong',
+          SnackbarType.warning);
+    } else {
+      User user = User(
+          name: nameController.text,
+          dateOfBirth: dateBirthController.text,
+          number: telpController.text,
+          address: addressController.text);
+      profileBloc.add(UpdateProfile(user));
+    }
   }
 
   @override

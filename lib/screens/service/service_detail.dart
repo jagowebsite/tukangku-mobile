@@ -55,7 +55,11 @@ class _ServiceDetailState extends State<ServiceDetail> {
     }
 
     CustomSnackbar.showSnackbar(
-        context, 'Berhasil ditambahkan ke keranjang', SnackbarType.success);
+        context, 'Berhasil ditambahkan ke keranjang', SnackbarType.success,
+        snackBarAction: SnackBarAction(
+            textColor: Colors.white,
+            label: 'Lihat Keranjang',
+            onPressed: () => Navigator.of(context).pushNamed('/cart')));
   }
 
   Future addToCart(int id) async {

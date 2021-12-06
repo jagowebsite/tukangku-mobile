@@ -39,14 +39,14 @@ dependencies:
   cool_alert: ^1.1.0
   flutter_easyloading: ^3.0.3
   image_crop: ^0.4.0
-  image_picker:
+  image_picker: 0.8.4+4
   path_provider:
   flutter_exif_rotation: ^0.4.1
   url_launcher:
   flutter_native_splash:
   hive: ^2.0.4
   hive_flutter: ^1.1.0
-  # camera: ^0.9.4+5
+  camera: ^0.9.4+5
   # camera_camera: ^2.0.2
 
   # The following adds the Cupertino Icons font to your application.

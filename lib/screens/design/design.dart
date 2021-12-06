@@ -180,6 +180,7 @@ class _DesignState extends State<Design> {
                         width: 30,
                         height: 30,
                         child: CircularProgressIndicator(
+                          strokeWidth: 3,
                           color: Colors.orangeAccent,
                         )),
                   );

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
 import 'package:tukangku/screens/account/account.dart';
-import 'package:tukangku/screens/chat/chat.dart';
 import 'package:tukangku/screens/design/design.dart';
 import 'package:tukangku/screens/home/dashboard.dart';
 
@@ -14,24 +13,34 @@ class Navbar extends StatefulWidget {
 }
 
 class _NavbarState extends State<Navbar> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 1;
 
-  static const List<Widget> _widgetOptions = <Widget>[
-    Dashboard(),
-    // Chat(),
-    Design(),
-    Account(),
-  ];
+  late PageController _pageController;
+
+  // static const List<Widget> _widgetOptions = <Widget>[
+  //   Dashboard(),
+  //   Design(),
+  //   Account(),
+  // ];
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      _pageController.animateToPage(index,
+          duration: Duration(milliseconds: 300), curve: Curves.ease);
     });
   }
 
   @override
   void initState() {
+    _pageController = PageController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -50,8 +59,21 @@ class _NavbarState extends State<Navbar> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Center(
-          child: _widgetOptions.elementAt(_selectedIndex),
+        // body: Center(
+        //   child: _widgetOptions.elementAt(_selectedIndex),
+        // ),
+        body: SizedBox.expand(
+          child: PageView(
+            controller: _pageController,
+            onPageChanged: (index) {
+              setState(() => _selectedIndex = index);
+            },
+            children: <Widget>[
+              Dashboard(),
+              Design(),
+              Account(),
+            ],
+          ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
@@ -66,10 +88,6 @@ class _NavbarState extends State<Navbar> {
               icon: Icon(Icons.home),
               label: 'Home',
             ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.chat),
-            //   label: 'Chat',
-            // ),
             BottomNavigationBarItem(
               icon: Icon(Icons.grid_view),
               label: 'Desain',

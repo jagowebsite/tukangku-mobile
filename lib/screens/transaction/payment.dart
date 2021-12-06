@@ -2,6 +2,7 @@ import 'dart:io';
 
 // import 'package:camera/camera.dart';
 // import 'package:camera/camera.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -13,6 +14,7 @@ import 'package:tukangku/models/location_model.dart';
 import 'package:tukangku/models/payment_model.dart';
 import 'package:tukangku/models/transaction_model.dart';
 import 'package:tukangku/screens/others/map_coordinate.dart';
+import 'package:tukangku/screens/widgets/camera_screen.dart';
 // import 'package:tukangku/screens/widgets/camera_screen2.dart';
 // import 'package:tukangku/screens/widgets/camera_screen.dart';
 import 'package:tukangku/utils/currency_format.dart';
@@ -66,9 +68,9 @@ class _PaymentState extends State<Payment> {
       return Future.error('Location services are disabled.');
     }
 
-    permission = await Geolocator.checkPermission();
+    permission = await Geolocator.requestPermission();
     if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
+      permission = await Geolocator.checkPermission();
       if (permission == LocationPermission.denied) {
         // Permissions are denied, next time you could try
         // requesting permissions again (this is also where
@@ -76,6 +78,10 @@ class _PaymentState extends State<Payment> {
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
         // return Future.error('Location permissions are denied');
+        CustomSnackbar.showSnackbar(
+            context,
+            'Silahkan nyalakan lokasi anda sebelum melakukan pembayaran',
+            SnackbarType.warning);
         Navigator.pop(context);
       }
     }
@@ -84,7 +90,10 @@ class _PaymentState extends State<Payment> {
       // Permissions are denied forever, handle appropriately.
       // return Future.error(
       //     'Location permissions are permanently denied, we cannot request permissions.');
-
+      CustomSnackbar.showSnackbar(
+          context,
+          'Silahkan nyalakan lokasi anda sebelum melakukan pembayaran',
+          SnackbarType.warning);
       Navigator.pop(context);
     }
 
@@ -486,15 +495,15 @@ class _PaymentState extends State<Payment> {
                               ),
                               GestureDetector(
                                 onTap: () async {
-                                  await pickImageUser();
-                                  // await availableCameras().then((value) async {
-                                  //   imageUserFile = await Navigator.push<File>(
-                                  //       context,
-                                  //       MaterialPageRoute(
-                                  //           builder: (_) => CameraScreen(
-                                  //                 cameras: value,
-                                  //               )));
-                                  // });
+                                  // await pickImageUser();
+                                  await availableCameras().then((value) async {
+                                    imageUserFile = await Navigator.push<File>(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) => CameraScreen(
+                                                  cameras: value,
+                                                )));
+                                  });
 
                                   // Navigator.push(context,
                                   //     MaterialPageRoute(builder: (context) {

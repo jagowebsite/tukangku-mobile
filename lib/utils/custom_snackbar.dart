@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 enum SnackbarType { success, warning, error }
 
 class CustomSnackbar {
-  static showSnackbar(BuildContext context, String message, SnackbarType type) {
+  static showSnackbar(BuildContext context, String message, SnackbarType type,
+      {SnackBarAction? snackBarAction}) {
     final snackBar = SnackBar(
+      action: snackBarAction,
       backgroundColor: type == SnackbarType.success
           ? Colors.green.shade600
           : type == SnackbarType.warning

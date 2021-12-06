@@ -244,7 +244,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           child: Container(
                             margin: EdgeInsets.symmetric(horizontal: 15),
                             child: Text(
-                              'Selamat Datang di Tukangkita',
+                              'Selamat Datang di Tukangku',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   fontSize: 23,
@@ -312,7 +312,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               Container(
                                 margin: EdgeInsets.symmetric(horizontal: 15),
                                 child: Text(
-                                  'By Tukangkita',
+                                  'By Tukangku',
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       color: Colors.black87, fontSize: 12),

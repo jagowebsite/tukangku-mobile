@@ -86,6 +86,7 @@ class _CartState extends State<Cart> {
           cartModels = [];
           CustomSnackbar.showSnackbar(
               context, response.message!, SnackbarType.success);
+          Navigator.of(context).pushNamed('/my-transaction');
         } else {
           CustomSnackbar.showSnackbar(
               context, response.message!, SnackbarType.error);
@@ -313,25 +314,32 @@ class _CartItemState extends State<CartItem> {
         children: [
           Expanded(
             flex: 1,
-            child: widget.cartModel.serviceModel != null && widget.cartModel.serviceModel!.images != null && widget.cartModel.serviceModel!.images!.length != 0 ? Container(
-              height: size.height * 0.1,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(5),
-                // child: CachedNetworkImage(
-                //   imageUrl: widget.cartModel.serviceModel!.images![0] != '' ? widget.cartModel.serviceModel!.images![0] : 'https://picsum.photos/64',
-                //   fit: BoxFit.cover,
-                // ),
-                child: Container(
-                              width: 60,
-                              height: 60,
-                              child: ClipRRect(
-                                  child: CustomCachedImage.build(
-                                context,
-                                imgUrl: widget.cartModel.serviceModel!.images![0] != '' ? widget.cartModel.serviceModel!.images![0] : 'https://picsum.photos/64',
-                              )),
-                            ),
-              ),
-            ) : Container(),
+            child: widget.cartModel.serviceModel != null &&
+                    widget.cartModel.serviceModel!.images != null &&
+                    widget.cartModel.serviceModel!.images!.length != 0
+                ? Container(
+                    height: size.height * 0.1,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      // child: CachedNetworkImage(
+                      //   imageUrl: widget.cartModel.serviceModel!.images![0] != '' ? widget.cartModel.serviceModel!.images![0] : 'https://picsum.photos/64',
+                      //   fit: BoxFit.cover,
+                      // ),
+                      child: Container(
+                        width: 60,
+                        height: 60,
+                        child: ClipRRect(
+                            child: CustomCachedImage.build(
+                          context,
+                          imgUrl:
+                              widget.cartModel.serviceModel!.images![0] != ''
+                                  ? widget.cartModel.serviceModel!.images![0]
+                                  : 'https://picsum.photos/64',
+                        )),
+                      ),
+                    ),
+                  )
+                : Container(),
           ),
           Expanded(
             flex: 3,
@@ -344,7 +352,10 @@ class _CartItemState extends State<CartItem> {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Text(
-                      widget.cartModel.description != null && widget.cartModel.description != '' ? widget.cartModel.description! : '(Tanpa keterangan)',
+                      widget.cartModel.description != null &&
+                              widget.cartModel.description != ''
+                          ? widget.cartModel.description!
+                          : '(Tanpa keterangan)',
                       style: TextStyle(color: Colors.grey),
                     ),
                   ),

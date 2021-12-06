@@ -14,8 +14,10 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController usernameController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController usernameController =
+      TextEditingController(text: 'harmokobaf@gmail.com');
+  TextEditingController passwordController =
+      TextEditingController(text: 'admin');
 
   late AuthBloc authBloc;
 
@@ -98,8 +100,8 @@ class _LoginState extends State<Login> {
     return InkWell(
       onTap: () => Navigator.of(context).pushNamed('/register').then(onGoBack),
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
-        padding: EdgeInsets.all(15),
+        // margin: EdgeInsets.symmetric(vertical: 10),
+        padding: EdgeInsets.all(5),
         alignment: Alignment.bottomCenter,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -129,8 +131,8 @@ class _LoginState extends State<Login> {
       onTap: () =>
           Navigator.of(context).pushNamed('/forgot-password').then(onGoBack),
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 10),
-        padding: EdgeInsets.all(15),
+        // margin: EdgeInsets.symmetric(vertical: 10),
+        padding: EdgeInsets.all(5),
         alignment: Alignment.bottomCenter,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -171,7 +173,7 @@ class _LoginState extends State<Login> {
               style: TextStyle(color: Color(0xffe46b10), fontSize: 30),
             ),
             TextSpan(
-              text: 'kita',
+              text: 'ku',
               style: TextStyle(color: Colors.black, fontSize: 30),
             ),
           ]),
@@ -244,6 +246,7 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     final height = MediaQuery.of(context).size.height;
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
@@ -292,6 +295,10 @@ class _LoginState extends State<Login> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
+                            Container(
+                                height: size.width * 0.3,
+                                child: Image.asset(
+                                    'assets/logo/tukangku_logo.png')),
                             _title(),
                             Text('Proffesional Homecare'),
                             SizedBox(
@@ -306,16 +313,20 @@ class _LoginState extends State<Login> {
                               height: 30,
                             ),
                             _divider(),
+                            SizedBox(
+                              height: 10,
+                            ),
                             _createAccountLabel(),
+                            _forgotPasswordLabel()
                           ],
                         ),
                       ),
                     ),
-                    Positioned(
-                        child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: Container(
-                                height: 70, child: _forgotPasswordLabel())))
+                    // Positioned(
+                    //     child: Align(
+                    //         alignment: Alignment.bottomCenter,
+                    //         child: Container(
+                    //             height: 70, child: _forgotPasswordLabel())))
                   ],
                 ),
               ),
