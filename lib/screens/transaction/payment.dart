@@ -16,10 +16,8 @@ import 'package:tukangku/models/transaction_model.dart';
 import 'package:tukangku/screens/others/map_coordinate.dart';
 import 'package:tukangku/screens/widgets/camera_screen.dart';
 // import 'package:tukangku/screens/widgets/camera_screen2.dart';
-// import 'package:tukangku/screens/widgets/camera_screen.dart';
 import 'package:tukangku/utils/currency_format.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
-// import 'package:tukangku/screens/widgets/camera_screen.dart';
 
 // Jenis pembayaran (dp | lunas)
 enum PaymentFlow { dp, paid }

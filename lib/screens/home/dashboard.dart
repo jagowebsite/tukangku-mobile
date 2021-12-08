@@ -69,7 +69,7 @@ class _DashboardState extends State<Dashboard> {
 
     if (currentScroll == maxScroll && !_hasReachMax) {
       print('iam scrolling');
-      homeBloc.add(GetServiceHome(2, false));
+      homeBloc.add(GetServiceHome(8, false));
     }
   }
 
@@ -94,7 +94,7 @@ class _DashboardState extends State<Dashboard> {
     getBanner();
     getCategoryService();
     authBloc.add(GetAuthData());
-    homeBloc.add(GetServiceHome(2, true));
+    homeBloc.add(GetServiceHome(8, true));
   }
 
   void _launchURL(_url) async => await canLaunch(_url)

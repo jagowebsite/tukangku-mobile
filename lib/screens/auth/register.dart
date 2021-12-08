@@ -237,7 +237,7 @@ class _RegisterState extends State<Register> {
                                   Color(0xfff7892b)
                                 ])),
                         child: Text(
-                          'Sign Up',
+                          'Register',
                           style: TextStyle(fontSize: 20, color: Colors.white),
                         ),
                       ),

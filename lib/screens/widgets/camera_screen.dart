@@ -45,59 +45,116 @@ class _CameraScreenState extends State<CameraScreen> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    cameraController.dispose();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   cameraController.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     // return Scaffold();
-    return FutureBuilder(
-        future: initializeCamera(),
-        builder: (_, snapshot) =>
-            (snapshot.connectionState == ConnectionState.done)
-                ? Stack(
-                    children: [
-                      SizedBox(
-                        width: size.width,
-                        height: size.height,
-                        child: CameraPreview(cameraController),
-                      ),
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            shape: CircleBorder(), primary: Colors.red),
-                        child: Container(
-                          width: 70,
-                          height: 70,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(shape: BoxShape.circle),
-                          child: Text(
-                            'I',
-                            style: TextStyle(fontSize: 24),
-                          ),
-                        ),
-                        onPressed: () async {
-                          if (!cameraController.value.isTakingPicture) {
-                            File? result = await takePicture();
-                            if (result != null) {
-                              Navigator.pop(context, result);
-                            }
-                          }
-                        },
-                      ),
-                    ],
-                  )
-                : Center(
-                    child: Container(
-                        width: 25,
-                        height: 25,
-                        child: CircularProgressIndicator(
-                          color: Colors.orangeAccent.shade700,
-                          strokeWidth: 3,
-                        )),
-                  ));
+    if (!cameraController.value.isInitialized) {
+      return Center(
+        child: Container(
+            width: 25,
+            height: 25,
+            child: CircularProgressIndicator(
+              color: Colors.orangeAccent.shade700,
+              strokeWidth: 3,
+            )),
+      );
+    } else {
+      return Scaffold(
+        body: Stack(
+          children: [
+            // SizedBox(
+            //   width: size.width,
+            //   height: size.height,
+            //   child: CameraPreview(cameraController),
+            // ),
+            CameraPreview(cameraController),
+            Positioned(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: CircleBorder(), primary: Colors.red),
+                  child: Container(
+                    width: 70,
+                    height: 70,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(shape: BoxShape.circle),
+                    child: Text(
+                      'I',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  ),
+                  onPressed: () async {
+                    if (!cameraController.value.isTakingPicture) {
+                      File? result = await takePicture();
+                      if (result != null) {
+                        Navigator.pop(context, result);
+                      }
+                    }
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // return FutureBuilder(
+    //     future: initializeCamera(),
+    //     builder: (_, snapshot) =>
+    //         (snapshot.connectionState == ConnectionState.done)
+    //             ? Stack(
+    //                 children: [
+    //                   SizedBox(
+    //                     width: size.width,
+    //                     height: size.height,
+    //                     child: CameraPreview(cameraController),
+    //                   ),
+    //                   Positioned(
+    //                     child: Align(
+    //                       alignment: Alignment.bottomCenter,
+    //                       child: ElevatedButton(
+    //                         style: ElevatedButton.styleFrom(
+    //                             shape: CircleBorder(), primary: Colors.red),
+    //                         child: Container(
+    //                           width: 70,
+    //                           height: 70,
+    //                           alignment: Alignment.center,
+    //                           decoration: BoxDecoration(shape: BoxShape.circle),
+    //                           child: Text(
+    //                             'I',
+    //                             style: TextStyle(fontSize: 24),
+    //                           ),
+    //                         ),
+    //                         onPressed: () async {
+    //                           if (!cameraController.value.isTakingPicture) {
+    //                             File? result = await takePicture();
+    //                             if (result != null) {
+    //                               Navigator.pop(context, result);
+    //                             }
+    //                           }
+    //                         },
+    //                       ),
+    //                     ),
+    //                   ),
+    //                 ],
+    //               )
+    //             : Center(
+    //                 child: Container(
+    //                     width: 25,
+    //                     height: 25,
+    //                     child: CircularProgressIndicator(
+    //                       color: Colors.orangeAccent.shade700,
+    //                       strokeWidth: 3,
+    //                     )),
+    //               ));
   }
 }

@@ -13,7 +13,7 @@ class Navbar extends StatefulWidget {
 }
 
 class _NavbarState extends State<Navbar> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
 
   late PageController _pageController;
 
