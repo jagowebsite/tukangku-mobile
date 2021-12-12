@@ -1,8 +1,6 @@
 import 'dart:io';
 
 // import 'package:camera/camera.dart';
-// import 'package:camera/camera.dart';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -14,7 +12,7 @@ import 'package:tukangku/models/location_model.dart';
 import 'package:tukangku/models/payment_model.dart';
 import 'package:tukangku/models/transaction_model.dart';
 import 'package:tukangku/screens/others/map_coordinate.dart';
-import 'package:tukangku/screens/widgets/camera_screen.dart';
+// import 'package:tukangku/screens/widgets/camera_screen.dart';
 // import 'package:tukangku/screens/widgets/camera_screen2.dart';
 import 'package:tukangku/utils/currency_format.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
@@ -493,15 +491,15 @@ class _PaymentState extends State<Payment> {
                               ),
                               GestureDetector(
                                 onTap: () async {
-                                  // await pickImageUser();
-                                  await availableCameras().then((value) async {
-                                    imageUserFile = await Navigator.push<File>(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (_) => CameraScreen(
-                                                  cameras: value,
-                                                )));
-                                  });
+                                  await pickImageUser();
+                                  // await availableCameras().then((value) async {
+                                  //   imageUserFile = await Navigator.push<File>(
+                                  //       context,
+                                  //       MaterialPageRoute(
+                                  //           builder: (_) => CameraScreen(
+                                  //                 cameras: value,
+                                  //               )));
+                                  // });
 
                                   // Navigator.push(context,
                                   //     MaterialPageRoute(builder: (context) {

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
 import 'package:tukangku/models/register_model.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:tukangku/screens/auth/login.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
 
 class Register extends StatefulWidget {
@@ -65,6 +66,11 @@ class _RegisterState extends State<Register> {
             context: context,
             type: CoolAlertType.success,
             text: state.message,
+          );
+          Navigator.pushAndRemoveUntil<void>(
+            context,
+            MaterialPageRoute<void>(builder: (BuildContext context) => Login()),
+            ModalRoute.withName('/login'),
           );
         } else if (state is RegisterError) {
           CoolAlert.show(

@@ -46,7 +46,7 @@ dependencies:
   flutter_native_splash:
   hive: ^2.0.4
   hive_flutter: ^1.1.0
-  camera: ^0.9.4+5
+  # camera: ^0.9.4+5
   # camera_camera: ^2.0.2
 
   # The following adds the Cupertino Icons font to your application.

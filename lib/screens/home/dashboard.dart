@@ -172,10 +172,22 @@ class _DashboardState extends State<Dashboard> {
                     top: 0,
                     right: 0,
                     child: cartBox.length != 0
-                        ? Icon(
-                            Icons.circle,
-                            color: Colors.orangeAccent.shade700,
-                            size: 15,
+                        // ? Icon(
+                        //     Icons.circle,
+                        //     color: Colors.orangeAccent.shade700,
+                        //     size: 15,
+                        //   )
+                        ? Container(
+                            width: 16,
+                            height: 16,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.orangeAccent.shade700),
+                            child: Center(
+                              child: Text(cartBox.length.toString(),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 12)),
+                            ),
                           )
                         : Container(),
                   ),

@@ -221,7 +221,8 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                               child: TextButton(
                                 style: TextButton.styleFrom(
                                     backgroundColor: Colors.grey.shade600),
-                                onPressed: () => _launchURL('$baseUrl/transaction/get-invoice/${state.transactionModel.id}'),
+                                onPressed: () => _launchURL(
+                                    '$baseUrl/transaction/get-invoice/${state.transactionModel.id}'),
                                 child: Text('Cetak Invoice',
                                     style: TextStyle(color: Colors.white)),
                               ),
@@ -321,22 +322,27 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                                     )),
                               ),
                             Divider(),
-                            Center(
-                              child: TextButton(
-                                style: TextButton.styleFrom(
-                                    backgroundColor: Colors.grey.shade600),
-                                onPressed: () {
-                                  Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) {
-                                    return Payment(
-                                        transactionModel:
-                                            state.transactionModel);
-                                  })).then(onGoBack);
-                                },
-                                child: Text('Tambah Pembayaran',
-                                    style: TextStyle(color: Colors.white)),
-                              ),
-                            ),
+                            state.transactionModel.statusOrder == 'done'
+                                ? Center(
+                                    child: TextButton(
+                                      style: TextButton.styleFrom(
+                                          backgroundColor:
+                                              Colors.grey.shade600),
+                                      onPressed: () {
+                                        Navigator.push(context,
+                                            MaterialPageRoute(
+                                                builder: (context) {
+                                          return Payment(
+                                              transactionModel:
+                                                  state.transactionModel);
+                                        })).then(onGoBack);
+                                      },
+                                      child: Text('Tambah Pembayaran',
+                                          style:
+                                              TextStyle(color: Colors.white)),
+                                    ),
+                                  )
+                                : Container(),
                           ],
                         ),
                       ),
