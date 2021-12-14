@@ -1,3 +1,4 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
@@ -58,50 +59,90 @@ class _NavbarState extends State<Navbar> {
         }
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
-        // body: Center(
-        //   child: _widgetOptions.elementAt(_selectedIndex),
-        // ),
-        body: SizedBox.expand(
-          child: PageView(
-            controller: _pageController,
-            onPageChanged: (index) {
-              setState(() => _selectedIndex = index);
-            },
-            children: <Widget>[
-              Dashboard(),
-              Design(),
-              Account(),
-            ],
-          ),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
-          unselectedItemColor: Colors.black26,
-          selectedFontSize: 12,
-          iconSize: 27,
-          showSelectedLabels: true,
-          showUnselectedLabels: true,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.grid_view),
-              label: 'Desain',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_box_rounded),
-              label: 'Profil',
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.orangeAccent.shade700,
-          onTap: _onItemTapped,
-        ),
-      ),
+          // body: SizedBox.expand(
+          //   child: PageView(
+          //     controller: _pageController,
+          //     onPageChanged: (index) {
+          //       setState(() => _selectedIndex = index);
+          //     },
+          //     children: <Widget>[
+          //       Dashboard(),
+          //       Design(),
+          //       Account(),
+          //     ],
+          //   ),
+          // ),
+          // bottomNavigationBar: BottomNavigationBar(
+          //   type: BottomNavigationBarType.fixed,
+          //   backgroundColor: Colors.white,
+          //   unselectedItemColor: Colors.black26,
+          //   selectedFontSize: 12,
+          //   iconSize: 27,
+          //   showSelectedLabels: true,
+          //   showUnselectedLabels: true,
+          //   items: const <BottomNavigationBarItem>[
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.home),
+          //       label: 'Home',
+          //     ),
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.grid_view),
+          //       label: 'Desain',
+          //     ),
+          //     BottomNavigationBarItem(
+          //       icon: Icon(Icons.account_box_rounded),
+          //       label: 'Profil',
+          //     ),
+          //   ],
+          //   currentIndex: _selectedIndex,
+          //   selectedItemColor: Colors.orangeAccent.shade700,
+          //   onTap: _onItemTapped,
+          // ),
+
+          body: Stack(
+            children: [
+              SizedBox.expand(
+                child: PageView(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    setState(() => _selectedIndex = index);
+                  },
+                  children: <Widget>[
+                    Dashboard(),
+                    Design(),
+                    Account(),
+                  ],
+                ),
+              ),
+              Positioned(
+                  child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  decoration: BoxDecoration(boxShadow: [
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        spreadRadius: 1,
+                        offset: Offset(0, 5))
+                  ]),
+                  child: CurvedNavigationBar(
+                    index: _selectedIndex,
+                    backgroundColor: Colors.transparent,
+                    items: <Widget>[
+                      Icon(Icons.home, size: 30),
+                      Icon(Icons.grid_view, size: 30),
+                      Icon(Icons.account_box_rounded, size: 30),
+                    ],
+                    onTap: (index) {
+                      _onItemTapped(index);
+                    },
+                  ),
+                ),
+              ))
+            ],
+          )),
     );
   }
 }

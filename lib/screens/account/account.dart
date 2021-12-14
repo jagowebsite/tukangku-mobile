@@ -182,7 +182,23 @@ class _AccountState extends State<Account> {
                             ),
                           ),
                           ListTile(
-                            title: Text('Keranjang'),
+                            title: Row(
+                              children: [
+                                Text('Keranjang'),
+                                SizedBox(
+                                  width: 3,
+                                ),
+                                Container(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 5),
+                                    decoration: BoxDecoration(
+                                        color: Colors.orangeAccent.shade700,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Text('12',
+                                        style: TextStyle(color: Colors.white))),
+                              ],
+                            ),
                             onTap: () =>
                                 Navigator.of(context).pushNamed('/cart'),
                             trailing: Icon(Icons.chevron_right),
@@ -193,7 +209,23 @@ class _AccountState extends State<Account> {
                           ListTile(
                             onTap: () => Navigator.of(context)
                                 .pushNamed('/my-transaction'),
-                            title: Text('Semua Transaksiku'),
+                            title: Row(
+                              children: [
+                                Text('Semua Transaksiku'),
+                                SizedBox(
+                                  width: 3,
+                                ),
+                                Container(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 5),
+                                    decoration: BoxDecoration(
+                                        color: Colors.orangeAccent.shade700,
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    child: Text('15',
+                                        style: TextStyle(color: Colors.white))),
+                              ],
+                            ),
                             trailing: Icon(Icons.chevron_right),
                           ),
                         ],
@@ -509,7 +541,10 @@ class _AccountState extends State<Account> {
                         'Version 1.0.0',
                         style: TextStyle(color: Colors.grey),
                       ),
-                    )
+                    ),
+                    SizedBox(
+                      height: 80,
+                    ),
                   ],
                 ),
               ),

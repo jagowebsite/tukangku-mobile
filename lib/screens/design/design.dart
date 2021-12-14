@@ -25,6 +25,8 @@ class _DesignState extends State<Design> {
   /// Berlangsung terus menerus.
   bool _hasReachMax = false;
 
+  int serviceDesignID = 7;
+
   void onScroll() {
     double maxScroll = _scrollController.position.maxScrollExtent;
     double currentScroll = _scrollController.position.pixels;
@@ -33,7 +35,7 @@ class _DesignState extends State<Design> {
       print('iam scrolling');
 
       _designBloc.filterService = FilterServiceModel(
-          q: '', categoryService: CategoryServiceModel(id: 7));
+          q: '', categoryService: CategoryServiceModel(id: serviceDesignID));
       _designBloc.add(GetServiceDesign(10, false));
     }
   }
@@ -41,8 +43,8 @@ class _DesignState extends State<Design> {
   Future<void> _refresh() async {
     await Future.delayed(Duration(seconds: 1));
     searchController.text = '';
-    _designBloc.filterService =
-        FilterServiceModel(q: '', categoryService: CategoryServiceModel(id: 7));
+    _designBloc.filterService = FilterServiceModel(
+        q: '', categoryService: CategoryServiceModel(id: serviceDesignID));
     _designBloc.add(GetServiceDesign(10, true));
     print('Refresing...');
   }
@@ -51,7 +53,8 @@ class _DesignState extends State<Design> {
   void initState() {
     _designBloc = BlocProvider.of<DesignBloc>(context);
     _designBloc.filterService = FilterServiceModel(
-        q: searchController.text, categoryService: CategoryServiceModel(id: 7));
+        q: searchController.text,
+        categoryService: CategoryServiceModel(id: serviceDesignID));
     _designBloc.add(GetServiceDesign(10, true));
 
     _scrollController.addListener(onScroll);
@@ -100,7 +103,8 @@ class _DesignState extends State<Design> {
                         onSubmitted: (value) {
                           _designBloc.filterService = FilterServiceModel(
                               q: value,
-                              categoryService: CategoryServiceModel(id: 1));
+                              categoryService:
+                                  CategoryServiceModel(id: serviceDesignID));
 
                           _designBloc.add(GetServiceDesign(10, true));
                         },
@@ -145,6 +149,7 @@ class _DesignState extends State<Design> {
                     controller: _scrollController,
                     physics: AlwaysScrollableScrollPhysics(),
                     shrinkWrap: true,
+                    padding: EdgeInsets.only(bottom: 80),
                     childAspectRatio: 1 / 1.3,
                     crossAxisCount: 2,
                     children: List.generate(

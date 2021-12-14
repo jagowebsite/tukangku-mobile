@@ -355,6 +355,7 @@ class _DashboardState extends State<Dashboard> {
                           return GridView.count(
                             physics: NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
+                            padding: EdgeInsets.only(bottom: 80),
                             childAspectRatio: 1 / 1.3,
                             crossAxisCount: 2,
                             children: List.generate(
