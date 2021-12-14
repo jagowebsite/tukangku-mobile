@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive/hive.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
+import 'package:tukangku/hive/cart/cart_hive.dart';
 import 'package:tukangku/main.dart';
 import 'package:tukangku/screens/widgets/bottom_sheet_modal.dart';
 import 'package:tukangku/screens/widgets/custom_cached_image.dart';
@@ -14,6 +16,7 @@ class Account extends StatefulWidget {
 
 class _AccountState extends State<Account> {
   late AuthBloc authBloc;
+  late Box cartBox;
 
   Future logout() async {
     BottomSheetModal.show(context, children: [
@@ -45,6 +48,7 @@ class _AccountState extends State<Account> {
   void initState() {
     authBloc = BlocProvider.of<AuthBloc>(context);
     authBloc.add(GetAuthData());
+    cartBox = Hive.box<CartHive>('cart');
     super.initState();
   }
 
@@ -188,15 +192,18 @@ class _AccountState extends State<Account> {
                                 SizedBox(
                                   width: 3,
                                 ),
-                                Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 5),
-                                    decoration: BoxDecoration(
-                                        color: Colors.orangeAccent.shade700,
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    child: Text('12',
-                                        style: TextStyle(color: Colors.white))),
+                                cartBox.length != 0
+                                    ? Container(
+                                        padding:
+                                            EdgeInsets.symmetric(horizontal: 5),
+                                        decoration: BoxDecoration(
+                                            color: Colors.orangeAccent.shade700,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: Text(cartBox.length.toString(),
+                                            style:
+                                                TextStyle(color: Colors.white)))
+                                    : Container(),
                               ],
                             ),
                             onTap: () =>

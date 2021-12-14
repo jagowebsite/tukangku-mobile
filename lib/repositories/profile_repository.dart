@@ -15,20 +15,31 @@ class ProfileRepository {
 
   Future<ResponseModel?> updateProfile(String _token, User user) async {
     try {
-      final response =
-          await http.patch(Uri.parse(_baseUrl + '/auth/update-user'),
-              headers: {
-                'Authorization': 'Bearer $_token',
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-              },
-              body: jsonEncode(<String, dynamic>{
-                'name': user.name,
-                'address': user.address,
-                'date_of_birth': user.dateOfBirth,
-                'number': user.number,
-              }));
+      http.MultipartRequest request = http.MultipartRequest(
+          'POST', Uri.parse(_baseUrl + '/auth/update-user'));
 
+      // Request input data
+      request.fields['name'] = user.name!;
+      request.fields['address'] = user.address!;
+      request.fields['date_of_birth'] = user.dateOfBirth!;
+      request.fields['number'] = user.number!;
+
+      // Convert file type to byte data
+      final byte = await user.ktpImageFile!.readAsBytes();
+      ByteData byteData = byte.buffer.asByteData();
+      List<int> byteImage = byteData.buffer.asUint8List();
+
+      // Set request value
+      request.files.add(http.MultipartFile.fromBytes('ktp_image', byteImage,
+          filename: basename(user.ktpImageFile!.path)));
+
+      request.headers['Authorization'] = "Bearer $_token";
+      request.headers['Accept'] = "application/json";
+
+      // Send request
+      http.StreamedResponse streamedResponse = await request.send();
+      final response =
+          await http.Response.fromStream(streamedResponse); // get body response
       print(response.body);
 
       // Error handling

@@ -194,11 +194,41 @@ class _CartState extends State<Cart> {
                   },
                   minusFunction: () {
                     if (cartModels[index].quantity! > 0) {
-                      minusQuantity(cartModels[index], index);
-                      cartModels[index].quantity =
-                          cartModels[index].quantity! - 1;
-                      countTotalPrice();
-                      setState(() {});
+                      if (cartModels[index].quantity! == 1) {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            content: Text(
+                                'Apakah anda yakin ingin menghapus layanan ${cartModels[index].serviceModel!.name}?'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.pop(context, 'Cancel'),
+                                child: const Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  minusQuantity(cartModels[index], index);
+                                  cartModels[index].quantity =
+                                      cartModels[index].quantity! - 1;
+                                  countTotalPrice();
+                                  cartBox.delete(cartBox.keyAt(index));
+                                  removeCart(cartModels[index]);
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          ),
+                        );
+                        setState(() {});
+                      } else {
+                        minusQuantity(cartModels[index], index);
+                        cartModels[index].quantity =
+                            cartModels[index].quantity! - 1;
+                        countTotalPrice();
+                        setState(() {});
+                      }
                     }
                     if (cartModels[index].quantity! <= 0) {
                       cartBox.delete(cartBox.keyAt(index));

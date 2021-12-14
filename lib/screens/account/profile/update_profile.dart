@@ -97,12 +97,16 @@ class _UpdateProfilState extends State<UpdateProfil> {
           context,
           'Input data profil tidak boleh ada yang kosong',
           SnackbarType.warning);
+    } else if (ktpFile == null) {
+      CustomSnackbar.showSnackbar(
+          context, 'Silahkan pilih foto ktp', SnackbarType.warning);
     } else {
       User user = User(
           name: nameController.text,
           dateOfBirth: dateBirthController.text,
           number: telpController.text,
-          address: addressController.text);
+          address: addressController.text,
+          ktpImageFile: ktpFile);
       profileBloc.add(UpdateProfile(user));
     }
   }
@@ -304,25 +308,25 @@ class _UpdateProfilState extends State<UpdateProfil> {
                   SizedBox(
                     height: 10,
                   ),
-                  GestureDetector(
-                    onTap: () => updateProfile(),
-                    child: Container(
-                      color: Colors.white,
-                      child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: Colors.orangeAccent.shade700,
-                          ),
-                          child: Center(
-                            child: Text('Update Profil',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                )),
-                          )),
-                    ),
-                  ),
+                  // GestureDetector(
+                  //   onTap: () => updateProfile(),
+                  //   child: Container(
+                  //     color: Colors.white,
+                  //     child: Container(
+                  //         width: MediaQuery.of(context).size.width,
+                  //         height: 40,
+                  //         decoration: BoxDecoration(
+                  //           color: Colors.orangeAccent.shade700,
+                  //         ),
+                  //         child: Center(
+                  //           child: Text('Update Profil',
+                  //               style: TextStyle(
+                  //                 color: Colors.white,
+                  //                 fontSize: 16,
+                  //               )),
+                  //         )),
+                  //   ),
+                  // ),
                   SizedBox(
                     height: 20,
                   ),
@@ -351,28 +355,28 @@ class _UpdateProfilState extends State<UpdateProfil> {
                                     child: Image.file(ktpFile!),
                                   ))),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  GestureDetector(
-                    onTap: () => updateKTP(),
-                    child: Container(
-                      color: Colors.white,
-                      child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: Colors.orangeAccent.shade700,
-                          ),
-                          child: Center(
-                            child: Text('Upload KTP',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                )),
-                          )),
-                    ),
-                  ),
+                  // SizedBox(
+                  //   height: 10,
+                  // ),
+                  // GestureDetector(
+                  //   onTap: () => updateKTP(),
+                  //   child: Container(
+                  //     color: Colors.white,
+                  //     child: Container(
+                  //         width: MediaQuery.of(context).size.width,
+                  //         height: 40,
+                  //         decoration: BoxDecoration(
+                  //           color: Colors.orangeAccent.shade700,
+                  //         ),
+                  //         child: Center(
+                  //           child: Text('Upload KTP',
+                  //               style: TextStyle(
+                  //                 color: Colors.white,
+                  //                 fontSize: 16,
+                  //               )),
+                  //         )),
+                  //   ),
+                  // ),
                   SizedBox(
                     height: 10,
                   ),
@@ -384,6 +388,30 @@ class _UpdateProfilState extends State<UpdateProfil> {
                     height: 100,
                   )
                 ],
+              ),
+            ),
+            Positioned(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: GestureDetector(
+                  onTap: () => updateProfile(),
+                  child: Container(
+                    color: Colors.white,
+                    child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Colors.orangeAccent.shade700,
+                        ),
+                        child: Center(
+                          child: Text('Update Profil',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                              )),
+                        )),
+                  ),
+                ),
               ),
             ),
             BlocBuilder<ProfileBloc, ProfileState>(

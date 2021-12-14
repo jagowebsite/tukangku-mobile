@@ -117,7 +117,7 @@ class _UpdatePasswordState extends State<UpdatePassword> {
                           child: Text('Update Password',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 18,
+                                fontSize: 16,
                               )),
                         )),
                   ),

@@ -68,7 +68,7 @@ class _MyTransactionState extends State<MyTransaction> {
               backgroundColor: Colors.white,
               elevation: 0,
               title: Text(
-                'Semua Transaksi',
+                'Semua Transaksiku',
                 style: TextStyle(color: Colors.black87),
               ),
               centerTitle: true,
@@ -86,35 +86,35 @@ class _MyTransactionState extends State<MyTransaction> {
             onRefresh: () => _refresh(),
             child: BlocBuilder<TransactionUserBloc, TransactionUserState>(
               builder: (context, state) {
-                if(state is TransactionUserData){
-
+                if (state is TransactionUserData) {
                   return ListView.separated(
                     physics: AlwaysScrollableScrollPhysics(),
                     controller: _scrollController,
                     itemBuilder: (context, index) {
-                      if(index<state.listTransactions.length){
-
+                      if (index < state.listTransactions.length) {
                         return ListTile(
                           onTap: () {
                             Navigator.push(context,
                                 MaterialPageRoute(builder: (context) {
-                              return MyTransactionDetail(transactionModel: state.listTransactions[index],);
+                              return MyTransactionDetail(
+                                transactionModel: state.listTransactions[index],
+                              );
                             })).then(onGoBack);
                           },
                           isThreeLine: true,
                           leading: Container(
-                              width: 60,
-                              height: 60,
-                              child: ClipRRect(
-                                  child: CustomCachedImage.build(
-                                context,
-                                imgUrl: state
-                                    .listTransactions[index]
-                                    .transactionDetail![0]
-                                    .serviceModel!
-                                    .images![0],
-                              )),
-                            ),
+                            width: 60,
+                            height: 60,
+                            child: ClipRRect(
+                                child: CustomCachedImage.build(
+                              context,
+                              imgUrl: state
+                                  .listTransactions[index]
+                                  .transactionDetail![0]
+                                  .serviceModel!
+                                  .images![0],
+                            )),
+                          ),
                           title: Container(
                             child: Text(
                               '${state.listTransactions[index].invoiceId} - ${state.listTransactions[index].user!.name}',
@@ -126,44 +126,44 @@ class _MyTransactionState extends State<MyTransaction> {
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              for (TransactionDetail transactionDetail in state.listTransactions[index].transactionDetail!)
-                                Text(transactionDetail.serviceModel!.name ?? ''),
+                              for (TransactionDetail transactionDetail in state
+                                  .listTransactions[index].transactionDetail!)
+                                Text(
+                                    transactionDetail.serviceModel!.name ?? ''),
                               // Text('Layanan Bebersih'),
                               // Text('Layanan Service AC'),
                             ],
                           ),
                           trailing: Column(
-                              children: [
-                                Text(
-                                    state.listTransactions[index].statusOrder ??
-                                        ''),
-                                state.listTransactions[index].statusOrder! ==
-                                        'done'
-                                    ? Icon(Icons.check_circle_outline,
-                                        color: Colors.green.shade600)
-                                    : state.listTransactions[index]
-                                                    .statusOrder! ==
-                                                'pending' ||
-                                            state.listTransactions[index]
-                                                    .statusOrder! ==
-                                                'process'
-                                        ? Icon(Icons.timer,
-                                            color: Colors.orange.shade600)
-                                        : Icon(Icons.cancel,
-                                            color: Colors.grey.shade600),
-                              ],
-                            ),
+                            children: [
+                              Text(state.listTransactions[index].statusOrder ??
+                                  ''),
+                              state.listTransactions[index].statusOrder! ==
+                                      'done'
+                                  ? Icon(Icons.check_circle_outline,
+                                      color: Colors.green.shade600)
+                                  : state.listTransactions[index]
+                                                  .statusOrder! ==
+                                              'pending' ||
+                                          state.listTransactions[index]
+                                                  .statusOrder! ==
+                                              'process'
+                                      ? Icon(Icons.timer,
+                                          color: Colors.orange.shade600)
+                                      : Icon(Icons.cancel,
+                                          color: Colors.grey.shade600),
+                            ],
+                          ),
                         );
-                      }else{
-                          return Center(
-                            child: SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: CircularProgressIndicator(
-                                  color: Colors.orange.shade600,
-                                  strokeWidth: 2),
-                            ),
-                          );
+                      } else {
+                        return Center(
+                          child: SizedBox(
+                            width: 30,
+                            height: 30,
+                            child: CircularProgressIndicator(
+                                color: Colors.orange.shade600, strokeWidth: 2),
+                          ),
+                        );
                       }
                     },
                     separatorBuilder: (context, index) {
@@ -171,9 +171,11 @@ class _MyTransactionState extends State<MyTransaction> {
                         thickness: 0.3,
                       );
                     },
-                    itemCount: state.hasReachMax ? state.listTransactions.length:state.listTransactions.length+1,
+                    itemCount: state.hasReachMax
+                        ? state.listTransactions.length
+                        : state.listTransactions.length + 1,
                   );
-                }else{
+                } else {
                   return Center(
                       child: Container(
                     width: 30,
