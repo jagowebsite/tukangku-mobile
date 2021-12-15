@@ -208,4 +208,26 @@ class TransactionRepository {
       print(e.toString());
     }
   }
+
+  Future<int?> countMyTransaction(String _token) async {
+    try {
+      final response = await http.get(
+          Uri.parse(_baseUrl + '/my-transactions/count'),
+          headers: {
+            'Authorization': 'Bearer $_token',
+            'Accept': 'application/json'
+          });
+      print(response.statusCode);
+
+      // Error handling
+      if (response.statusCode == 200) {
+        int count = json.decode(response.body)['data']['count'];
+        return count;
+      } else {
+        throw Exception(ErrorMessage.statusCode(response.statusCode));
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 }
