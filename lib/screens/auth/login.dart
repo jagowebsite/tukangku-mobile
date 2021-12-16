@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
 import 'package:tukangku/models/login_model.dart';
+import 'package:tukangku/models/user_model.dart';
 import 'package:tukangku/screens/auth/verify_email.dart';
 import 'package:tukangku/screens/navbar.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
@@ -236,6 +237,18 @@ class _LoginState extends State<Login> {
     super.initState();
   }
 
+  bool validation(User user) {
+    if (user.name == '' ||
+        user.address == '' ||
+        user.ktpImage == '' ||
+        user.dateOfBirth == '' ||
+        user.number == '') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   @override
   void dispose() {
     // usernameController.dispose();
@@ -258,6 +271,9 @@ class _LoginState extends State<Login> {
           })).then(onGoBack);
         } else if (state is LoginSuccess || state is Authorized) {
           // Navigator.of(context).popAndPushNamed('/navbar');
+          if (state is LoginSuccess) {
+            if (validation(state.user)) {}
+          }
           Navigator.pushAndRemoveUntil<void>(
             context,
             MaterialPageRoute<void>(

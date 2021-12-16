@@ -200,6 +200,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: Stack(
         children: [
           SlidingUpPanel(

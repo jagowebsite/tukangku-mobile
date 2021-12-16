@@ -12,10 +12,11 @@ class BottomSheetModal {
       MainAxisSize? mainAxisSize}) {
     return showModalBottomSheet<void>(
       context: context,
+      isScrollControlled: true,
       builder: (BuildContext context) {
-        return StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-          return Container(
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: Container(
             height: height ?? 100,
             color: color ?? Colors.white,
             padding: padding ?? EdgeInsets.all(10),
@@ -34,8 +35,8 @@ class BottomSheetModal {
                 //   )
                 // ],
                 ),
-          );
-        });
+          ),
+        );
       },
     );
   }

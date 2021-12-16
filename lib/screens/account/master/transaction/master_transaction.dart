@@ -102,19 +102,6 @@ class _MasterTransactionState extends State<MasterTransaction> {
                               })).then(onGoBack);
                             },
                             isThreeLine: true,
-                            leading: Container(
-                              width: 60,
-                              height: 60,
-                              child: ClipRRect(
-                                  child: CustomCachedImage.build(
-                                context,
-                                imgUrl: state
-                                    .listTransactions[index]
-                                    .transactionDetail![0]
-                                    .serviceModel!
-                                    .images![0],
-                              )),
-                            ),
                             title: Container(
                               child: Text(
                                 '${state.listTransactions[index].invoiceId} - ${state.listTransactions[index].user!.name}',
@@ -123,20 +110,8 @@ class _MasterTransactionState extends State<MasterTransaction> {
                                 ),
                               ),
                             ),
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                for (TransactionDetail transactionDetail
-                                    in state.listTransactions[index]
-                                        .transactionDetail!)
-                                  Text(transactionDetail.serviceModel!.name ??
-                                      ''),
-                                // Text(
-                                //   currencyId.format(1000).toString(),
-                                //   style: TextStyle(color: Colors.green),
-                                // ),
-                              ],
-                            ),
+                            subtitle: detailListTransaction(state
+                                .listTransactions[index].transactionDetail!),
                             trailing: Column(
                               children: [
                                 Text(
@@ -192,5 +167,41 @@ class _MasterTransactionState extends State<MasterTransaction> {
             ),
           )),
     );
+  }
+
+  Widget detailListTransaction(List<TransactionDetail>? transactionDetail) {
+    List<Widget> list = [];
+    for (var i = 0; i < transactionDetail!.length; i++) {
+      list.add(
+        Container(
+          margin: EdgeInsets.only(bottom: 5),
+          child: Row(
+            children: [
+              Container(
+                width: 30,
+                height: 30,
+                child: ClipRRect(
+                    child: CustomCachedImage.build(
+                  context,
+                  borderRadius: BorderRadius.circular(5),
+                  imgUrl: transactionDetail[i].serviceModel!.images![0],
+                )),
+              ),
+              SizedBox(width: 5),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(transactionDetail[i].serviceModel!.name ?? ''),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    return new Column(
+        crossAxisAlignment: CrossAxisAlignment.start, children: list);
   }
 }

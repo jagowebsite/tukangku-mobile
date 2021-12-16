@@ -30,8 +30,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         if (loginData.verified != null && loginData.verified!) {
           await _authRepo.setToken(loginData.token!);
 
+          User? user = await _authRepo.getUser(loginData.token!);
+
           print('Login success');
-          emit(LoginSuccess());
+          emit(LoginSuccess(user!));
         } else if (loginData.status == 'failed') {
           emit(LoginError(loginData.message!));
         } else {
@@ -39,7 +41,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(VerifyEmail(event.loginModel));
         }
       } else {
-        emit(LoginError('Login Error, silahkan periksa kembali koneksi internet anda'));
+        emit(LoginError(
+            'Login Error, silahkan periksa kembali koneksi internet anda'));
       }
     } catch (e) {
       emit(LoginError(e.toString()));
@@ -61,10 +64,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       } else {
         print('Register failed');
-        emit(RegisterError('Register Error, silahkan periksa koneksi internet anda'));
+        emit(RegisterError(
+            'Register Error, silahkan periksa koneksi internet anda'));
       }
     } catch (e) {
-      emit(RegisterError('Register Error, silahkan periksa koneksi internet anda'));
+      emit(RegisterError(
+          'Register Error, silahkan periksa koneksi internet anda'));
     }
   }
 

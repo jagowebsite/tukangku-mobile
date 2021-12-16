@@ -147,6 +147,13 @@ class _PaymentState extends State<Payment> {
           context,
           'Silahkan pilih koordinat lokasi anda terlebih dahulu',
           SnackbarType.warning);
+    } else if (paymentFlow == PaymentFlow.dp &&
+        int.parse(nominalDPController.text) >
+            widget.transactionModel.totalAllPrice!) {
+      CustomSnackbar.showSnackbar(
+          context,
+          'Nominal DP tidak boleh lebih dari total pembayaran sebesar ${widget.transactionModel.totalAllPrice}',
+          SnackbarType.warning);
     } else {
       PaymentModel paymentModel = PaymentModel(
           transactionModel: widget.transactionModel,
@@ -346,6 +353,7 @@ class _PaymentState extends State<Payment> {
                                           setState(() {});
                                         },
                                         controller: nominalDPController,
+                                        keyboardType: TextInputType.number,
                                         decoration: InputDecoration(
                                           border: InputBorder.none,
                                         ),

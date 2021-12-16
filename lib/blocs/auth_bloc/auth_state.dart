@@ -23,7 +23,14 @@ class LoginError extends AuthState {
   List<Object> get props => [message];
 }
 
-class LoginSuccess extends AuthState {}
+class LoginSuccess extends AuthState {
+  final User user;
+
+  LoginSuccess(this.user);
+
+  @override
+  List<Object> get props => [user];
+}
 
 // Register
 
