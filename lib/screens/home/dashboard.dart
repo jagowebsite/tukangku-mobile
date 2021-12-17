@@ -12,8 +12,10 @@ import 'package:tukangku/hive/cart/cart_hive.dart';
 import 'package:tukangku/models/banner_model.dart';
 import 'package:tukangku/models/category_service_model.dart';
 import 'package:tukangku/models/filter_service_model.dart';
+import 'package:tukangku/models/user_model.dart';
 import 'package:tukangku/repositories/banner_repository.dart';
 import 'package:tukangku/repositories/category_service_repository.dart';
+import 'package:tukangku/screens/account/profile/update_profile.dart';
 import 'package:tukangku/screens/service/services.dart';
 import 'package:tukangku/screens/widgets/custom_cached_image.dart';
 import 'package:tukangku/screens/widgets/service_item.dart';
@@ -101,6 +103,18 @@ class _DashboardState extends State<Dashboard> {
       ? await launch(_url)
       : throw 'Could not launch $_url';
 
+  bool validation(User user) {
+    if (user.name == '' ||
+        user.address == '' ||
+        user.ktpImage == '' ||
+        user.dateOfBirth == '' ||
+        user.number == '') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   @override
   void initState() {
     homeBloc = BlocProvider.of<HomeBloc>(context);
@@ -121,15 +135,40 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return BlocListener<HomeBloc, HomeState>(
-      listener: (context, state) {
-        if (state is ServiceHomeError) {
-          CustomSnackbar.showSnackbar(
-              context, state.message, SnackbarType.error);
-        } else if (state is ServiceHomeData) {
-          _hasReachMax = state.hasReachMax;
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<HomeBloc, HomeState>(
+          listener: (context, state) {
+            if (state is ServiceHomeError) {
+              CustomSnackbar.showSnackbar(
+                  context, state.message, SnackbarType.error);
+            } else if (state is ServiceHomeData) {
+              _hasReachMax = state.hasReachMax;
+            }
+          },
+        ),
+        BlocListener<AuthBloc, AuthState>(
+          listener: (context, state) {
+            if (state is Authorized) {
+              print('im here boss');
+              if (!validation(state.user)) {
+                CustomSnackbar.showSnackbar(
+                    context,
+                    'Mohon lengkapi data anda terlebih dahulu',
+                    SnackbarType.warning);
+                Navigator.pushAndRemoveUntil<void>(
+                  context,
+                  MaterialPageRoute<void>(
+                      builder: (BuildContext context) => const UpdateProfil(
+                            isInit: true,
+                          )),
+                  ModalRoute.withName('/update-profile'),
+                );
+              }
+            }
+          },
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,

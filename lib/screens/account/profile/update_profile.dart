@@ -3,11 +3,13 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
 import 'package:tukangku/blocs/profile_bloc/profile_bloc.dart';
 import 'package:tukangku/models/user_model.dart';
+import 'package:tukangku/screens/navbar.dart';
 import 'package:tukangku/screens/widgets/custom_cached_image.dart';
 import 'package:tukangku/screens/widgets/input_text.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
@@ -15,7 +17,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 
 class UpdateProfil extends StatefulWidget {
-  const UpdateProfil({Key? key}) : super(key: key);
+  final bool? isInit;
+  const UpdateProfil({Key? key, this.isInit}) : super(key: key);
 
   @override
   _UpdateProfilState createState() => _UpdateProfilState();
@@ -143,6 +146,11 @@ class _UpdateProfilState extends State<UpdateProfil> {
               CustomSnackbar.showSnackbar(
                   context, state.message, SnackbarType.success);
               authBloc.add(GetAuthData());
+              if (widget.isInit != null && widget.isInit == true) {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return const Navbar();
+                }));
+              }
             } else if (state is UpdateProfileError) {
               CustomSnackbar.showSnackbar(
                   context, state.message, SnackbarType.error);
@@ -175,7 +183,9 @@ class _UpdateProfilState extends State<UpdateProfil> {
             ),
             centerTitle: true,
             leading: IconButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => widget.isInit != null && widget.isInit == true
+                    ? SystemNavigator.pop()
+                    : Navigator.pop(context),
                 icon: Icon(
                   Icons.arrow_back,
                   color: Colors.black87,

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,6 +26,7 @@ import 'package:tukangku/blocs/transaction_detail_bloc/transaction_detail_bloc.d
 import 'package:tukangku/blocs/transaction_user_bloc/transaction_user_bloc.dart';
 import 'package:tukangku/blocs/user_data_bloc/user_data_bloc.dart';
 import 'package:tukangku/hive/cart/cart_hive.dart';
+import 'package:tukangku/models/user_model.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner.dart';
 import 'package:tukangku/screens/account/master/banner/master_banner_create.dart';
 import 'package:tukangku/screens/account/master/category/master_category_service.dart';
@@ -59,6 +62,7 @@ import 'package:tukangku/screens/transaction/cart.dart';
 import 'package:tukangku/screens/transaction/my_transaction.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:tukangku/screens/widgets/image_cropper.dart';
+import 'package:tukangku/utils/custom_snackbar.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -197,6 +201,25 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   late AuthBloc authBloc;
 
+  /// Merefresh data ketika kembali ke page ini (current page)
+  /// Mencegah perbedaan state dalam satu bloc
+  FutureOr onGoBack(dynamic value) {
+    print('iam on goback...');
+    authBloc.add(GetAuthData());
+  }
+
+  bool validation(User user) {
+    if (user.name == '' ||
+        user.address == '' ||
+        user.ktpImage == '' ||
+        user.dateOfBirth == '' ||
+        user.number == '') {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   @override
   void initState() {
     authBloc = BlocProvider.of<AuthBloc>(context);
@@ -221,12 +244,27 @@ class _MyHomePageState extends State<MyHomePage> {
       listener: (context, state) {
         if (state is Authorized) {
           // Navigator.of(context).popAndPushNamed('/navbar');
-          Navigator.pushAndRemoveUntil<void>(
-            context,
-            MaterialPageRoute<void>(
-                builder: (BuildContext context) => const Navbar()),
-            ModalRoute.withName('/navbar'),
-          );
+          if (validation(state.user)) {
+            Navigator.pushAndRemoveUntil<void>(
+              context,
+              MaterialPageRoute<void>(
+                  builder: (BuildContext context) => const Navbar()),
+              ModalRoute.withName('/navbar'),
+            );
+          } else {
+            CustomSnackbar.showSnackbar(
+                context,
+                'Mohon lengkapi data anda terlebih dahulu',
+                SnackbarType.warning);
+            Navigator.pushAndRemoveUntil<void>(
+              context,
+              MaterialPageRoute<void>(
+                  builder: (BuildContext context) => const UpdateProfil(
+                        isInit: true,
+                      )),
+              ModalRoute.withName('/update-profile'),
+            );
+          }
         }
       },
       child: Scaffold(
@@ -269,8 +307,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               Container(
                                 width: size.width,
                                 child: TextButton(
-                                  onPressed: () =>
-                                      Navigator.of(context).pushNamed('/login'),
+                                  onPressed: () => Navigator.of(context)
+                                      .pushNamed('/login')
+                                      .then(onGoBack),
                                   child: Container(
                                     padding: EdgeInsets.symmetric(vertical: 8),
                                     child: Text(
@@ -290,7 +329,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 width: size.width,
                                 child: TextButton(
                                   onPressed: () => Navigator.of(context)
-                                      .pushNamed('/register'),
+                                      .pushNamed('/register')
+                                      .then(onGoBack),
                                   child: Container(
                                     padding: EdgeInsets.symmetric(vertical: 8),
                                     child: Text(

@@ -62,15 +62,17 @@ class _RegisterState extends State<Register> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is RegisterSuccess) {
-          CoolAlert.show(
-            context: context,
-            type: CoolAlertType.success,
-            text: state.message,
-          );
+          CustomSnackbar.showSnackbar(
+              context, state.message, SnackbarType.success);
           Navigator.pushAndRemoveUntil<void>(
             context,
             MaterialPageRoute<void>(builder: (BuildContext context) => Login()),
             ModalRoute.withName('/login'),
+          );
+          CoolAlert.show(
+            context: context,
+            type: CoolAlertType.success,
+            text: state.message,
           );
         } else if (state is RegisterError) {
           CoolAlert.show(

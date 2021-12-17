@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/auth_bloc/auth_bloc.dart';
 import 'package:tukangku/models/login_model.dart';
 import 'package:tukangku/models/user_model.dart';
+import 'package:tukangku/screens/account/profile/update_profile.dart';
 import 'package:tukangku/screens/auth/verify_email.dart';
 import 'package:tukangku/screens/navbar.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
@@ -272,14 +273,28 @@ class _LoginState extends State<Login> {
         } else if (state is LoginSuccess || state is Authorized) {
           // Navigator.of(context).popAndPushNamed('/navbar');
           if (state is LoginSuccess) {
-            if (validation(state.user)) {}
+            if (validation(state.user)) {
+              Navigator.pushAndRemoveUntil<void>(
+                context,
+                MaterialPageRoute<void>(
+                    builder: (BuildContext context) => const Navbar()),
+                ModalRoute.withName('/navbar'),
+              );
+            } else {
+              CustomSnackbar.showSnackbar(
+                  context,
+                  'Mohon lengkapi data anda terlebih dahulu',
+                  SnackbarType.warning);
+              Navigator.pushAndRemoveUntil<void>(
+                context,
+                MaterialPageRoute<void>(
+                    builder: (BuildContext context) => const UpdateProfil(
+                          isInit: true,
+                        )),
+                ModalRoute.withName('/update-profile'),
+              );
+            }
           }
-          Navigator.pushAndRemoveUntil<void>(
-            context,
-            MaterialPageRoute<void>(
-                builder: (BuildContext context) => const Navbar()),
-            ModalRoute.withName('/navbar'),
-          );
         } else if (state is LoginError) {
           CustomSnackbar.showSnackbar(
               context, state.message, SnackbarType.error);
