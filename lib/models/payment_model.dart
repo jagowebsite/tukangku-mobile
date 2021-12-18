@@ -20,12 +20,13 @@ class PaymentModel {
       description,
       createdAt,
       address;
-  final int? totalPayment, id;
+  final int? totalPayment, id, accountPaymentId;
   final File? imageUserFile, imagePaymentFile;
 
   PaymentModel(
       {this.user,
       this.id,
+      this.accountPaymentId,
       this.transactionModel,
       this.paymentCode,
       this.type,
@@ -67,6 +68,23 @@ class PaymentModel {
       address: json['address'],
       totalPayment: json['total_payment'],
       createdAt: json['created_at'],
+    );
+  }
+}
+
+class AccountPaymentModel {
+  int? id;
+  String? accountName, accountNumber, bankName;
+
+  AccountPaymentModel(
+      {this.id, this.accountName, this.accountNumber, this.bankName});
+
+  factory AccountPaymentModel.fromJson(Map<String, dynamic> json) {
+    return AccountPaymentModel(
+      id: json['id'],
+      accountName: json['account_name'],
+      accountNumber: json['account_number'],
+      bankName: json['bank_name'],
     );
   }
 }

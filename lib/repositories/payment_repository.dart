@@ -46,11 +46,15 @@ class PaymentRepository {
       // request.fields['user_id'] = paymentModel.user!.id.toString();
       request.fields['transaction_id'] =
           paymentModel.transactionModel!.id.toString();
+      request.fields['account_payment_id'] =
+          paymentModel.accountPaymentId != null
+              ? paymentModel.accountPaymentId.toString()
+              : '';
       request.fields['type'] = paymentModel.type!;
-      request.fields['type_transfer'] = paymentModel.typeTransfer!;
-      request.fields['bank_number'] = paymentModel.bankNumber!;
-      request.fields['bank_name'] = paymentModel.bankName!;
-      request.fields['account_name'] = paymentModel.accountName!;
+      request.fields['type_transfer'] = paymentModel.typeTransfer ?? '';
+      request.fields['bank_number'] = paymentModel.bankNumber ?? '';
+      request.fields['bank_name'] = paymentModel.bankName ?? '';
+      request.fields['account_name'] = paymentModel.accountName ?? '';
       request.fields['longitude'] = paymentModel.longitude!;
       request.fields['latitude'] = paymentModel.latitude!;
       request.fields['total_payment'] = paymentModel.totalPayment!.toString();
@@ -192,6 +196,27 @@ class PaymentRepository {
         return ResponseModel.toJson(jsonResponse);
       } else {
         throw Exception(ErrorMessage.statusCode(response.statusCode));
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<List<AccountPaymentModel>?> getAccountPayment(String _token) async {
+    try {
+      final response = await http.get(
+          Uri.parse(_baseUrl + '/account-payment?page=1&limit=10'),
+          headers: {
+            'Authorization': 'Bearer $_token',
+            'Accept': 'application/json',
+          });
+      // print(response.body);
+
+      if (response.statusCode == 200) {
+        Iterable iterable = json.decode(response.body)['data'];
+        List<AccountPaymentModel> listAccountPayments =
+            iterable.map((e) => AccountPaymentModel.fromJson(e)).toList();
+        return listAccountPayments;
       }
     } catch (e) {
       print(e.toString());

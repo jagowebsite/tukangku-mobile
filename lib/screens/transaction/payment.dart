@@ -11,6 +11,8 @@ import 'package:tukangku/blocs/payment_bloc/payment_bloc.dart';
 import 'package:tukangku/models/location_model.dart';
 import 'package:tukangku/models/payment_model.dart';
 import 'package:tukangku/models/transaction_model.dart';
+import 'package:tukangku/repositories/auth_repository.dart';
+import 'package:tukangku/repositories/payment_repository.dart';
 import 'package:tukangku/screens/others/map_coordinate.dart';
 // import 'package:tukangku/screens/widgets/camera_screen.dart';
 // import 'package:tukangku/screens/widgets/camera_screen2.dart';
@@ -37,6 +39,8 @@ class _PaymentState extends State<Payment> {
   File? imagePaymentFile;
   File? imageUserFile;
   bool isLocationChoosen = false;
+  PaymentRepository paymentRepo = PaymentRepository();
+  AuthRepository authRepo = AuthRepository();
 
   TextEditingController bankNameController = TextEditingController();
   TextEditingController noRekController = TextEditingController();
@@ -50,6 +54,9 @@ class _PaymentState extends State<Payment> {
   // Data for dropdown type
   List<String> typeList = ['Cash', 'Transfer'];
   String typeValue = 'Cash';
+
+  List<AccountPaymentModel> listAccountPayments = [];
+  AccountPaymentModel? accountPaymentSelected;
 
   Future _determinePosition({bool isCurrent = false}) async {
     bool serviceEnabled;
@@ -159,9 +166,9 @@ class _PaymentState extends State<Payment> {
           transactionModel: widget.transactionModel,
           typeTransfer: typeValue.toLowerCase(),
           type: paymentFlow == PaymentFlow.dp ? 'dp' : 'lunas',
-          bankNumber: noRekController.text,
-          bankName: bankNameController.text,
-          accountName: rekNameController.text,
+          bankNumber: typeValue == 'Transfer' ? noRekController.text : null,
+          bankName: typeValue == 'Transfer' ? bankNameController.text : null,
+          accountName: typeValue == 'Transfer' ? rekNameController.text : null,
           latitude: locationModel.latitude.toString(),
           longitude: locationModel.longitude.toString(),
           totalPayment: paymentFlow == PaymentFlow.dp
@@ -170,9 +177,27 @@ class _PaymentState extends State<Payment> {
           description: descriptionController.text,
           address: addressController.text,
           imagePaymentFile: imagePaymentFile,
+          accountPaymentId:
+              accountPaymentSelected != null && typeValue == 'Transfer'
+                  ? accountPaymentSelected!.id
+                  : null,
           imageUserFile: imageUserFile);
 
       paymentBloc.add(CreatePayment(paymentModel));
+    }
+  }
+
+  Future getAccountPayments() async {
+    String? _token = await authRepo.hasToken();
+    List<AccountPaymentModel>? data =
+        await paymentRepo.getAccountPayment(_token!);
+
+    if (data != null) {
+      listAccountPayments = data;
+      if (listAccountPayments.length != 0) {
+        accountPaymentSelected = listAccountPayments[0];
+      }
+      setState(() {});
     }
   }
 
@@ -180,6 +205,7 @@ class _PaymentState extends State<Payment> {
   void initState() {
     paymentBloc = BlocProvider.of<PaymentBloc>(context);
     _determinePosition(isCurrent: true);
+    getAccountPayments();
     super.initState();
   }
 
@@ -363,74 +389,155 @@ class _PaymentState extends State<Payment> {
                             ],
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        Container(
-                          color: Colors.white,
-                          width: size.width,
-                          padding: EdgeInsets.all(15),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                  margin: EdgeInsets.only(bottom: 5),
-                                  child: Text(
-                                    'Informasi Pembayaran',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                  )),
-                              SizedBox(
+                        typeValue == 'Transfer'
+                            ? SizedBox(
                                 height: 10,
-                              ),
-                              Text('Nama Bank'),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.grey.shade100),
-                                child: TextField(
-                                  controller: bankNameController,
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'Contoh: BCA, BRI, dll.'),
+                              )
+                            : Container(),
+                        typeValue == 'Transfer'
+                            ? Container(
+                                color: Colors.white,
+                                width: size.width,
+                                padding: EdgeInsets.all(15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                        margin: EdgeInsets.only(bottom: 5),
+                                        child: Text(
+                                          'Informasi Pembayaran',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        )),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text('Nama Bank'),
+                                    Container(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.grey.shade100),
+                                      child: TextField(
+                                        controller: bankNameController,
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText: 'Contoh: BCA, BRI, dll.'),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text('Nomor Rekening'),
+                                    Container(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.grey.shade100),
+                                      child: TextField(
+                                        controller: noRekController,
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText: 'Nomor Rekening Bank'),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text('Nama Rekening'),
+                                    Container(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.grey.shade100),
+                                      child: TextField(
+                                        controller: rekNameController,
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText:
+                                                'Masukkan nama rekening kamu'),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Divider(),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Container(
+                                        margin: EdgeInsets.only(bottom: 5),
+                                        child: Text(
+                                          'Transfer ke',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold),
+                                        )),
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text('Pilih No Rekening Tukangku'),
+                                    Container(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Colors.grey.shade100),
+                                      child:
+                                          DropdownButton<AccountPaymentModel>(
+                                        dropdownColor: Colors.grey.shade100,
+                                        value: accountPaymentSelected,
+                                        isExpanded: true,
+                                        icon: Icon(Icons.expand_more),
+                                        iconSize: 24,
+                                        elevation: 1,
+                                        style: TextStyle(color: Colors.black),
+                                        underline: Container(),
+                                        onChanged:
+                                            (AccountPaymentModel? newValue) {
+                                          setState(() {
+                                            accountPaymentSelected = newValue!;
+                                          });
+                                        },
+                                        items: listAccountPayments
+                                            .map((AccountPaymentModel value) {
+                                          return DropdownMenuItem<
+                                              AccountPaymentModel>(
+                                            value: value,
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text((value.accountName ?? '') +
+                                                    ' (' +
+                                                    (value.bankName ?? '') +
+                                                    ')'),
+                                                Text(
+                                                  'No Rek: ' +
+                                                      (value.accountNumber ??
+                                                          ''),
+                                                  style: TextStyle(
+                                                      color:
+                                                          Colors.grey.shade600),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text('Nomor Rekening'),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.grey.shade100),
-                                child: TextField(
-                                  controller: noRekController,
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'Nomor Rekening Bank'),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text('Nama Rekening'),
-                              Container(
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.grey.shade100),
-                                child: TextField(
-                                  controller: rekNameController,
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'Masukkan nama rekening kamu'),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                              )
+                            : Container(),
                         SizedBox(
                           height: 10,
                         ),

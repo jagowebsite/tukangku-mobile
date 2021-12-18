@@ -2,11 +2,16 @@ import 'package:tukangku/models/user_model.dart';
 
 class ComplainModel {
   int? id, orderId;
-  String? description, status;
+  String? description, status, createdAt;
   User? user;
 
   ComplainModel(
-      {this.id, this.orderId, this.description, this.status, this.user});
+      {this.id,
+      this.orderId,
+      this.description,
+      this.status,
+      this.user,
+      this.createdAt});
 
   factory ComplainModel.fromJson(Map<String, dynamic> json) {
     return ComplainModel(
@@ -14,6 +19,7 @@ class ComplainModel {
       orderId: json['order_id'],
       description: json['description'],
       status: json['status'],
+      createdAt: json['created_at'],
       user: json['user'] != null ? User.fromJson(json['user']) : null,
     );
   }
@@ -24,6 +30,7 @@ class ComplainModel {
     data['order_id'] = this.orderId;
     data['description'] = this.description;
     data['status'] = this.status;
+    data['created_at'] = this.createdAt;
     data['user'] = this.user!.toJson();
     return data;
   }

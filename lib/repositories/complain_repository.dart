@@ -78,4 +78,24 @@ class ComplainRepository {
       print(e.toString());
     }
   }
+
+  Future<List<ComplainModel>?> getComplainUser(String _token) async {
+    try {
+      final response = await http.get(Uri.parse(_baseUrl + '/complains/user'),
+          headers: {
+            'Authorization': 'Bearer $_token',
+            'Accept': 'application/json'
+          });
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        Iterable iterable = json.decode(response.body)['data'];
+        List<ComplainModel> listComplainUsers =
+            iterable.map((e) => ComplainModel.fromJson(e)).toList();
+        return listComplainUsers;
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
 }

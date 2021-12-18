@@ -34,6 +34,8 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
   ComplainRepository complainRepo = ComplainRepository();
   AuthRepository authRepo = AuthRepository();
 
+  List<ComplainModel> listComplainsUser = [];
+
   TextEditingController complainController = TextEditingController();
 
   Future<void> _refresh() async {
@@ -69,6 +71,7 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
         if (response.status == 'success') {
           CustomSnackbar.showSnackbar(
               context, response.message!, SnackbarType.success);
+          getComplainUser();
         } else {
           CustomSnackbar.showSnackbar(
               context, response.message!, SnackbarType.error);
@@ -85,11 +88,23 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
     EasyLoading.dismiss();
   }
 
+  Future getComplainUser() async {
+    String? _token = await authRepo.hasToken();
+    List<ComplainModel>? listComplain =
+        await complainRepo.getComplainUser(_token!);
+    if (listComplain != null) {
+      listComplainsUser = listComplain;
+      setState(() {});
+    }
+  }
+
   @override
   void initState() {
     transactionUserBloc = BlocProvider.of<TransactionUserBloc>(context);
     transactionUserBloc
         .add(GetTransactionDetailUser(widget.transactionModel.id!));
+
+    getComplainUser();
     super.initState();
   }
 
@@ -398,28 +413,36 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                               height: 5,
                             ),
                             Divider(),
-                            Container(
-                              width: size.width,
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(color: Colors.grey)),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                            for (ComplainModel complainModel
+                                in listComplainsUser)
+                              Column(
                                 children: [
-                                  Text('Masukk bro, layanan selesai!'),
-                                  Text(
-                                    '2021-12-09',
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 12),
+                                  Container(
+                                    width: size.width,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(
+                                            color: Colors.grey.shade300)),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(complainModel.description ?? ''),
+                                        Text(
+                                          complainModel.createdAt ?? '',
+                                          style: TextStyle(
+                                              color: Colors.grey, fontSize: 12),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10,
                                   ),
                                 ],
                               ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 10),
                               decoration: BoxDecoration(
@@ -440,6 +463,7 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                               style: TextButton.styleFrom(
                                   backgroundColor: Colors.grey.shade600),
                               onPressed: () {
+                                // getComplainUser();
                                 if (complainController.text == '') {
                                   CustomSnackbar.showSnackbar(
                                       context,
