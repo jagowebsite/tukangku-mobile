@@ -79,9 +79,11 @@ class ComplainRepository {
     }
   }
 
-  Future<List<ComplainModel>?> getComplainUser(String _token) async {
+  Future<List<ComplainModel>?> getComplainUser(
+      String _token, int orderId) async {
     try {
-      final response = await http.get(Uri.parse(_baseUrl + '/complains/user'),
+      final response = await http.get(
+          Uri.parse(_baseUrl + '/complains/user?order_id=$orderId'),
           headers: {
             'Authorization': 'Bearer $_token',
             'Accept': 'application/json'

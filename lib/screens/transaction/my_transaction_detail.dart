@@ -90,8 +90,8 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
 
   Future getComplainUser() async {
     String? _token = await authRepo.hasToken();
-    List<ComplainModel>? listComplain =
-        await complainRepo.getComplainUser(_token!);
+    List<ComplainModel>? listComplain = await complainRepo.getComplainUser(
+        _token!, widget.transactionModel.id!);
     if (listComplain != null) {
       listComplainsUser = listComplain;
       setState(() {});

@@ -6,6 +6,7 @@ import 'package:tukangku/models/user_model.dart';
 class PaymentModel {
   final User? user;
   final TransactionModel? transactionModel;
+  final AccountPaymentModel? accountPaymentModel;
   final String? paymentCode,
       type,
       typeTransfer,
@@ -44,6 +45,7 @@ class PaymentModel {
       this.description,
       this.address,
       this.createdAt,
+      this.accountPaymentModel,
       this.totalPayment});
 
   factory PaymentModel.fromJson(Map<String, dynamic> json) {
@@ -51,6 +53,9 @@ class PaymentModel {
       user: json['user'] != null ? User.fromJson(json['user']) : null,
       transactionModel: json['transaction'] != null
           ? TransactionModel.fromJson(json['transaction'])
+          : null,
+      accountPaymentModel: json['account_payment'] != null
+          ? AccountPaymentModel.fromJson(json['account_payment'])
           : null,
       paymentCode: json['payment_code'],
       id: json['id'],

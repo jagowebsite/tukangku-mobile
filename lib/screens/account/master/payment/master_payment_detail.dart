@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tukangku/blocs/payment_bloc/payment_bloc.dart';
 import 'package:tukangku/models/payment_model.dart';
+import 'package:tukangku/repositories/auth_repository.dart';
+import 'package:tukangku/repositories/payment_repository.dart';
 import 'package:tukangku/screens/widgets/bottom_sheet_modal.dart';
 import 'package:tukangku/screens/widgets/custom_cached_image.dart';
 import 'package:tukangku/utils/currency_format.dart';
@@ -19,6 +21,10 @@ class MasterPaymentDetail extends StatefulWidget {
 
 class _MasterPaymentDetailState extends State<MasterPaymentDetail> {
   late PaymentBloc paymentBloc;
+
+  PaymentRepository paymentRepo = PaymentRepository();
+  AuthRepository authRepo = AuthRepository();
+  AccountPaymentModel? accountPayment;
 
   Future confirmPayment() async {
     BottomSheetModal.show(context, children: [
@@ -84,9 +90,24 @@ class _MasterPaymentDetailState extends State<MasterPaymentDetail> {
       ? await launch(_url)
       : throw 'Could not launch $_url';
 
+  Future getAccountPayment() async {
+    try {
+      String? _token = await authRepo.hasToken();
+      AccountPaymentModel? data = await paymentRepo.getDetailAccountPayment(
+          _token!, widget.paymentModel.accountPaymentModel!.id!);
+      if (data != null) {
+        accountPayment = data;
+        setState(() {});
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
   @override
   void initState() {
     paymentBloc = BlocProvider.of<PaymentBloc>(context);
+    getAccountPayment();
     super.initState();
   }
 
@@ -215,23 +236,25 @@ class _MasterPaymentDetailState extends State<MasterPaymentDetail> {
                               Text(widget.paymentModel.status!.toUpperCase())
                             ],
                           ),
-                          
                           SizedBox(
                             height: 15,
                           ),
-                          widget.paymentModel.imagesPayment != null && widget.paymentModel.imagesPayment != '' ? GestureDetector(
-                            onTap: () => _launchURL(
-                                widget.paymentModel.imagesPayment ??
-                                    'https://i.pravatar.cc/300'),
-                            child: Container(
-                              width: size.width,
-                              height: size.width,
-                              child: CustomCachedImage.build(context,
-                                  imgUrl: widget.paymentModel.imagesPayment ??
-                                      'https://i.pravatar.cc/300'),
-                            ),
-                          ) : Container(),
-
+                          widget.paymentModel.imagesPayment != null &&
+                                  widget.paymentModel.imagesPayment != ''
+                              ? GestureDetector(
+                                  onTap: () => _launchURL(
+                                      widget.paymentModel.imagesPayment ??
+                                          'https://i.pravatar.cc/300'),
+                                  child: Container(
+                                    width: size.width,
+                                    height: size.width,
+                                    child: CustomCachedImage.build(context,
+                                        imgUrl:
+                                            widget.paymentModel.imagesPayment ??
+                                                'https://i.pravatar.cc/300'),
+                                  ),
+                                )
+                              : Container(),
                           Divider(
                             thickness: 0.4,
                           ),
@@ -273,44 +296,74 @@ class _MasterPaymentDetailState extends State<MasterPaymentDetail> {
                               )
                             ],
                           ),
-                          
                           SizedBox(
                             height: 15,
                           ),
-                          widget.paymentModel.imagesUser != null && widget.paymentModel.imagesUser != '' ? GestureDetector(
-                            onTap: () => _launchURL(
-                                widget.paymentModel.imagesUser ??
-                                    'https://i.pravatar.cc/300'),
-                            child: Container(
-                              width: size.width,
-                              height: size.width,
-                              child: CustomCachedImage.build(context,
-                                  imgUrl: widget.paymentModel.imagesUser ??
-                                      'https://i.pravatar.cc/300'),
-                            ),
-                          ) : Container(),
-
+                          widget.paymentModel.imagesUser != null &&
+                                  widget.paymentModel.imagesUser != ''
+                              ? GestureDetector(
+                                  onTap: () => _launchURL(
+                                      widget.paymentModel.imagesUser ??
+                                          'https://i.pravatar.cc/300'),
+                                  child: Container(
+                                    width: size.width,
+                                    height: size.width,
+                                    child: CustomCachedImage.build(context,
+                                        imgUrl:
+                                            widget.paymentModel.imagesUser ??
+                                                'https://i.pravatar.cc/300'),
+                                  ),
+                                )
+                              : Container(),
                           Divider(
                             thickness: 0.4,
                           ),
                           Text('Alamat'),
                           Text(widget.paymentModel.address ?? ''),
-                          Divider(
-                            thickness: 0.4,
-                          ),
-                          // Row(
-                          //   children: [
-                          //     Expanded(
-                          //         child: Text(
-                          //       'Total',
-                          //       style: TextStyle(fontWeight: FontWeight.bold),
-                          //     )),
-                          //     Text(
-                          //       'Rp 230.000',
-                          //       style: TextStyle(fontWeight: FontWeight.bold),
-                          //     )
-                          //   ],
-                          // ),
+                          accountPayment != null
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      height: 15,
+                                    ),
+                                    Text(
+                                      'Rekening Transfer',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Divider(),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(child: Text('Nama Rek')),
+                                        Text(accountPayment!.accountName ?? '')
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(child: Text('Nama Bank')),
+                                        Text(accountPayment!.bankName ?? '')
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Row(
+                                      children: [
+                                        Expanded(child: Text('Nomor Rek')),
+                                        Text(
+                                            accountPayment!.accountNumber ?? '')
+                                      ],
+                                    ),
+                                  ],
+                                )
+                              : Container(),
                         ],
                       ),
                     ),

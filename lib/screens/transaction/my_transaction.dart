@@ -116,6 +116,7 @@ class _MyTransactionState extends State<MyTransaction> {
                           //   )),
                           // ),
                           title: Container(
+                            margin: EdgeInsets.only(bottom: 10),
                             child: Text(
                               '${state.listTransactions[index].invoiceId} - ${state.listTransactions[index].user!.name}',
                               style: TextStyle(

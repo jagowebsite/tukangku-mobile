@@ -11,6 +11,8 @@ import 'package:tukangku/screens/account/master/user/master_user_edit.dart';
 import 'package:tukangku/screens/widgets/bottom_sheet_modal.dart';
 import 'package:tukangku/utils/currency_format.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MasterTransactionDetail extends StatefulWidget {
   final TransactionModel transactionModel;
@@ -25,6 +27,8 @@ class MasterTransactionDetail extends StatefulWidget {
 class _MasterTransactionDetailState extends State<MasterTransactionDetail> {
   late TransactionDetailBloc transactionDetailBloc;
   late TransactionBloc transactionBloc;
+
+  final _baseUrl = dotenv.env['API_URL'].toString();
 
   Future<void> _refresh() async {
     await Future.delayed(Duration(seconds: 1));
@@ -187,6 +191,10 @@ class _MasterTransactionDetailState extends State<MasterTransactionDetail> {
       ),
     ]);
   }
+
+  void _launchURL(_url) async => await canLaunch(_url)
+      ? await launch(_url)
+      : throw 'Could not launch $_url';
 
   @override
   void initState() {
@@ -351,12 +359,58 @@ class _MasterTransactionDetailState extends State<MasterTransactionDetail> {
                                         },
                                         title: Text(
                                             '${transactionDetail.serviceModel!.name} - ${transactionDetail.serviceModel!.categoryService!.name}'),
-                                        subtitle: Text(
+                                        subtitle: Row(
+                                          children: [
+                                            Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 10, vertical: 5),
+                                              decoration: BoxDecoration(
+                                                  color: Colors.grey.shade200,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              child: Text(
+                                                  transactionDetail
+                                                          .statusOrderDetail ??
+                                                      '',
+                                                  style: TextStyle(
+                                                      color: Colors.orange)),
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
                                             transactionDetail
-                                                    .statusOrderDetail ??
-                                                '',
-                                            style: TextStyle(
-                                                color: Colors.orange)),
+                                                            .statusOrderDetail ==
+                                                        'process' ||
+                                                    transactionDetail
+                                                            .statusOrderDetail ==
+                                                        'done'
+                                                ? GestureDetector(
+                                                    onTap: () => _launchURL(
+                                                        _baseUrl +
+                                                            '/transaction/get-letters/?order_detail_id=' +
+                                                            transactionDetail
+                                                                .id!
+                                                                .toString()),
+                                                    child: Container(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 10,
+                                                              vertical: 5),
+                                                      decoration: BoxDecoration(
+                                                          color: Colors
+                                                              .grey.shade200,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10)),
+                                                      child:
+                                                          Text('Surat Tugas'),
+                                                    ),
+                                                  )
+                                                : Container()
+                                          ],
+                                        ),
                                         isThreeLine: true,
                                         trailing: GestureDetector(
                                           onTap: () {

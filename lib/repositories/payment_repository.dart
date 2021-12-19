@@ -21,7 +21,7 @@ class PaymentRepository {
           'Accept': 'application/json',
         },
       );
-      print(response.body);
+      // print(response.body);
 
       if (response.statusCode == 200) {
         Iterable iterable = json.decode(response.body)['data'];
@@ -217,6 +217,26 @@ class PaymentRepository {
         List<AccountPaymentModel> listAccountPayments =
             iterable.map((e) => AccountPaymentModel.fromJson(e)).toList();
         return listAccountPayments;
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<AccountPaymentModel?> getDetailAccountPayment(
+      String _token, int id) async {
+    try {
+      final response = await http
+          .get(Uri.parse(_baseUrl + '/account-payment/detail/$id'), headers: {
+        'Authorization': 'Bearer $_token',
+        'Accept': 'application/json',
+      });
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        AccountPaymentModel detailAccountPayments =
+            AccountPaymentModel.fromJson(json.decode(response.body)['data']);
+        return detailAccountPayments;
       }
     } catch (e) {
       print(e.toString());
