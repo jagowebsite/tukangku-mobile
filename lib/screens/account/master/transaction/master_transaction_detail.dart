@@ -6,6 +6,7 @@ import 'package:tukangku/blocs/transaction_bloc/transaction_bloc.dart';
 import 'package:tukangku/blocs/transaction_detail_bloc/transaction_detail_bloc.dart';
 import 'package:tukangku/models/payment_model.dart';
 import 'package:tukangku/models/transaction_model.dart';
+import 'package:tukangku/repositories/auth_repository.dart';
 import 'package:tukangku/screens/account/master/transaction/master_transaction_confirmation.dart';
 import 'package:tukangku/screens/account/master/user/master_user_edit.dart';
 import 'package:tukangku/screens/widgets/bottom_sheet_modal.dart';
@@ -13,6 +14,7 @@ import 'package:tukangku/utils/currency_format.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
 class MasterTransactionDetail extends StatefulWidget {
   final TransactionModel transactionModel;
@@ -388,10 +390,35 @@ class _MasterTransactionDetailState extends State<MasterTransactionDetail> {
                                                 ? GestureDetector(
                                                     onTap: () => _launchURL(
                                                         _baseUrl +
-                                                            '/transaction/get-letters/?order_detail_id=' +
+                                                            '/transaction/get-letters/' +
                                                             transactionDetail
                                                                 .id!
                                                                 .toString()),
+                                                    // onTap: () async {
+                                                    //   print(transactionDetail
+                                                    //       .id!
+                                                    //       .toString());
+                                                    //   AuthRepository authRepo =
+                                                    //       AuthRepository();
+                                                    //   String? token =
+                                                    //       await authRepo
+                                                    //           .hasToken();
+                                                    //   final response = await http.get(
+                                                    //       Uri.parse(_baseUrl +
+                                                    //           '/transaction/get-letters/?order_detail_id=' +
+                                                    //           transactionDetail
+                                                    //               .id!
+                                                    //               .toString()),
+                                                    //       headers: {
+                                                    //         'Content-Type':
+                                                    //             'application/json',
+                                                    //         'Accept':
+                                                    //             'application/json',
+                                                    //         'Authorization':
+                                                    //             'Bearer $token',
+                                                    //       });
+                                                    //   print(response.body);
+                                                    // },
                                                     child: Container(
                                                       padding:
                                                           EdgeInsets.symmetric(
