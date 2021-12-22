@@ -129,11 +129,25 @@ class _NavbarState extends State<Navbar> {
                   ]),
                   child: CurvedNavigationBar(
                     index: _selectedIndex,
+                    buttonBackgroundColor: Colors.orangeAccent.shade700,
                     backgroundColor: Colors.transparent,
                     items: <Widget>[
-                      Icon(Icons.home, size: 30),
-                      Icon(Icons.grid_view, size: 30),
-                      Icon(Icons.account_box_rounded, size: 30),
+                      Icon(
+                        Icons.home,
+                        size: 30,
+                        color:
+                            _selectedIndex == 0 ? Colors.white : Colors.black,
+                      ),
+                      Icon(Icons.grid_view,
+                          size: 30,
+                          color: _selectedIndex == 1
+                              ? Colors.white
+                              : Colors.black),
+                      Icon(Icons.account_box_rounded,
+                          size: 30,
+                          color: _selectedIndex == 2
+                              ? Colors.white
+                              : Colors.black),
                     ],
                     onTap: (index) {
                       _onItemTapped(index);
