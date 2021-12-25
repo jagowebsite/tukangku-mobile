@@ -16,10 +16,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  TextEditingController usernameController =
-      TextEditingController(text: 'harmokobaf@gmail.com');
-  TextEditingController passwordController =
-      TextEditingController(text: 'admin');
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   late AuthBloc authBloc;
 

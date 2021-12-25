@@ -118,18 +118,30 @@ class _PaymentDetailState extends State<PaymentDetail> {
                             Text(widget.paymentModel.typeTransfer ?? '')
                           ],
                         ),
-                        Row(
-                          children: [
-                            Expanded(child: Text('No Rek')),
-                            Text(widget.paymentModel.bankNumber ?? '')
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Expanded(child: Text('Nama Rek')),
-                            Text(widget.paymentModel.bankName ?? '')
-                          ],
-                        ),
+                        widget.paymentModel.accountName != null
+                            ? Row(
+                                children: [
+                                  Expanded(child: Text('Nama Rek')),
+                                  Text(widget.paymentModel.accountName ?? '')
+                                ],
+                              )
+                            : Container(),
+                        widget.paymentModel.bankNumber != null
+                            ? Row(
+                                children: [
+                                  Expanded(child: Text('No Rek')),
+                                  Text(widget.paymentModel.bankNumber ?? '')
+                                ],
+                              )
+                            : Container(),
+                        widget.paymentModel.bankName != null
+                            ? Row(
+                                children: [
+                                  Expanded(child: Text('Nama Bank')),
+                                  Text(widget.paymentModel.bankName ?? '')
+                                ],
+                              )
+                            : Container(),
                         Row(
                           children: [
                             Expanded(child: Text('Nominal')),

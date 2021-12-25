@@ -135,6 +135,18 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
           child: BlocBuilder<TransactionUserBloc, TransactionUserState>(
             builder: (context, state) {
               if (state is TransactionDetailUserData) {
+                int dp = 0;
+                if (state.transactionModel.payment != null &&
+                    state.transactionModel.payment!.isNotEmpty) {
+                  for (var i = 0;
+                      i < state.transactionModel.payment!.length;
+                      i++) {
+                    if (state.transactionModel.payment![i].status != 'reject') {
+                      dp += state.transactionModel.payment![i].totalPayment!;
+                    }
+                  }
+                }
+                print(dp);
                 return SingleChildScrollView(
                   physics: AlwaysScrollableScrollPhysics(),
                   padding: EdgeInsets.all(15),
@@ -325,7 +337,12 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(paymentModel.createdAt ?? ''),
+                                        Text(currencyId
+                                            .format(paymentModel.totalPayment)),
+                                        Text(
+                                          paymentModel.createdAt ?? '',
+                                          style: TextStyle(fontSize: 12),
+                                        ),
                                         Text(paymentModel.status ?? '',
                                             style: TextStyle(
                                                 color: Colors.orange)),
@@ -368,7 +385,8 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                                     )),
                               ),
                             Divider(),
-                            state.transactionModel.statusOrder != 'done'
+                            state.transactionModel.statusOrder != 'done' &&
+                                    state.transactionModel.totalAllPrice! > dp
                                 ? TextButton(
                                     style: TextButton.styleFrom(
                                         backgroundColor: Colors.grey.shade600),
@@ -376,8 +394,10 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                                       Navigator.push(context,
                                           MaterialPageRoute(builder: (context) {
                                         return Payment(
-                                            transactionModel:
-                                                state.transactionModel);
+                                          transactionModel:
+                                              state.transactionModel,
+                                          dpNominal: dp,
+                                        );
                                       })).then(onGoBack);
                                     },
                                     child: Text('Tambah Pembayaran',
@@ -406,7 +426,7 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Complain (opsional)',
+                              'Kesan & Pesan (opsional)',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             SizedBox(
@@ -456,7 +476,7 @@ class _MyTransactionDetailState extends State<MyTransactionDetail> {
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
                                     hintText:
-                                        'Masukkan complain anda disini (jika ada)...'),
+                                        'Masukkan kesan & pesan anda disini (jika ada)...'),
                               ),
                             ),
                             TextButton(

@@ -132,22 +132,70 @@ class _NavbarState extends State<Navbar> {
                     buttonBackgroundColor: Colors.orangeAccent.shade700,
                     backgroundColor: Colors.transparent,
                     items: <Widget>[
-                      Icon(
-                        Icons.home,
-                        size: 30,
-                        color:
-                            _selectedIndex == 0 ? Colors.white : Colors.black,
-                      ),
-                      Icon(Icons.grid_view,
-                          size: 30,
-                          color: _selectedIndex == 1
-                              ? Colors.white
-                              : Colors.black),
-                      Icon(Icons.account_box_rounded,
-                          size: 30,
-                          color: _selectedIndex == 2
-                              ? Colors.white
-                              : Colors.black),
+                      _selectedIndex == 0
+                          ? Icon(
+                              Icons.home,
+                              size: 30,
+                              color: _selectedIndex == 0
+                                  ? Colors.white
+                                  : Colors.black,
+                            )
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.home,
+                                  size: 30,
+                                  color: _selectedIndex == 0
+                                      ? Colors.white
+                                      : Colors.black,
+                                ),
+                                Text(
+                                  'Beranda',
+                                  style: TextStyle(fontSize: 12),
+                                )
+                              ],
+                            ),
+                      _selectedIndex == 1
+                          ? Icon(Icons.grid_view,
+                              size: 30,
+                              color: _selectedIndex == 1
+                                  ? Colors.white
+                                  : Colors.black)
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.grid_view,
+                                    size: 30,
+                                    color: _selectedIndex == 1
+                                        ? Colors.white
+                                        : Colors.black),
+                                Text(
+                                  'Desain',
+                                  style: TextStyle(fontSize: 12),
+                                )
+                              ],
+                            ),
+                      _selectedIndex == 2
+                          ? Icon(Icons.account_box_rounded,
+                              size: 30,
+                              color: _selectedIndex == 2
+                                  ? Colors.white
+                                  : Colors.black)
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.account_box_rounded,
+                                    size: 30,
+                                    color: _selectedIndex == 2
+                                        ? Colors.white
+                                        : Colors.black),
+                                Text(
+                                  'Akun',
+                                  style: TextStyle(fontSize: 12),
+                                )
+                              ],
+                            ),
                     ],
                     onTap: (index) {
                       _onItemTapped(index);

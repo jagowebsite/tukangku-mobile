@@ -14,8 +14,6 @@ import 'package:tukangku/models/transaction_model.dart';
 import 'package:tukangku/repositories/auth_repository.dart';
 import 'package:tukangku/repositories/payment_repository.dart';
 import 'package:tukangku/screens/others/map_coordinate.dart';
-// import 'package:tukangku/screens/widgets/camera_screen.dart';
-// import 'package:tukangku/screens/widgets/camera_screen2.dart';
 import 'package:tukangku/utils/currency_format.dart';
 import 'package:tukangku/utils/custom_snackbar.dart';
 
@@ -24,7 +22,9 @@ enum PaymentFlow { dp, paid }
 
 class Payment extends StatefulWidget {
   final TransactionModel transactionModel;
-  const Payment({Key? key, required this.transactionModel}) : super(key: key);
+  final int? dpNominal;
+  const Payment({Key? key, required this.transactionModel, this.dpNominal})
+      : super(key: key);
 
   @override
   _PaymentState createState() => _PaymentState();
@@ -133,10 +133,7 @@ class _PaymentState extends State<Payment> {
   }
 
   Future createPayment() async {
-    if (noRekController.text == '' ||
-        bankNameController.text == '' ||
-        rekNameController.text == '' ||
-        addressController.text == '') {
+    if (addressController.text == '') {
       CustomSnackbar.showSnackbar(context,
           'Mohon lengkapi informasi pembayaran anda', SnackbarType.warning);
     } else if (imagePaymentFile == null) {
@@ -162,28 +159,41 @@ class _PaymentState extends State<Payment> {
           'Nominal DP tidak boleh lebih dari total pembayaran sebesar ${widget.transactionModel.totalAllPrice}',
           SnackbarType.warning);
     } else {
-      PaymentModel paymentModel = PaymentModel(
-          transactionModel: widget.transactionModel,
-          typeTransfer: typeValue.toLowerCase(),
-          type: paymentFlow == PaymentFlow.dp ? 'dp' : 'lunas',
-          bankNumber: typeValue == 'Transfer' ? noRekController.text : null,
-          bankName: typeValue == 'Transfer' ? bankNameController.text : null,
-          accountName: typeValue == 'Transfer' ? rekNameController.text : null,
-          latitude: locationModel.latitude.toString(),
-          longitude: locationModel.longitude.toString(),
-          totalPayment: paymentFlow == PaymentFlow.dp
-              ? int.parse(nominalDPController.text)
-              : widget.transactionModel.totalAllPrice,
-          description: descriptionController.text,
-          address: addressController.text,
-          imagePaymentFile: imagePaymentFile,
-          accountPaymentId:
-              accountPaymentSelected != null && typeValue == 'Transfer'
-                  ? accountPaymentSelected!.id
-                  : null,
-          imageUserFile: imageUserFile);
+      if (typeValue == 'Transfer' &&
+          (noRekController.text == '' ||
+              bankNameController.text == '' ||
+              rekNameController.text == '' ||
+              accountPaymentSelected == null)) {
+        CustomSnackbar.showSnackbar(context,
+            'Mohon lengkapi informasi pembayaran anda', SnackbarType.warning);
+      } else {
+        PaymentModel paymentModel = PaymentModel(
+            transactionModel: widget.transactionModel,
+            typeTransfer: typeValue.toLowerCase(),
+            type: paymentFlow == PaymentFlow.dp ? 'dp' : 'lunas',
+            bankNumber: typeValue == 'Transfer' ? noRekController.text : null,
+            bankName: typeValue == 'Transfer' ? bankNameController.text : null,
+            accountName:
+                typeValue == 'Transfer' ? rekNameController.text : null,
+            latitude: locationModel.latitude.toString(),
+            longitude: locationModel.longitude.toString(),
+            totalPayment: paymentFlow == PaymentFlow.dp
+                ? int.parse(nominalDPController.text)
+                : widget.dpNominal != 0
+                    ? (widget.transactionModel.totalAllPrice! -
+                        widget.dpNominal!)
+                    : widget.transactionModel.totalAllPrice,
+            description: descriptionController.text,
+            address: addressController.text,
+            imagePaymentFile: imagePaymentFile,
+            accountPaymentId:
+                accountPaymentSelected != null && typeValue == 'Transfer'
+                    ? accountPaymentSelected!.id
+                    : null,
+            imageUserFile: imageUserFile);
 
-      paymentBloc.add(CreatePayment(paymentModel));
+        paymentBloc.add(CreatePayment(paymentModel));
+      }
     }
   }
 
@@ -217,7 +227,7 @@ class _PaymentState extends State<Payment> {
         if (state is CreatePaymentSuccess) {
           CustomSnackbar.showSnackbar(
               context,
-              '${state.message}, Mohon menunggu konfirmasi dari Tukangkita',
+              'Pembayaran berhasil ditambahkan, Mohon menunggu konfirmasi dari Tukangkita',
               SnackbarType.success);
           Navigator.pop(context);
         } else if (state is CreatePaymentError) {
@@ -302,67 +312,84 @@ class _PaymentState extends State<Payment> {
                               SizedBox(
                                 height: 10,
                               ),
-                              Text('Jenis'),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      child: Text('Pilih jenis pembayaran'),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Row(
+                              widget.dpNominal == 0
+                                  ? Text('Jenis')
+                                  : Container(),
+                              widget.dpNominal == 0
+                                  ? Row(
                                       children: [
                                         Expanded(
-                                          child: TextButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                paymentFlow = PaymentFlow.dp;
-                                              });
-                                            },
-                                            style: TextButton.styleFrom(
-                                                backgroundColor: paymentFlow ==
-                                                        PaymentFlow.dp
-                                                    ? Colors
-                                                        .orangeAccent.shade700
-                                                    : Colors.grey.shade100),
-                                            child: Text('DP',
-                                                style: TextStyle(
-                                                    color: paymentFlow ==
-                                                            PaymentFlow.dp
-                                                        ? Colors.white
-                                                        : Colors.black87)),
+                                          child: Container(
+                                            child:
+                                                Text('Pilih jenis pembayaran'),
                                           ),
                                         ),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
                                         Expanded(
-                                          child: TextButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                paymentFlow = PaymentFlow.paid;
-                                              });
-                                            },
-                                            style: TextButton.styleFrom(
-                                                backgroundColor: paymentFlow ==
-                                                        PaymentFlow.paid
-                                                    ? Colors
-                                                        .orangeAccent.shade700
-                                                    : Colors.grey.shade100),
-                                            child: Text('Lunas',
-                                                style: TextStyle(
-                                                    color: paymentFlow ==
-                                                            PaymentFlow.paid
-                                                        ? Colors.white
-                                                        : Colors.black87)),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: TextButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      paymentFlow =
+                                                          PaymentFlow.dp;
+                                                    });
+                                                  },
+                                                  style: TextButton.styleFrom(
+                                                      backgroundColor:
+                                                          paymentFlow ==
+                                                                  PaymentFlow.dp
+                                                              ? Colors
+                                                                  .orangeAccent
+                                                                  .shade700
+                                                              : Colors.grey
+                                                                  .shade100),
+                                                  child: Text('DP',
+                                                      style: TextStyle(
+                                                          color: paymentFlow ==
+                                                                  PaymentFlow.dp
+                                                              ? Colors.white
+                                                              : Colors
+                                                                  .black87)),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Expanded(
+                                                child: TextButton(
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      paymentFlow =
+                                                          PaymentFlow.paid;
+                                                    });
+                                                  },
+                                                  style: TextButton.styleFrom(
+                                                      backgroundColor:
+                                                          paymentFlow ==
+                                                                  PaymentFlow
+                                                                      .paid
+                                                              ? Colors
+                                                                  .orangeAccent
+                                                                  .shade700
+                                                              : Colors.grey
+                                                                  .shade100),
+                                                  child: Text('Lunas',
+                                                      style: TextStyle(
+                                                          color: paymentFlow ==
+                                                                  PaymentFlow
+                                                                      .paid
+                                                              ? Colors.white
+                                                              : Colors
+                                                                  .black87)),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ],
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                    )
+                                  : Container(),
                               paymentFlow == PaymentFlow.dp
                                   ? Text('Nominal DP (RP)')
                                   : Container(),
@@ -898,7 +925,12 @@ class _PaymentState extends State<Payment> {
                                             nominalDPController.text != ''
                                                 ? nominalDPController.text
                                                 : '0')
-                                        : widget.transactionModel.totalAllPrice)
+                                        : widget.dpNominal != 0
+                                            ? (widget.transactionModel
+                                                    .totalAllPrice! -
+                                                widget.dpNominal!)
+                                            : widget
+                                                .transactionModel.totalAllPrice)
                                     .toString(),
                                 style: TextStyle(
                                     color: Colors.orangeAccent.shade700,
