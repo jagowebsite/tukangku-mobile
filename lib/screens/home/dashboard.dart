@@ -12,9 +12,11 @@ import 'package:tukangku/hive/cart/cart_hive.dart';
 import 'package:tukangku/models/banner_model.dart';
 import 'package:tukangku/models/category_service_model.dart';
 import 'package:tukangku/models/filter_service_model.dart';
+import 'package:tukangku/models/social_link_model.dart';
 import 'package:tukangku/models/user_model.dart';
 import 'package:tukangku/repositories/banner_repository.dart';
 import 'package:tukangku/repositories/category_service_repository.dart';
+import 'package:tukangku/repositories/profile_repository.dart';
 import 'package:tukangku/screens/account/profile/update_profile.dart';
 import 'package:tukangku/screens/service/services.dart';
 import 'package:tukangku/screens/widgets/custom_cached_image.dart';
@@ -32,10 +34,13 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   BannerRepository _bannerRepo = BannerRepository();
   CategoryServiceRepository _categoryServiceRepo = CategoryServiceRepository();
+  ProfileRepository _profileRepository = ProfileRepository();
   late AuthBloc authBloc;
   late Box cartBox;
 
   ScrollController _scrollController = ScrollController();
+
+  String? linkSocial;
 
   // Bloc
   late HomeBloc homeBloc;
@@ -63,6 +68,15 @@ class _DashboardState extends State<Dashboard> {
   FutureOr onGoBack(dynamic value) {
     print('iam on goback...');
     setState(() {});
+  }
+
+  Future getLinkSocial() async {
+    SocialLinkModel? socialLink = await _profileRepository.getSocialLink();
+
+    if (socialLink != null) {
+      linkSocial = socialLink.link;
+      setState(() {});
+    }
   }
 
   void onScroll() {
@@ -121,6 +135,7 @@ class _DashboardState extends State<Dashboard> {
     authBloc = BlocProvider.of<AuthBloc>(context);
     cartBox = Hive.box<CartHive>('cart');
     getInitData();
+    getLinkSocial();
     _scrollController.addListener(onScroll);
     super.initState();
   }
@@ -194,6 +209,15 @@ class _DashboardState extends State<Dashboard> {
             ],
           ),
           actions: [
+            linkSocial != null
+                ? IconButton(
+                    onPressed: () {
+                      _launchURL(linkSocial!);
+                    },
+                    icon: SizedBox(
+                        width: 28,
+                        child: Image.asset('assets/logo/whatsapp.png')))
+                : Container(),
             IconButton(
               onPressed: () =>
                   Navigator.of(context).pushNamed('/cart').then(onGoBack),
@@ -232,7 +256,7 @@ class _DashboardState extends State<Dashboard> {
                   ),
                 ],
               ),
-            )
+            ),
           ],
         ),
         backgroundColor: Colors.white,

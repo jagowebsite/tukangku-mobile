@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 
 import 'package:flutter/services.dart' show ByteData;
 import 'package:tukangku/models/response_model.dart';
+import 'package:tukangku/models/social_link_model.dart';
 import 'package:tukangku/models/user_model.dart';
 import 'package:tukangku/utils/error_message.dart';
 import 'package:path/path.dart';
@@ -148,6 +149,21 @@ class ProfileRepository {
         return ResponseModel.toJson(jsonResponse);
       } else {
         throw Exception(ErrorMessage.statusCode(response.statusCode));
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<SocialLinkModel?> getSocialLink() async {
+    try {
+      final response = await http.get(Uri.parse(_baseUrl + '/whatsappnumber'));
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        SocialLinkModel socialLink =
+            SocialLinkModel.fromJson(json.decode(response.body)['data']);
+        return socialLink;
       }
     } catch (e) {
       print(e.toString());

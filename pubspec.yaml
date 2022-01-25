@@ -84,6 +84,7 @@ flutter:
     - assets/env/.env_production
     - assets/env/.env_development
     - assets/logo/tukangku_logo.png
+    - assets/logo/whatsapp.png
     - assets/flats/chat-flat.png
     - assets/flare/
 

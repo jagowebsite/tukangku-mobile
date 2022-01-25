@@ -54,7 +54,7 @@ class _CartState extends State<Cart> {
                   name: serviceModel.name,
                   images: serviceModel.images,
                   typeQuantity: serviceModel.typeQuantity,
-                  price: 15000)));
+                  price: serviceModel.price)));
         }
       }
       setState(() {});
